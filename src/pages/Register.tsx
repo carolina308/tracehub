@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const Register: React.FC = () => {
+  const navigate = useNavigate();
   
   const [formData, setFormData] = useState({
     firstName: '',
@@ -20,14 +21,15 @@ const Register: React.FC = () => {
   const [success, setSuccess] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value, type } = e.target;
+    const { name, id, value, type } = e.target;
+    const fieldName = name || id;
     setFormData(prev => ({
       ...prev,
-      [name]: type === 'checkbox' ? e.target.checked : value,
+      [fieldName]: type === 'checkbox' ? e.target.checked : value,
     }));
     // Clear error for this field when user types
-    if (errors[name]) {
-      setErrors(prev => ({ ...prev, [name]: '' }));
+    if (errors[fieldName]) {
+      setErrors(prev => ({ ...prev, [fieldName]: '' }));
     }
   };
 
@@ -52,23 +54,16 @@ const Register: React.FC = () => {
     e.preventDefault();
     if (validateForm()) {
       setLoading(true);
-      const navigate = useNavigate();
-      try {
-        // Simulate API call
-        await new Promise(resolve => setTimeout(resolve, 1500));
-        // In a real app, you would call your registration API here
-        console.log('Registration successful:', formData);
-        setSuccess(true);
-        // Redirect to login after successful registration
-        setTimeout(() => {
-          navigate('/login');
-        }, 2000);
-      } catch (err) {
-        // Handle error
-        console.error('Registration failed');
-      } finally {
-        setLoading(false);
-      }
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      // In a real app, you would call your registration API here
+      console.log('Registration successful:', formData);
+      setSuccess(true);
+      // Redirect to login after successful registration
+      setTimeout(() => {
+        navigate('/login');
+      }, 2000);
+      setLoading(false);
     }
   };
 
@@ -104,6 +99,7 @@ const Register: React.FC = () => {
               </label>
               <input
                 id="firstName"
+                name="firstName"
                 type="text"
                 required
                 className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus-indigo-600 sm:text-sm sm:leading-6"
@@ -120,6 +116,7 @@ const Register: React.FC = () => {
               </label>
               <input
                 id="middleName"
+                name="middleName"
                 type="text"
                 className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus-indigo-600 sm:text-sm sm:leading-6"
                 value={formData.middleName}
@@ -136,6 +133,7 @@ const Register: React.FC = () => {
               </label>
               <input
                 id="lastName"
+                name="lastName"
                 type="text"
                 required
                 className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus-indigo-600 sm:text-sm sm:leading-6"
@@ -152,6 +150,7 @@ const Register: React.FC = () => {
               </label>
               <input
                 id="secondLastName"
+                name="secondLastName"
                 type="text"
                 className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus-indigo-600 sm:text-sm sm:leading-6"
                 value={formData.secondLastName}
@@ -168,6 +167,7 @@ const Register: React.FC = () => {
               </label>
               <input
                 id="dni"
+                name="dni"
                 type="text"
                 required
                 className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus-indigo-600 sm:text-sm sm:leading-6"
@@ -184,6 +184,7 @@ const Register: React.FC = () => {
               </label>
               <input
                 id="email"
+                name="email"
                 type="email"
                 required
                 className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus-indigo-600 sm:text-sm sm:leading-6"
@@ -201,6 +202,7 @@ const Register: React.FC = () => {
             </label>
             <select
               id="role"
+              name="role"
               required
               className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus-indigo-600 sm:text-sm sm:leading-6"
               value={formData.role}
@@ -223,6 +225,7 @@ const Register: React.FC = () => {
             <div className="flex items-end">
               <input
                 id="password"
+                name="password"
                 type={loading ? 'text' : 'password'}
                 required
                 className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus-indigo-600 sm:text-sm sm:leading-6"
@@ -256,6 +259,7 @@ const Register: React.FC = () => {
             <div className="flex items-end">
               <input
                 id="confirmPassword"
+                name="confirmPassword"
                 type={loading ? 'text' : 'password'}
                 required
                 className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus-indigo-600 sm:text-sm sm:leading-6"
@@ -286,6 +290,7 @@ const Register: React.FC = () => {
             <div className="flex items-center h-4">
               <input
                 id="terms"
+                name="terms"
                 type="checkbox"
                 required
                 className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
@@ -316,7 +321,7 @@ const Register: React.FC = () => {
         
         <div className="text-center mt-4">
           <p className="text-sm text-gray-500">
-            ¿Ya tienes una cuenta?
+            <span>¿Ya tienes una cuenta? </span>
             <a href="/login" className="font-medium text-indigo-600 hover:text-indigo-500">
               Inicia sesión aquí
             </a>
