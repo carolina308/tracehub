@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+
 type Card = {
   id: string;
   title: string;
@@ -89,6 +90,7 @@ const Dashboard: React.FC = () => {
 
   const [newCardTitle, setNewCardTitle] = useState('');
   const [activeColumn] = useState<string>('todo');
+  const navigate = useNavigate();
 
   const handleLogout = () => {
     // Limpiar datos de autenticación
@@ -96,7 +98,7 @@ const Dashboard: React.FC = () => {
     localStorage.removeItem('user');
     
     // Redirigir a la página de login
-    navigation('login');
+    navigate('/login', { replace: true });
   };
 
   function handleAddCard() {
