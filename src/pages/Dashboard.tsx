@@ -86,24 +86,22 @@ const Dashboard: React.FC = () => {
   ]);
 
   const [newCardTitle, setNewCardTitle] = useState('');
-  const [activeColumn, setActiveColumn] = useState<string>('todo');
+  const [activeColumn] = useState<string>('todo');
 
-  const handleAddCard = () => {
+  function handleAddCard() {
     if (newCardTitle.trim()) {
       const newCard: Card = {
         id: Date.now().toString(),
         title: newCardTitle,
       };
-      setColumns(prev => 
-        prev.map(column => 
-          column.id === activeColumn 
-            ? { ...column, cards: [...column.cards, newCard] } 
-            : column
-        )
+      setColumns(prev => prev.map(column => column.id === activeColumn
+        ? { ...column, cards: [...column.cards, newCard] }
+        : column
+      )
       );
       setNewCardTitle('');
     }
-  };
+  }
 
   const handleDragStart = (e: React.DragEvent, cardId: string) => {
     e.dataTransfer.setData('text/plain', cardId);
@@ -150,17 +148,17 @@ const Dashboard: React.FC = () => {
           <button 
             className="px-4 py-2 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
           >
-            Filter
+            Import
           </button>
           <button 
             className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700"
           >
-            Export
+            Exportar
           </button>
           <button 
             className="ml-4 px-4 py-2 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
           >
-            New Column
+            Novo Projeto
           </button>
         </div>
       </header>
@@ -243,7 +241,7 @@ const Dashboard: React.FC = () => {
                     disabled={!newCardTitle.trim()}
                     className="px-3 py-1 bg-indigo-600 text-white rounded-md text-sm hover:bg-indigo-700"
                   >
-                    Add Card
+                    añadir
                   </button>
                 </div>
               </div>

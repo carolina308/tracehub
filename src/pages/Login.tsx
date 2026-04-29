@@ -36,14 +36,14 @@ const Login: React.FC = () => {
             TraceHub
           </h2>
           <p className="text-center text-gray-600">
-            Agile Workspace Management
+            Gestión ágil del espacio de trabajo
           </p>
         </div>
         
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
             <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-              Email Address
+              Correo Electronico
             </label>
             <input
               id="email"
@@ -58,7 +58,7 @@ const Login: React.FC = () => {
           
           <div className="relative">
             <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
-              Password
+              Contraseña
             </label>
             <div className="flex items-end">
               <input
@@ -100,13 +100,13 @@ const Login: React.FC = () => {
                 className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
               />
               <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900">
-                Remember me
+                Recuerdame
               </label>
             </div>
             
             <div className="text-sm">
               <a href="#" className="font-medium text-indigo-600 hover:text-indigo-500">
-                Forgot password?
+                Olvidaste tu contraseña?
               </a>
             </div>
           </div>
@@ -116,27 +116,27 @@ const Login: React.FC = () => {
             disabled={loading}
             className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
           >
-            {loading ? 'Signing in...' : 'Sign In'}
+            {loading ? 'Signing in...' : 'Iniciar sesión'}
           </button>
         </form>
         
         <div className="text-center">
           <p className="text-sm">
-            Or continue with
+            O continuar Con
           </p>
           <button
             type="button"
             className="mt-1 w-full flex items-center justify-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50"
           >
-            Sign in with SSO
+           Iniciar sesión con SSO
           </button>
         </div>
         
 <div className="text-center mt-4">
   <p className="text-sm text-gray-500">
-    Don't have an account?
+    Tienes cuenta ?
     <a href="/register" className="font-medium text-indigo-600 hover:text-indigo-500">
-      Request access
+     Solicitar acceso
     </a>
   </p>
 </div>

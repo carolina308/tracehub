@@ -76,8 +76,8 @@ const Register: React.FC = () => {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center px-4 py-8 bg-white">
         <div className="text-center">
-          <h2 className="text-2xl font-bold text-gray-800 mb-4">Account Created Successfully</h2>
-          <p className="text-gray-600 mb-6">You will be redirected to the login page shortly.</p>
+          <h2 className="text-2xl font-bold text-gray-800 mb-4">Cuenta creada exitosamente</h2>
+          <p className="text-gray-600 mb-6">En breve serás redirigido a la página de inicio de sesión..</p>
           <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-indigo-500"></div>
         </div>
       </div>
@@ -92,7 +92,7 @@ const Register: React.FC = () => {
             TraceHub
           </h2>
           <p className="text-center text-gray-600">
-            High-stakes project execution begins here.
+            Gestión ágil del espacio de trabajo
           </p>
         </div>
         
@@ -100,7 +100,7 @@ const Register: React.FC = () => {
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 mb-1">
-                First Name (required)
+                Nombre  (required)
               </label>
               <input
                 id="firstName"
@@ -116,7 +116,7 @@ const Register: React.FC = () => {
             
             <div>
               <label htmlFor="middleName" className="block text-sm font-medium text-gray-700 mb-1">
-                Middle Name
+                Segundo nombre
               </label>
               <input
                 id="middleName"
@@ -132,7 +132,7 @@ const Register: React.FC = () => {
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 mb-1">
-                Last Name (required)
+                Apellido (required)
               </label>
               <input
                 id="lastName"
@@ -148,7 +148,7 @@ const Register: React.FC = () => {
             
             <div>
               <label htmlFor="secondLastName" className="block text-sm font-medium text-gray-700 mb-1">
-                Second Last Name
+                Segundo apellido
               </label>
               <input
                 id="secondLastName"
@@ -206,7 +206,7 @@ const Register: React.FC = () => {
               value={formData.role}
               onChange={handleChange}
             >
-              <option value="">Select your professional role</option>
+              <option value="">Selecione su rol profesional</option>
               <option value="Project Manager">Project Manager</option>
               <option value="Engineering Lead">Engineering Lead</option>
               <option value="QA Validator">QA Validator</option>
@@ -218,7 +218,7 @@ const Register: React.FC = () => {
           
           <div className="relative">
             <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
-              Password (required)
+              Contraseña (required)
             </label>
             <div className="flex items-end">
               <input
@@ -251,7 +251,7 @@ const Register: React.FC = () => {
           
           <div className="relative">
             <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-1">
-              Confirm Password (required)
+              Confirmar contraseña (required)
             </label>
             <div className="flex items-end">
               <input
@@ -295,13 +295,13 @@ const Register: React.FC = () => {
             </div>
             <div className="ml-3 text-sm">
               <label htmlFor="terms" className="text-gray-700">
-                I accept the Terms of Service and Security Protocols.
+                Acepto los Términos de Servicio y las Protocolos de Seguridad.
               </label>
             </div>
           </div>
           {!formData.terms && (
             <p className="ml-5 text-sm text-red-600">
-              You must accept the terms to continue
+              Debes aceptar los términos para continuar
             </p>
           )}
           
@@ -316,9 +316,9 @@ const Register: React.FC = () => {
         
         <div className="text-center mt-4">
           <p className="text-sm text-gray-500">
-            Already have an account?
+            ¿Ya tienes una cuenta?
             <a href="/login" className="font-medium text-indigo-600 hover:text-indigo-500">
-              Sign in here
+              Inicia sesión aquí
             </a>
           </p>
         </div>
