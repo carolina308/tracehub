@@ -164,7 +164,7 @@ const RegistroUsuario = () => {
       <h2>Registro de Usuario</h2>
       <form onSubmit={manejarSubmit} noValidate>
         <div className="form-group">
-          <label>Prer nombre:</label>
+          <label>Primer nombre:</label>
           <input
             type="text"
             name="primerNombre"

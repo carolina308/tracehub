@@ -88,6 +88,15 @@ const Dashboard: React.FC = () => {
   const [newCardTitle, setNewCardTitle] = useState('');
   const [activeColumn] = useState<string>('todo');
 
+  const handleLogout = () => {
+    // Limpiar datos de autenticación
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    
+    // Redirigir a la página de login
+    window.location.href = '/login';
+  };
+
   function handleAddCard() {
     if (newCardTitle.trim()) {
       const newCard: Card = {
@@ -142,26 +151,32 @@ const Dashboard: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 p-6">
-      <header className="mb-8 flex justify-between items-center">
-        <h1 className="text-2xl font-bold text-gray-800">Dashboard</h1>
-        <div className="flex space-x-4">
-          <button 
-            className="px-4 py-2 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
-          >
-            Import
-          </button>
-          <button 
-            className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700"
-          >
-            Exportar
-          </button>
-          <button 
-            className="ml-4 px-4 py-2 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
-          >
-            Novo Projeto
-          </button>
-        </div>
-      </header>
+       <header className="mb-8 flex justify-between items-center">
+         <h1 className="text-2xl font-bold text-gray-800">Dashboard</h1>
+         <div className="flex space-x-4">
+           <button 
+             className="px-4 py-2 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
+           >
+             Importar
+           </button>
+           <button 
+             className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700"
+           >
+             Exportar
+           </button>
+           <button 
+             className="ml-4 px-4 py-2 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
+           >
+             Nueo Projeto
+           </button>
+           <button 
+             className="ml-4 px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
+             onClick={handleLogout}
+           >
+             Salir
+           </button>
+         </div>
+       </header>
 
       <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
         {columns.map(column => (
