@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 type Card = {
   id: string;
@@ -16,6 +17,7 @@ type Column = {
 };
 
 const Dashboard: React.FC = () => {
+  const navigation = useNavigate();
   const [columns, setColumns] = useState<Column[]>([
     {
       id: 'todo',
@@ -24,7 +26,7 @@ const Dashboard: React.FC = () => {
         {
           id: '1',
           title: 'Define authentication schema for Tracehub Pro',
-          description: 'Create detailed specifications for the authentication system including JWT, OAuth2, and session management.',
+          description: 'Create detailed specifications for the authentication     system including JWT, OAuth2, and session management.',
           assignee: 'Alex Chen',
           priority: 'high',
           tags: ['backend', 'security']
@@ -94,7 +96,7 @@ const Dashboard: React.FC = () => {
     localStorage.removeItem('user');
     
     // Redirigir a la página de login
-    window.location.href = '/login';
+    navigation('login');
   };
 
   function handleAddCard() {
