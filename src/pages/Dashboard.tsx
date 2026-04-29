@@ -90,7 +90,7 @@ const Dashboard: React.FC = () => {
 
   const [newCardTitle, setNewCardTitle] = useState('');
   const [activeColumn] = useState<string>('todo');
-  const navigate = useNavigate();
+  
 
   const handleLogout = () => {
     // Limpiar datos de autenticación
@@ -98,7 +98,7 @@ const Dashboard: React.FC = () => {
     localStorage.removeItem('user');
     
     // Redirigir a la página de login
-    navigate('/login', { replace: true });
+    navigation('/login', { replace: true });
   };
 
   function handleAddCard() {
