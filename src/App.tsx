@@ -16,12 +16,11 @@ function App() {
         <Route path="/" element={<Navigate to="/login" replace />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/tablerokanban" element={<TableroKanban />} />
         <Route path="/registrar-requisito" element={<RegistrarRequisito />} />
         <Route path="/registrar-cambios" element={<RegistrarCambios />} />
         <Route path="/asignar-requisitos" element={<AsignarRequisitos />} />
         <Route path="/validar-calidad" element={<ValidarCalidad />} />
-        <Route path="/tablero-kanban" element={<TableroKanban />} />
         <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
     </BrowserRouter>

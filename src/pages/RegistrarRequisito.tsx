@@ -45,7 +45,7 @@ const RegistrarRequisito: React.FC = () => {
           <div className="flex items-center space-x-4 mb-4">
             <span className="text-2xl font-bold text-gray-800">TRACEHUB</span>
             <nav className="flex space-x-4 text-sm text-gray-500">
-              <a href="#" className="hover:text-gray-700">dashboard</a>
+              <a href="/tablerokanban" className="hover:text-gray-700">dashboard</a>
               <a href="#" className="hover:text-gray-700">Tablero</a>
               <a href="#" className="hover:text-gray-700">list_alt</a>
               <a href="#" className="hover:text-gray-700">Requisitos</a>
