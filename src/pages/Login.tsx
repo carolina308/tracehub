@@ -19,7 +19,7 @@ const Login: React.FC = () => {
       // In a real app, you would call your authentication API here
       console.log('Login successful:', { email, password });
       // Redirect to dashboard
-      navigate('/dashboard');
+      navigate('/tablerokanban');
     } catch (err) {
       setError('Invalid credentials');
     } finally {
