@@ -1,25 +1,9 @@
+
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Link } from "react-router-dom";
+import type { Column, Card } from '../types/kanban';
 
-
-
-type Card = {
-  id: string;
-  title: string;
-  description?: string;
-  assignee?: string;
-  priority?: 'low' | 'medium' | 'high';
-  tags?: string[];
-};
-
-type Column = {
-  id: string;
-  title: string;
-  cards: Card[];
-};
-
-const Dashboard: React.FC = () => {
+const TableroKanban: React.FC = () => {
   const navigation = useNavigate();
   const [columns, setColumns] = useState<Column[]>([
     {
@@ -29,7 +13,7 @@ const Dashboard: React.FC = () => {
         {
           id: '1',
           title: 'Define authentication schema for Tracehub Pro',
-          description: 'Create detailed specifications for the authentication     system including JWT, OAuth2, and session management.',
+          description: 'Create detailed specifications for the authentication system including JWT, OAuth2, and session management.',
           assignee: 'Alex Chen',
           priority: 'high',
           tags: ['backend', 'security']
@@ -92,7 +76,6 @@ const Dashboard: React.FC = () => {
 
   const [newCardTitle, setNewCardTitle] = useState('');
   const [activeColumn] = useState<string>('todo');
-  
 
   const handleLogout = () => {
     // Limpiar datos de autenticación
@@ -108,6 +91,10 @@ const Dashboard: React.FC = () => {
       const newCard: Card = {
         id: Date.now().toString(),
         title: newCardTitle,
+        description: '',
+        assignee: '',
+        priority: 'low',
+        tags: []
       };
       setColumns(prev => prev.map(column => column.id === activeColumn
         ? { ...column, cards: [...column.cards, newCard] }
@@ -157,32 +144,32 @@ const Dashboard: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 p-6">
-       <header className="mb-8 flex justify-between items-center">
-         <h1 className="text-2xl font-bold text-gray-800">Dashboard</h1>
-         <div className="flex space-x-4">
-           <button 
-             className="px-4 py-2 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
-           >
-             Importar
-           </button>
-           <button 
-             className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700"
-           >
-             Exportar
-           </button>
-           <button 
-             className="ml-4 px-4 py-2 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
-           >
-             Nueo Projeto
-           </button>
-           <button 
-             className="ml-4 px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
-             onClick={handleLogout}
-           >
-             Salir
-           </button>
-         </div>
-       </header>
+      <header className="mb-8 flex justify-between items-center">
+        <h1 className="text-2xl font-bold text-gray-800">Tablero Kanban - TRACEHUB</h1>
+        <div className="flex space-x-4">
+          <button 
+            className="px-4 py-2 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
+          >
+            Importar
+          </button>
+          <button 
+            className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700"
+          >
+            Exportar
+          </button>
+          <button 
+            className="ml-4 px-4 py-2 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
+          >
+            Nuevo Proyecto
+          </button>
+          <button 
+            className="ml-4 px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
+            onClick={handleLogout}
+          >
+            Salir
+          </button>
+        </div>
+      </header>
 
       <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
         {columns.map(column => (
@@ -274,4 +261,4 @@ const Dashboard: React.FC = () => {
   );
 };
 
-export default Dashboard;
+export default TableroKanban;
