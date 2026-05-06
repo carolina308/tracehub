@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, Outlet } from 'react-router-dom';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
@@ -9,19 +9,44 @@ import ValidarCalidad from './pages/ValidarCalidad';
 import TableroKanban from './pages/TableroKanban';
 import './App.css';
 
+function ProtectedRoute() {
+  const token = localStorage.getItem('token');
+  const user = localStorage.getItem('user');
+  if (!token || !user) {
+    return <Navigate to="/login" replace />;
+  }
+  return <Outlet />;
+}
+
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Navigate to="/login" replace />} />
+        <Route path="/" element={<TableroKanban />}>
+          <Route index element={<TableroKanban />} />
+        </Route>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/tablerokanban" element={<TableroKanban />} />
+        <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/registrar-requisito" element={<RegistrarRequisito />} />
         <Route path="/registrar-cambios" element={<RegistrarCambios />} />
         <Route path="/asignar-requisitos" element={<AsignarRequisitos />} />
         <Route path="/validar-calidad" element={<ValidarCalidad />} />
-        <Route path="*" element={<Navigate to="/login" replace />} />
+        <Route 
+          element={<ProtectedRoute />}
+        >
+          <Route path="/" element={<TableroKanban />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/registrar-requisito" element={<RegistrarRequisito />} />
+          <Route path="/registrar-cambios" element={<RegistrarCambios />} />
+          <Route path="/asignar-requisitos" element={<AsignarRequisitos />} />
+          <Route path="/validar-calidad" element={<ValidarCalidad />} />
+        </Route>
+        <Route path="*" element={
+          localStorage.getItem('token') && localStorage.getItem('user')
+            ? <Navigate to="/" replace />
+            : <Navigate to="/login" replace />
+        } />
       </Routes>
     </BrowserRouter>
   );
