@@ -18,6 +18,27 @@ const Login: React.FC = () => {
       await new Promise(resolve => setTimeout(resolve, 1000));
       // In a real app, you would call your authentication API here
       console.log('Login successful:', { email, password });
+      
+      // Mock role assignment based on email for demonstration
+      let role = 'developer'; // default role
+      if (email.includes('@po.example.com')) {
+        role = 'product_owner';
+      } else if (email.includes('@qa.example.com')) {
+        role = 'qa';
+      } else if (email.includes('@sm.example.com')) {
+        role = 'scrum_master';
+      } else if (email.includes('@stakeholder.example.com')) {
+        role = 'stakeholder';
+      }
+      
+      // Store user info including role
+      const userInfo = {
+        email: email,
+        role: role
+      };
+      localStorage.setItem('user', JSON.stringify(userInfo));
+      localStorage.setItem('token', 'mock-token'); // mock token
+      
       // Redirect to dashboard
       navigate('/tablerokanban');
     } catch (err) {

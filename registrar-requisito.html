@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>TRACEHUB - Crear Requisito</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800;900&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-error": "#ffffff",
+                        "on-tertiary": "#ffffff",
+                        "tertiary-fixed": "#dde3eb",
+                        "on-background": "#0d1c2e",
+                        "on-surface-variant": "#43474e",
+                        "outline": "#74777f",
+                        "surface-dim": "#ccdbf4",
+                        "primary-fixed-dim": "#adc7f7",
+                        "inverse-on-surface": "#eaf1ff",
+                        "on-error-container": "#93000a",
+                        "outline-variant": "#c4c6cf",
+                        "surface-variant": "#d4e4fc",
+                        "on-tertiary-fixed-variant": "#41474e",
+                        "on-secondary-fixed": "#001c38",
+                        "primary-fixed": "#d6e3ff",
+                        "surface": "#f8f9ff",
+                        "on-secondary-fixed-variant": "#004881",
+                        "surface-bright": "#f8f9ff",
+                        "background": "#f8f9ff",
+                        "on-primary-fixed": "#001b3c",
+                        "on-primary": "#ffffff",
+                        "surface-container-high": "#dce9ff",
+                        "secondary-container": "#7db6ff",
+                        "surface-tint": "#455f88",
+                        "on-tertiary-fixed": "#161c22",
+                        "error": "#ba1a1a",
+                        "secondary-fixed-dim": "#a2c9ff",
+                        "secondary-fixed": "#d3e4ff",
+                        "surface-container": "#e5eeff",
+                        "on-tertiary-container": "#989fa6",
+                        "primary-container": "#1a365d",
+                        "surface-container-low": "#eff4ff",
+                        "tertiary-container": "#30363c",
+                        "tertiary-fixed-dim": "#c1c7cf",
+                        "on-primary-fixed-variant": "#2d476f",
+                        "error-container": "#ffdad6",
+                        "on-primary-container": "#86a0cd",
+                        "secondary": "#1960a3",
+                        "on-secondary": "#ffffff",
+                        "on-surface": "#0d1c2e",
+                        "inverse-surface": "#223144",
+                        "surface-container-highest": "#d4e4fc",
+                        "surface-container-lowest": "#ffffff",
+                        "primary": "#002045",
+                        "tertiary": "#1b2127",
+                        "on-secondary-container": "#00477f",
+                        "inverse-primary": "#adc7f7"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "md": "16px",
+                        "sm": "8px",
+                        "gutter": "20px",
+                        "xl": "40px",
+                        "margin": "32px",
+                        "base": "4px",
+                        "xs": "4px",
+                        "lg": "24px"
+                    },
+                    "fontFamily": {
+                        "headline-xl": ["Manrope"],
+                        "label-sm": ["Inter"],
+                        "body-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-lg": ["Manrope"],
+                        "label-md": ["Inter"],
+                        "headline-md": ["Manrope"]
+                    },
+                    "fontSize": {
+                        "headline-xl": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "label-sm": ["11px", {"lineHeight": "14px", "fontWeight": "500"}],
+                        "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "headline-lg": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "headline-md": ["18px", {"lineHeight": "24px", "fontWeight": "600"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            background-color: #f8f9ff;
+            color: #0d1c2e;
+        }
+    </style>
+</head>
+<body class="flex min-h-screen">
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-0 h-full w-[240px] z-50 bg-slate-50 border-r border-slate-200 flex flex-col p-4 gap-2 font-manrope text-sm font-medium">
+<div class="mb-6 px-2">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-lg bg-blue-900 flex items-center justify-center text-white">
+<span class="material-symbols-outlined text-[20px]">architecture</span>
+</div>
+<div>
+<h1 class="text-lg font-black text-blue-900">Proyecto Alpha</h1>
+<p class="text-xs text-slate-500 font-normal">Espacio de trabajo</p>
+</div>
+</div>
+</div>
+<nav class="space-y-1 flex-1">
+<a class="flex items-center gap-3 px-3 py-2.5 text-slate-600 hover:bg-slate-200 rounded-lg transition-all group" href="#">
+<span class="material-symbols-outlined text-xl" data-icon="dashboard">dashboard</span>
+<span>Tablero</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 bg-white text-blue-700 shadow-sm border border-slate-200 rounded-lg scale-[0.98] duration-150" href="#">
+<span class="material-symbols-outlined text-xl" data-icon="list_alt">list_alt</span>
+<span>Requisitos</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 text-slate-600 hover:bg-slate-200 rounded-lg transition-all group" href="#">
+<span class="material-symbols-outlined text-xl" data-icon="person_add">person_add</span>
+<span>Asignación de Tareas</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 text-slate-600 hover:bg-slate-200 rounded-lg transition-all group" href="#">
+<span class="material-symbols-outlined text-xl" data-icon="history">history</span>
+<span>Historial</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 text-slate-600 hover:bg-slate-200 rounded-lg transition-all group" href="#">
+<span class="material-symbols-outlined text-xl" data-icon="fact_check">fact_check</span>
+<span>Validación QA</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 text-slate-600 hover:bg-slate-200 rounded-lg transition-all group" href="#">
+<span class="material-symbols-outlined text-xl" data-icon="visibility">visibility</span>
+<span>Vista de Stakeholders</span>
+</a>
+</nav>
+<div class="mt-auto pt-4">
+<button class="w-full bg-primary text-white py-3 rounded-lg flex items-center justify-center gap-2 font-semibold hover:bg-opacity-90 transition-all">
+<span class="material-symbols-outlined text-sm">add</span>
+                Crear Requisito
+            </button>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="ml-[240px] flex-1 min-h-screen flex flex-col">
+<!-- TopAppBar -->
+<header class="flex justify-between items-center h-16 px-6 sticky top-0 w-full bg-white border-b border-slate-200 z-40 font-manrope text-sm tracking-tight">
+<div class="flex items-center gap-4">
+<span class="text-xl font-bold text-blue-900">TRACEHUB</span>
+<div class="h-6 w-[1px] bg-slate-200"></div>
+<div class="flex items-center gap-2 text-slate-500">
+<span>Requisitos</span>
+<span class="material-symbols-outlined text-xs">chevron_right</span>
+<span class="text-blue-900 font-semibold">Nueva Entrada</span>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative">
+<span class="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-slate-400 text-lg">search</span>
+<input class="pl-10 pr-4 py-2 bg-slate-50 border-none rounded-lg text-sm w-64 focus:ring-2 focus:ring-secondary focus:bg-white transition-all" placeholder="Buscar requisitos..." type="text"/>
+</div>
+<button class="p-2 text-slate-500 hover:bg-slate-50 rounded-lg">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="p-2 text-slate-500 hover:bg-slate-50 rounded-lg">
+<span class="material-symbols-outlined" data-icon="help_outline">help_outline</span>
+</button>
+<img alt="User profile" class="w-8 h-8 rounded-full border border-slate-200" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCOpIqQUfuAk42dACAzKGlr3SUS_lGUc6Ssb0mnW0-2T-6FdH048IIBSdiVNOblmiTjlYfHMSgaEvHItuYrGURL23Fxm3q4t5FnxEVbrxAv5RAxsU3jIi28NceorSQGFKFiJNgafGta3i5VCbA3HVCKKM6sH3bv0ujvtvMBj3Lo3aUvjB_dwtAzpFNnxpkQztW1Hx__De7QWZYpGuW0dGD--mi6GDFlIBhgmd5mrW87ve0ObaPgYAMpCKKb1kIhwLfTBAn7Ya-UUKI"/>
+</div>
+</header>
+<!-- Canvas -->
+<div class="p-margin flex-1 flex justify-center bg-surface">
+<div class="w-full max-w-4xl">
+<!-- Notifications Section -->
+<div class="space-y-4 mb-lg">
+<!-- Success Message -->
+<div class="flex items-center gap-3 bg-emerald-50 border border-emerald-200 p-4 rounded-xl text-emerald-800">
+<span class="material-symbols-outlined text-emerald-500">check_circle</span>
+<span class="font-body-md font-semibold">Requisito creado exitosamente</span>
+</div>
+<!-- Error Message -->
+<div class="flex items-center gap-3 bg-red-50 border border-red-200 p-4 rounded-xl text-red-800">
+<span class="material-symbols-outlined text-red-500">error</span>
+<span class="font-body-md font-semibold">Error en los campos ingresados</span>
+</div>
+</div>
+<!-- Form Header -->
+<div class="mb-lg">
+<h2 class="font-headline-xl text-headline-xl text-primary mb-1">Crear Requisito</h2>
+<p class="font-body-md text-body-md text-slate-500">Define un nuevo requisito funcional o técnico para el Proyecto Alpha.</p>
+</div>
+<!-- Bento Style Form Layout -->
+<div class="grid grid-cols-12 gap-gutter">
+<!-- Left Column: Main Inputs -->
+<div class="col-span-8 space-y-gutter">
+<div class="bg-white border border-outline-variant p-lg rounded-xl">
+<div class="space-y-lg">
+<!-- Nombre del Requisito -->
+<div class="space-y-2">
+<label class="block font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">
+                                        Nombre del requisito <span class="text-error">*</span>
+</label>
+<input class="w-full px-4 py-3 rounded-lg border border-outline-variant focus:ring-2 focus:ring-secondary transition-all font-body-lg text-body-lg text-on-surface" placeholder="ej. Autenticación de Usuario vía SAML" required="" type="text"/>
+</div>
+<!-- Descripción Detallada -->
+<div class="space-y-2">
+<label class="block font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">
+                                        Descripción detallada <span class="text-error">*</span>
+</label>
+<textarea class="w-full px-4 py-3 rounded-lg border border-outline-variant focus:ring-2 focus:ring-secondary transition-all font-body-md text-body-md text-on-surface resize-none" placeholder="Detalle las especificaciones técnicas, beneficios para el usuario y restricciones..." required="" rows="6"></textarea>
+</div>
+<!-- Criterios de Aceptación -->
+<div class="space-y-2">
+<label class="block font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">
+                                        Criterios de aceptación
+                                    </label>
+<textarea class="w-full px-4 py-3 rounded-lg border border-outline-variant focus:ring-2 focus:ring-secondary transition-all font-body-md text-body-md text-on-surface resize-none" placeholder="Defina cuándo este requisito se considerará completado..." rows="4"></textarea>
+</div>
+</div>
+</div>
+<!-- Attachments Mockup Area -->
+<div class="bg-white border border-outline-variant p-lg rounded-xl border-dashed">
+<div class="flex flex-col items-center justify-center py-6 text-center">
+<span class="material-symbols-outlined text-4xl text-slate-300 mb-2">upload_file</span>
+<p class="font-body-md text-on-surface-variant">Arrastre archivos de diseño o diagramas aquí</p>
+<button class="mt-2 text-secondary font-semibold hover:underline">Explorar archivos</button>
+</div>
+</div>
+</div>
+<!-- Right Column: Meta & Actions -->
+<div class="col-span-4 space-y-gutter">
+<!-- Priority Selection (Dropdown style as per request) -->
+<div class="bg-white border border-outline-variant p-lg rounded-xl">
+<label class="block font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-4">
+                                Prioridad <span class="text-error">*</span>
+</label>
+<div class="relative">
+<select class="w-full px-4 py-3 rounded-lg border border-outline-variant focus:ring-2 focus:ring-secondary transition-all font-body-md text-on-surface appearance-none bg-slate-50 cursor-pointer" required="">
+<option disabled="" selected="" value="">Seleccionar prioridad</option>
+<option value="low">Baja</option>
+<option value="medium">Media</option>
+<option value="high">Alta</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400">expand_more</span>
+</div>
+</div>
+<!-- Data Insights -->
+<div class="bg-primary-container p-lg rounded-xl text-on-primary-container relative overflow-hidden">
+<div class="relative z-10">
+<h4 class="font-headline-md text-headline-md mb-2">Sugerencia</h4>
+<p class="font-label-sm text-label-sm opacity-80 leading-relaxed">Según la capacidad actual, este requisito puede ser priorizado en el Sprint 24. Asegúrese de incluir criterios claros para una validación más rápida.</p>
+</div>
+<div class="absolute -right-4 -bottom-4 opacity-10">
+<span class="material-symbols-outlined text-8xl">lightbulb</span>
+</div>
+</div>
+<!-- Footer Actions -->
+<div class="space-y-3 pt-4">
+<button class="w-full bg-secondary text-white py-4 rounded-lg font-headline-md text-headline-md hover:bg-opacity-90 transition-all flex items-center justify-center gap-2 shadow-lg group">
+<span>Registrar</span>
+<span class="material-symbols-outlined text-xl transition-transform group-hover:translate-x-1">arrow_forward</span>
+</button>
+<button class="w-full bg-white border border-outline-variant text-on-surface-variant py-4 rounded-lg font-headline-md text-headline-md hover:bg-slate-50 transition-all">
+                                Guardar como Borrador
+                            </button>
+<div class="flex items-center justify-center gap-2 py-2">
+<button class="text-label-md text-slate-400 hover:text-error transition-colors uppercase tracking-widest">Cancelar y salir</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>

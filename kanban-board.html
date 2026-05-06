@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Manrope:wght@500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-primary-fixed-variant": "#2d476f",
+                        "surface-container": "#e5eeff",
+                        "secondary-container": "#7db6ff",
+                        "primary-fixed-dim": "#adc7f7",
+                        "surface-dim": "#ccdbf4",
+                        "on-background": "#0d1c2e",
+                        "on-tertiary-fixed": "#161c22",
+                        "outline": "#74777f",
+                        "surface-bright": "#f8f9ff",
+                        "surface": "#f8f9ff",
+                        "on-error-container": "#93000a",
+                        "inverse-surface": "#223144",
+                        "surface-container-highest": "#d4e4fc",
+                        "tertiary-container": "#30363c",
+                        "on-primary": "#ffffff",
+                        "tertiary-fixed-dim": "#c1c7cf",
+                        "on-tertiary": "#ffffff",
+                        "on-secondary-fixed": "#001c38",
+                        "on-error": "#ffffff",
+                        "surface-tint": "#455f88",
+                        "on-primary-fixed": "#001b3c",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container-low": "#eff4ff",
+                        "primary": "#002045",
+                        "on-tertiary-fixed-variant": "#41474e",
+                        "inverse-primary": "#adc7f7",
+                        "on-tertiary-container": "#989fa6",
+                        "secondary-fixed": "#d3e4ff",
+                        "inverse-on-surface": "#eaf1ff",
+                        "on-secondary": "#ffffff",
+                        "secondary": "#1960a3",
+                        "surface-variant": "#d4e4fc",
+                        "surface-container-high": "#dce9ff",
+                        "on-surface": "#0d1c2e",
+                        "tertiary": "#1b2127",
+                        "primary-fixed": "#d6e3ff",
+                        "tertiary-fixed": "#dde3eb",
+                        "error-container": "#ffdad6",
+                        "on-secondary-container": "#00477f",
+                        "on-surface-variant": "#43474e",
+                        "on-primary-container": "#86a0cd",
+                        "outline-variant": "#c4c6cf",
+                        "on-secondary-fixed-variant": "#004881",
+                        "primary-container": "#1a365d",
+                        "secondary-fixed-dim": "#a2c9ff",
+                        "background": "#f8f9ff",
+                        "error": "#ba1a1a"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "sm": "8px",
+                        "xl": "40px",
+                        "lg": "24px",
+                        "xs": "4px",
+                        "md": "16px",
+                        "margin": "32px",
+                        "base": "4px",
+                        "gutter": "20px"
+                    },
+                    "fontFamily": {
+                        "label-sm": ["Inter"],
+                        "headline-md": ["Manrope"],
+                        "headline-xl": ["Manrope"],
+                        "body-lg": ["Inter"],
+                        "label-md": ["Inter"],
+                        "headline-lg": ["Manrope"],
+                        "body-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-sm": ["11px", {"lineHeight": "14px", "fontWeight": "500"}],
+                        "headline-md": ["18px", {"lineHeight": "24px", "fontWeight": "600"}],
+                        "headline-xl": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "headline-lg": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .kanban-scroll::-webkit-scrollbar {
+            height: 8px;
+        }
+        .kanban-scroll::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        .kanban-scroll::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md selection:bg-secondary-container selection:text-on-secondary-container">
+<!-- SideNavBar -->
+<aside class="docked fixed left-0 top-0 h-full w-[240px] border-r bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 flex flex-col h-full py-4 z-50">
+<div class="text-2xl font-extrabold text-blue-900 dark:text-white px-6 py-8">
+            TRACEHUB
+            <div class="font-['Manrope'] font-semibold text-xs text-slate-500 tracking-normal mt-1">Agile Command</div>
+</div>
+<nav class="flex-1 space-y-1 px-3">
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg bg-slate-50 dark:bg-blue-900/20 text-blue-900 dark:text-blue-400 border-r-4 border-blue-900 dark:border-blue-400 active:scale-[0.98] transition-all font-['Manrope'] font-semibold text-sm" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span>Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-500 dark:text-slate-400 hover:text-blue-900 dark:hover:text-blue-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all font-['Manrope'] font-semibold text-sm" href="#">
+<span class="material-symbols-outlined" data-icon="list_alt">list_alt</span>
+<span>Requirements</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-500 dark:text-slate-400 hover:text-blue-900 dark:hover:text-blue-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all font-['Manrope'] font-semibold text-sm" href="#">
+<span class="material-symbols-outlined" data-icon="history">history</span>
+<span>Change Log</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-500 dark:text-slate-400 hover:text-blue-900 dark:hover:text-blue-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all font-['Manrope'] font-semibold text-sm" href="#">
+<span class="material-symbols-outlined" data-icon="fact_check">fact_check</span>
+<span>Quality Validation</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-500 dark:text-slate-400 hover:text-blue-900 dark:hover:text-blue-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all font-['Manrope'] font-semibold text-sm" href="#">
+<span class="material-symbols-outlined" data-icon="groups">groups</span>
+<span>Team</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-500 dark:text-slate-400 hover:text-blue-900 dark:hover:text-blue-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all font-['Manrope'] font-semibold text-sm" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span>Settings</span>
+</a>
+</nav>
+</aside>
+<!-- TopAppBar -->
+<header class="fixed top-0 right-0 left-[240px] flex justify-between items-center px-6 h-16 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 z-40 flat no shadows">
+<div class="flex items-center gap-4 flex-1">
+<div class="relative w-full max-w-md">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm" data-icon="search">search</span>
+<input class="w-full bg-slate-50 border-none rounded-lg pl-10 pr-4 py-2 text-sm focus:ring-2 focus:ring-primary-container outline-none" placeholder="Search tasks, requirements..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 text-slate-500 hover:bg-slate-50 rounded-full transition-all cursor-pointer">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="p-2 text-slate-500 hover:bg-slate-50 rounded-full transition-all cursor-pointer">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+</button>
+<div class="h-8 w-8 rounded-full overflow-hidden border border-slate-200 ml-2">
+<img alt="User Profile Avatar" class="h-full w-full object-cover" data-alt="professional headshot of a software project manager in a bright office setting with soft natural light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCnmytkqbJxypQHAzzemLZzD-Wo1_wbbOLFjPhkIJufyE4G3nGR9F10Kl4U2V-9S6Z8EOJ2f-DtTZXpdDqrUQc5mtY-zEnZzzYz6O9HmaHigZekwivSeeBb3oMqsGp1RsLPQT1iSaIGCgoBRqM7s6bIuSDfJXsBUCPgsJA4OHbu51g2rg1s04Ohq-Has1fAkQJaU0yMGcqX8WwXWcwD5_XtjPcZBNKZ3g-21PkbJyfxJyh6tMCbRifXrBqU9jIjJinUSq_6oGjlMb0"/>
+</div>
+</div>
+</header>
+<!-- Main Canvas -->
+<main class="ml-[240px] pt-16 min-h-screen bg-background">
+<!-- Dashboard Header / Filters -->
+<div class="p-8 pb-0">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+<div>
+<nav class="flex items-center gap-2 text-label-sm text-slate-500 mb-2">
+<span>Projects</span>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<span class="text-primary font-semibold">TRACEHUB Dashboard</span>
+</nav>
+<h1 class="font-headline-xl text-headline-xl text-primary">Unified Kanban Board</h1>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex flex-col gap-1.5">
+<label class="font-label-md text-label-md text-slate-500">Filtro por responsable</label>
+<div class="relative min-w-[200px]">
+<select class="appearance-none w-full bg-white border border-slate-200 rounded-lg pl-3 pr-10 py-2 text-body-md focus:ring-2 focus:ring-primary focus:border-transparent outline-none cursor-pointer">
+<option>All Team Members</option>
+<option>Alex Rivera (Lead)</option>
+<option>Sarah Chen</option>
+<option>Marcus Wright</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400">expand_more</span>
+</div>
+</div>
+<button class="mt-auto bg-primary text-white px-4 py-2.5 rounded-lg font-label-md text-label-md flex items-center gap-2 hover:bg-opacity-90 transition-all shadow-sm">
+<span class="material-symbols-outlined text-[18px]" data-icon="add">add</span>
+                        New Task
+                    </button>
+</div>
+</div>
+<!-- Dashboard Stats Bento -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap- gutter mt-8 mb-8">
+<div class="bg-white border border-slate-200 p-lg rounded-lg">
+<p class="text-label-md text-slate-500 mb-1">Total Requirements</p>
+<p class="text-headline-lg font-headline-lg text-primary">124</p>
+<div class="mt-2 flex items-center gap-1 text-label-sm text-emerald-600">
+<span class="material-symbols-outlined text-[14px]">trending_up</span>
+<span>12% from last sprint</span>
+</div>
+</div>
+<div class="bg-white border border-slate-200 p-lg rounded-lg">
+<p class="text-label-md text-slate-500 mb-1">Velocity</p>
+<p class="text-headline-lg font-headline-lg text-primary">42 <span class="text-label-md font-normal text-slate-400">pts/week</span></p>
+<div class="mt-2 flex items-center gap-1 text-label-sm text-blue-600">
+<span class="material-symbols-outlined text-[14px]">bolt</span>
+<span>Optimal Performance</span>
+</div>
+</div>
+<div class="bg-white border border-slate-200 p-lg rounded-lg">
+<p class="text-label-md text-slate-500 mb-1">Open Blockers</p>
+<p class="text-headline-lg font-headline-lg text-error">3</p>
+<div class="mt-2 flex items-center gap-1 text-label-sm text-error">
+<span class="material-symbols-outlined text-[14px]">warning</span>
+<span>Requires Attention</span>
+</div>
+</div>
+<div class="bg-white border border-slate-200 p-lg rounded-lg">
+<p class="text-label-md text-slate-500 mb-1">Quality Score</p>
+<p class="text-headline-lg font-headline-lg text-primary">98.2%</p>
+<div class="mt-2 flex items-center gap-1 text-label-sm text-emerald-600">
+<span class="material-symbols-outlined text-[14px]">verified</span>
+<span>Target Exceeded</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Kanban Board Area -->
+<div class="px-8 pb-12">
+<div class="flex gap-gutter overflow-x-auto pb-6 kanban-scroll min-h-[600px]">
+<!-- Column: To Do -->
+<div class="flex-shrink-0 w-[280px] flex flex-col gap-4">
+<div class="flex items-center justify-between px-2">
+<div class="flex items-center gap-2">
+<h3 class="font-headline-md text-headline-md text-primary">To Do</h3>
+<span class="bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full text-label-sm">5</span>
+</div>
+<button class="text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="more_horiz">more_horiz</span>
+</button>
+</div>
+<div class="flex flex-col gap-3 p-2 rounded-xl border-2 border-dashed border-slate-200 min-h-full">
+<!-- Card 1 -->
+<div class="bg-white border border-slate-200 p-3 rounded-lg shadow-sm hover:border-secondary-container transition-all cursor-pointer group">
+<div class="flex items-center justify-between mb-3">
+<span class="bg-surface-container text-primary text-[10px] font-bold px-2 py-0.5 rounded tracking-wide">TH-204</span>
+<span class="material-symbols-outlined text-[18px] text-slate-300 group-hover:text-slate-500">drag_indicator</span>
+</div>
+<h4 class="font-body-md text-body-md text-on-surface mb-4">Initial Architecture Review for Cloud Migration</h4>
+<div class="flex items-center justify-between">
+<div class="flex -space-x-2">
+<div class="h-6 w-6 rounded-full border-2 border-white overflow-hidden">
+<img alt="Team member" class="h-full w-full object-cover" data-alt="professional portrait of a developer with a clean white background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDR7ifAEVQk20DMY9gO2iB1kKyLYWqNap0_wUt8o02QlM9bOEFKo3G3b6UPFBbRsMXbp6Zj12WgkLj3o7JsIHRzO2TtCVsUdiPoWBu_1SYNPoJrbxdzc1ANN-OBt1Bgixvf0jFqhUvlOxyyp1cb07EOwIJt1tMxwiJQD5bSebZhrASQk8YbJyfiw2BiLfUbK20Ndk_lKBkfMSy-tKbdujKVj5T7UpSZAU6W2S-09zA4FdxTQZI31L619TBvgxyEvcw7bQuLxwEc_sw"/>
+</div>
+</div>
+<div class="flex items-center gap-1.5 text-slate-400">
+<span class="material-symbols-outlined text-[16px]">chat_bubble_outline</span>
+<span class="text-label-sm">4</span>
+</div>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="bg-white border border-slate-200 p-3 rounded-lg shadow-sm hover:border-secondary-container transition-all cursor-pointer group">
+<div class="flex items-center justify-between mb-3">
+<span class="bg-surface-container text-primary text-[10px] font-bold px-2 py-0.5 rounded tracking-wide">TH-205</span>
+<span class="material-symbols-outlined text-[18px] text-slate-300 group-hover:text-slate-500">drag_indicator</span>
+</div>
+<h4 class="font-body-md text-body-md text-on-surface mb-4">Draft Quality Validation Protocol v2</h4>
+<div class="flex items-center justify-between">
+<div class="flex -space-x-2">
+<div class="h-6 w-6 rounded-full border-2 border-white overflow-hidden">
+<img alt="Team member" class="h-full w-full object-cover" data-alt="portrait of a woman in business attire with soft lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC9cQ71dzu8UBUCx4ExvJ6Fo2o4JX6XfOFGJhrUTTVN_WJ1ZJvs5UdpNo5VrTLwu0sgeVMa_-20VMPr-gbWOgQrBkA0jMX72ZOneMN0xwEsjUDGCGL6OLn4S1NZsSyGq97uN9ziVHjS83axnNamrITwVLuTevGLsJgsPlrKvXyNFOxPTF5Ygw9WaUVjfD6tZDZkT3VaJSH4ObABwvGbKger_nsS-6EWEtuXYzaxI8USQllnGc0cL37HIJm_9mM3FlutUaqOF4nbJpg"/>
+</div>
+</div>
+<div class="flex items-center gap-1.5 text-slate-400">
+<span class="material-symbols-outlined text-[16px]">attachment</span>
+<span class="text-label-sm">2</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Column: In Progress -->
+<div class="flex-shrink-0 w-[280px] flex flex-col gap-4">
+<div class="flex items-center justify-between px-2">
+<div class="flex items-center gap-2">
+<h3 class="font-headline-md text-headline-md text-primary">In Progress</h3>
+<span class="bg-secondary-container text-white px-2 py-0.5 rounded-full text-label-sm">2</span>
+</div>
+<button class="text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="more_horiz">more_horiz</span>
+</button>
+</div>
+<div class="flex flex-col gap-3 p-2 rounded-xl border-2 border-dashed border-slate-200 min-h-full">
+<!-- Card 1 -->
+<div class="bg-white border-l-4 border-l-secondary border border-slate-200 p-3 rounded-lg shadow-sm hover:border-secondary-container transition-all cursor-pointer group">
+<div class="flex items-center justify-between mb-3">
+<span class="bg-secondary-container/10 text-secondary text-[10px] font-bold px-2 py-0.5 rounded tracking-wide">TH-198</span>
+<span class="material-symbols-outlined text-[18px] text-slate-300 group-hover:text-slate-500">drag_indicator</span>
+</div>
+<h4 class="font-body-md text-body-md text-on-surface mb-2">Automated Test Suite Refactoring</h4>
+<div class="flex gap-2 mb-4">
+<span class="bg-error-container text-error text-[10px] px-2 py-0.5 rounded font-bold">HIGH PRIO</span>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex -space-x-2">
+<div class="h-6 w-6 rounded-full border-2 border-white overflow-hidden">
+<img alt="Team member" class="h-full w-full object-cover" data-alt="professional male headshot with a friendly expression in a modern office" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAqQ65gXZha9lAXi-8sJRfwMz-yEcNLwatWTy73hZ6NdvKusKzRnx3Lydoi_MnpH0Rb97kgmopCBgfmlhg1-kporU51lrXmlbt7GETpt0d8pu7gbnZ3ilzKFJ-fnY8ufqFZ_ES7wG4ClSO-skYQ1ct9-XL2q9dq53_DaS2qu06Regnfp35hmNmSxh5Vmdd5UUE2f5QuuobyjIXDVCgAiesIvL4EwQx2mGFBpKZ4yLWXBvsL9JjpQYvjO7-Y2oqgO3N1pOpsC-JImKk"/>
+</div>
+</div>
+<div class="flex items-center gap-1.5 text-slate-400">
+<span class="material-symbols-outlined text-[16px]">schedule</span>
+<span class="text-label-sm">2d left</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Column: Done -->
+<div class="flex-shrink-0 w-[280px] flex flex-col gap-4">
+<div class="flex items-center justify-between px-2">
+<div class="flex items-center gap-2">
+<h3 class="font-headline-md text-headline-md text-primary">Done</h3>
+<span class="bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full text-label-sm">18</span>
+</div>
+<button class="text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="more_horiz">more_horiz</span>
+</button>
+</div>
+<div class="flex flex-col gap-3 p-2 rounded-xl border-2 border-dashed border-slate-200 min-h-full">
+<!-- Card 1 -->
+<div class="bg-slate-50 opacity-75 border border-slate-200 p-3 rounded-lg shadow-sm hover:opacity-100 transition-all cursor-pointer group">
+<div class="flex items-center justify-between mb-3">
+<span class="bg-slate-200 text-slate-600 text-[10px] font-bold px-2 py-0.5 rounded tracking-wide">TH-182</span>
+<span class="material-symbols-outlined text-emerald-500 text-[18px]">check_circle</span>
+</div>
+<h4 class="font-body-md text-body-md text-slate-500 mb-4 line-through">Security Patch Deployment v4.2</h4>
+<div class="flex items-center justify-between">
+<div class="flex -space-x-2">
+<div class="h-6 w-6 rounded-full border-2 border-white overflow-hidden">
+<img alt="Team member" class="h-full w-full object-cover" data-alt="professional woman in tech smiling in a creative studio environment" src="https://lh3.googleusercontent.com/aida-public/AB6AXuABWzqHMTsXisPt03Zd19R0DzOhaE06KraxVG8TDtAqpqiAQ6XvI2V9YP67-OuwXDZHqp7LVRj09WkrHMbOeC_-xqWWgNkppVRlZgW27AiA8nd_NQxDRnYXKwLutoBCFp46lvLqZ7dU4kO8YWgE2EtjLdWQnVP5ALtB9h3eCJvfN7QeCL4iGgubM8U-SKhEzareyuTHf6FDzrIHLn--kQxu_vHDgF4adUOYc5CQj_o713D3QaOyWYAk8FE28RSNdzAgLIPXegcQDmw"/>
+</div>
+</div>
+<div class="text-emerald-600 text-label-sm font-semibold">Completed</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Column: Cerrado -->
+<div class="flex-shrink-0 w-[280px] flex flex-col gap-4">
+<div class="flex items-center justify-between px-2">
+<div class="flex items-center gap-2">
+<h3 class="font-headline-md text-headline-md text-primary">Cerrado</h3>
+<span class="bg-slate-200 text-slate-600 px-2 py-0.5 rounded-full text-label-sm">42</span>
+</div>
+<button class="text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="more_horiz">more_horiz</span>
+</button>
+</div>
+<div class="flex flex-col gap-3 p-2 rounded-xl border-2 border-dashed border-slate-200 min-h-full">
+<div class="flex flex-col items-center justify-center h-48 text-center px-6">
+<span class="material-symbols-outlined text-slate-300 text-[48px] mb-2" data-icon="archive">archive</span>
+<p class="text-label-md text-slate-400">Items in this column are archived and ready for reporting.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- FAB (Suppressed based on context: Details or settings, but visible here as it's the Main Board) -->
+<button class="fixed bottom-8 right-8 h-14 w-14 bg-primary text-white rounded-full flex items-center justify-center shadow-xl hover:scale-105 active:scale-95 transition-all z-50">
+<span class="material-symbols-outlined text-[28px]" data-icon="add">add</span>
+</button>
+</body></html>
