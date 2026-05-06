@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 const Register: React.FC = () => {
-  const navigate = useNavigate();
   
   const [formData, setFormData] = useState({
     firstName: '',
@@ -17,52 +15,132 @@ const Register: React.FC = () => {
     terms: false,
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [statusMessage, setStatusMessage] = useState<{ type: 'error' | 'warning' | 'success' | ''; text: string }>({ type: '', text: '' });
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
 
+  const roleOptions = [
+    { value: 'PO', label: 'PO' },
+    { value: 'SM', label: 'SM' },
+    { value: 'Dev', label: 'Dev' },
+    { value: 'QA', label: 'QA' },
+    { value: 'Stakeholder', label: 'Stakeholders' },
+  ];
+
+  const getStoredUsers = () => {
+    const stored = localStorage.getItem('registeredUsers');
+    return stored ? JSON.parse(stored) as Array<{ email: string; firstName: string; lastName: string; role: string }> : [];
+  };
+
+  const saveUser = (user: { email: string; firstName: string; lastName: string; role: string }) => {
+    const users = getStoredUsers();
+    users.push(user);
+    localStorage.setItem('registeredUsers', JSON.stringify(users));
+  };
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, id, value, type } = e.target;
-    const fieldName = name || id;
+    const { name, value, type } = e.target;
     setFormData(prev => ({
       ...prev,
-      [fieldName]: type === 'checkbox' ? e.target.checked : value,
+      [name]: type === 'checkbox' ? (e.target as HTMLInputElement).checked : value,
     }));
-    // Clear error for this field when user types
-    if (errors[fieldName]) {
-      setErrors(prev => ({ ...prev, [fieldName]: '' }));
+
+    if (errors[name]) {
+      setErrors(prev => ({ ...prev, [name]: '' }));
+    }
+
+    if (statusMessage.type) {
+      setStatusMessage({ type: '', text: '' });
     }
   };
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
-    
-    if (!formData.firstName.trim()) newErrors.firstName = 'First name is required';
-    if (!formData.lastName.trim()) newErrors.lastName = 'Last name is required';
-    if (!formData.dni.trim()) newErrors.dni = 'DNI is required';
-    if (!formData.email.trim()) newErrors.email = 'Email is required';
-    else if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = 'Email is invalid';
-    if (!formData.role) newErrors.role = 'Role is required';
-    if (!formData.password) newErrors.password = 'Password is required';
-    else if (formData.password.length < 8) newErrors.password = 'Password must be at least 8 characters';
-    if (formData.password !== formData.confirmPassword) newErrors.confirmPassword = 'Passwords do not match';
-    
+    const nameRegex = /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/;
+
+    if (!formData.firstName.trim()) {
+      newErrors.firstName = 'Primer nombre es obligatorio';
+    } else if (!nameRegex.test(formData.firstName.trim())) {
+      newErrors.firstName = 'Solo se permiten letras y espacios';
+    }
+
+    if (formData.middleName.trim() && !nameRegex.test(formData.middleName.trim())) {
+      newErrors.middleName = 'Solo se permiten letras y espacios';
+    }
+
+    if (!formData.lastName.trim()) {
+      newErrors.lastName = 'Primer apellido es obligatorio';
+    } else if (!nameRegex.test(formData.lastName.trim())) {
+      newErrors.lastName = 'Solo se permiten letras y espacios';
+    }
+
+    if (formData.secondLastName.trim() && !nameRegex.test(formData.secondLastName.trim())) {
+      newErrors.secondLastName = 'Solo se permiten letras y espacios';
+    }
+
+    if (!formData.email.trim()) {
+      newErrors.email = 'Correo es obligatorio';
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())) {
+      newErrors.email = 'Verificar correo';
+    }
+
+    if (!formData.role) {
+      newErrors.role = 'Cargo es obligatorio';
+    }
+
     setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+
+    if (Object.keys(newErrors).length > 0) {
+      const requiredErrors = (['firstName', 'lastName', 'email', 'role'] as const).some(key => {
+        const value = formData[key];
+        return !value.trim();
+      });
+      if (requiredErrors) {
+        setStatusMessage({ type: 'error', text: 'Debe diligenciar los campos obligatorios' });
+      } else if (newErrors.email === 'Verificar correo') {
+        setStatusMessage({ type: 'error', text: 'Verificar correo' });
+      } else {
+        setStatusMessage({ type: 'error', text: 'Error en los campos ingresados' });
+      }
+      return false;
+    }
+
+    return true;
   };
 
-  const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (validateForm()) {
-      setLoading(true);
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      // In a real app, you would call your registration API here
-      console.log('Registration successful:', formData);
+    setStatusMessage({ type: '', text: '' });
+
+    if (!validateForm()) {
+      return;
+    }
+
+    setLoading(true);
+
+    const existingUsers = getStoredUsers();
+    const emailLower = formData.email.trim().toLowerCase();
+    const userAlreadyExists = existingUsers.some(user => user.email.toLowerCase() === emailLower);
+
+    if (userAlreadyExists) {
+      setStatusMessage({ type: 'warning', text: 'El usuario ya está registrado' });
+      setLoading(false);
+      return;
+    }
+
+    try {
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      saveUser({
+        email: formData.email.trim(),
+        firstName: formData.firstName.trim(),
+        lastName: formData.lastName.trim(),
+        role: formData.role,
+      });
       setSuccess(true);
-      // Redirect to login after successful registration
-      setTimeout(() => {
-        navigate('/login');
-      }, 2000);
+      setStatusMessage({ type: 'success', text: 'El registro fue exitoso' });
+    } catch (err) {
+      setStatusMessage({ type: 'error', text: 'Error en los campos ingresados' });
+    } finally {
       setLoading(false);
     }
   };
@@ -71,9 +149,8 @@ const Register: React.FC = () => {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center px-4 py-8 bg-white">
         <div className="text-center">
-          <h2 className="text-2xl font-bold text-gray-800 mb-4">Cuenta creada exitosamente</h2>
-          <p className="text-gray-600 mb-6">En breve serás redirigido a la página de inicio de sesión..</p>
-          <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-indigo-500"></div>
+          <h2 className="text-2xl font-bold text-gray-800 mb-4">El registro fue exitoso</h2>
+          <p className="text-gray-600 mb-6">El usuario se ha registrado correctamente.</p>
         </div>
       </div>
     );
@@ -92,6 +169,11 @@ const Register: React.FC = () => {
         </div>
         
         <form onSubmit={handleSubmit} className="space-y-6">
+          {statusMessage.text && (
+            <div className={`rounded-md px-4 py-3 text-sm ${statusMessage.type === 'error' ? 'bg-red-50 text-red-700' : statusMessage.type === 'warning' ? 'bg-yellow-50 text-yellow-700' : 'bg-green-50 text-green-700'}`}>
+              {statusMessage.text}
+            </div>
+          )}
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 mb-1">
@@ -198,7 +280,7 @@ const Register: React.FC = () => {
           
           <div>
             <label htmlFor="role" className="block text-sm font-medium text-gray-700 mb-1">
-              Role (required)
+              Cargo/Rol (required)
             </label>
             <select
               id="role"
@@ -208,12 +290,10 @@ const Register: React.FC = () => {
               value={formData.role}
               onChange={handleChange}
             >
-              <option value="">Selecione su rol profesional</option>
-              <option value="Project Manager">Project Manager</option>
-              <option value="Engineering Lead">Engineering Lead</option>
-              <option value="QA Validator">QA Validator</option>
-              <option value="Stakeholder">Stakeholder</option>
-              <option value="Full-stack Developer">Full-stack Developer</option>
+              <option value="">Seleccione su cargo</option>
+              {roleOptions.map(option => (
+                <option key={option.value} value={option.value}>{option.label}</option>
+              ))}
             </select>
             {errors.role && <p className="text-sm text-red-600 mt-1">{errors.role}</p>}
           </div>
@@ -315,7 +395,7 @@ const Register: React.FC = () => {
             disabled={loading || !formData.terms}
             className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
           >
-            {loading ? 'Creating account...' : 'Create Account'}
+            {loading ? 'Registrando...' : 'Registrar'}
           </button>
         </form>
         

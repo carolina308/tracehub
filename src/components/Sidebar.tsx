@@ -1,102 +1,100 @@
-﻿import React, { useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
-import {
-  BiMenuAltLeft,
-  BiMenuAltRight,
-  BiGridAlt,
-  BiListUl,
-  BiHistory,
-  BiCheckShield,
-  BiGroup,
-  BiCog,
-  BiLogOut
-} from 'react-icons/bi';
+﻿import {
+  LayoutDashboard,
+  ClipboardList,
+  History,
+  ShieldCheck,
+  Users,
+  Settings,
+  LogOut,
+} from "lucide-react";
 
-const Sidebar: React.FC = () => {
-  const navigate = useNavigate();
+import { Link, useLocation } from "react-router-dom";
+
+const Sidebar = () => {
   const location = useLocation();
-  const [collapsed, setCollapsed] = useState(false);
 
-  const menuItems = [
-    { name: 'Tablero', path: '/', icon: <BiGridAlt /> },
-    { name: 'Requerimientos', path: '/registrar-requisito', icon: <BiListUl /> },
-    { name: 'Registrar cambios', path: '/registrar-cambios', icon: <BiHistory /> },
-    { name: 'Calidad', path: '/validar-calidad', icon: <BiCheckShield /> },
-    { name: 'Grupo', path: '/team', icon: <BiGroup /> },
-    { name: 'Ajustes', path: '/settings', icon: <BiCog /> }
+  const menu = [
+    {
+      name: "Tablero",
+      icon: LayoutDashboard,
+      path: "/dashboard",
+    },
+    {
+      name: "Requerimientos",
+      icon: ClipboardList,
+      path: "/register-requirement",
+    },
+    {
+      name: "Registrar cambios",
+      icon: History,
+      path: "/historial",
+    },
+    {
+      name: "Calidad",
+      icon: ShieldCheck,
+      path: "/qa",
+    },
+    {
+      name: "Grupo",
+      icon: Users,
+      path: "/team",
+    },
+    {
+      name: "Ajustes",
+      icon: Settings,
+      path: "/settings",
+    },
   ];
 
-  const handleLogout = () => {
-    localStorage.clear();
-    navigate('/login');
-  };
-
   return (
-    <aside
-      className={`
-        fixed top-0 left-0 h-full bg-white dark:bg-slate-900 border-r
-        transition-all duration-300 z-50 flex flex-col
-        ${collapsed ? 'w-[70px]' : 'w-[240px]'}
-      `}
-    >
-      {/* HEADER */}
-      <div className="flex items-center justify-between px-4 py-5">
-        {!collapsed && (
-          <div>
-            <h1 className="text-lg font-bold text-blue-900 dark:text-white">
-              TRACEHUB
-            </h1>
-            <p className="text-xs text-slate-500">Agile Command</p>
-          </div>
-        )}
+    <aside className="w-[230px] min-h-screen bg-[#081028] flex flex-col justify-between border-r border-[#1e293b]">
+      {/* TOP */}
+      <div>
+        {/* LOGO */}
+        <div className="p-8">
+          <h1 className="text-5xl font-bold text-[#2563eb]">
+            TRACEHUB
+          </h1>
 
-        <button
-          onClick={() => setCollapsed(!collapsed)}
-          className="text-xl text-slate-500 hover:text-blue-600"
-        >
-          {collapsed ? <BiMenuAltRight /> : <BiMenuAltLeft />}
-        </button>
-      </div>
+          <p className="text-gray-500 text-sm mt-4">
+            Agile Command
+          </p>
+        </div>
 
-      {/* MENU */}
-      <nav className="flex-1 px-2 space-y-2">
-        {menuItems.map((item) => {
-          const active = location.pathname === item.path;
+        {/* MENU */}
+        <nav className="px-4 space-y-3">
+          {menu.map((item) => {
+            const Icon = item.icon;
 
-          return (
-            <button
-              key={item.path}
-              onClick={() => navigate(item.path)}
-              className={`
-                w-full flex items-center gap-3 px-3 py-3 rounded-lg
-                transition-all duration-200
-                ${
+            const active =
+              location.pathname === item.path;
+
+            return (
+              <Link
+                key={item.name}
+                to={item.path}
+                className={`flex items-center gap-3 px-5 py-4 rounded-2xl transition-all ${
                   active
-                    ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400'
-                    : 'text-slate-500 hover:bg-gray-100 dark:hover:bg-slate-800'
-                }
-              `}
-            >
-              <span className="text-xl">{item.icon}</span>
+                    ? "bg-[#172554] text-white"
+                    : "text-gray-400 hover:bg-[#111827]"
+                }`}
+              >
+                <Icon size={20} />
 
-              {!collapsed && (
-                <span className="text-sm font-medium">
+                <span className="font-medium">
                   {item.name}
                 </span>
-              )}
-            </button>
-          );
-        })}
-      </nav>
+              </Link>
+            );
+          })}
+        </nav>
+      </div>
 
-      {/* LOGOUT */}
-      <div className="p-3">
-        <button
-          onClick={handleLogout}
-          className="w-full flex items-center gap-3 px-3 py-3 rounded-lg bg-red-500 text-white hover:bg-red-600 transition"
-        >
-          <BiLogOut />
-          {!collapsed && <span>Salir</span>}
+      {/* BOTTOM */}
+      <div className="p-4">
+        <button className="w-full bg-red-500 hover:bg-red-600 transition-all text-white rounded-2xl py-4 flex items-center justify-center gap-3 font-semibold">
+          <LogOut size={18} />
+          Salir
         </button>
       </div>
     </aside>

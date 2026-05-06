@@ -1,233 +1,218 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState } from "react";
 
-const RegistrarRequisito: React.FC = () => {
-  const navigate = useNavigate();
-  const [nombre, setNombre] = useState('');
-  const [descripcion, setDescripcion] = useState('');
-  const [criterios, setCriterios] = useState('');
-  const [prioridad, setPrioridad] = useState<'baja' | 'media' | 'alta'>('media');
-  const [sugerencia, setSugerencia] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [success, setSuccess] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+interface RequirementForm {
+  title: string;
+  description: string;
+  priority: string;
+  acceptance: string;
+}
 
-  const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
+const RegistrarRequisito = () => {
+  const [formData, setFormData] = useState<RequirementForm>({
+    title: "",
+    description: "",
+    priority: "",
+    acceptance: "",
+  });
+
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+
+  const handleChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
+  ) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
-    setError(null);
-    setSuccess(false);
-    
-    // Simulate API call
-    try {
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      // In a real app, you would call your API here
-      console.log('Requisito creado:', { nombre, descripcion, criterios, prioridad });
-      setSuccess(true);
-      // Reset form after success
-      setNombre('');
-      setDescripcion('');
-      setCriterios('');
-      setPrioridad('media');
-      setSugerencia('');
-    } catch (err) {
-      setError('Error al crear el requisito');
-    } finally {
-      setLoading(false);
+
+    setError("");
+    setSuccess("");
+
+    if (
+      !formData.title ||
+      !formData.description ||
+      !formData.priority
+    ) {
+      setError("Error en los campos ingresados");
+      return;
     }
+
+    const newRequirement = {
+      id: crypto.randomUUID(),
+      code: `TH-${Math.floor(Math.random() * 900 + 100)}`,
+      title: formData.title,
+      description: formData.description,
+      priority: formData.priority,
+      acceptance: formData.acceptance,
+      assignee: "Unassigned",
+      tags: ["new"],
+      points: 0,
+      status: "backlog",
+      createdAt: new Date(),
+    };
+
+    const existing =
+      JSON.parse(localStorage.getItem("tracehub_tasks") || "[]");
+
+    localStorage.setItem(
+      "tracehub_tasks",
+      JSON.stringify([...existing, newRequirement])
+    );
+
+    setSuccess("Requisito creado exitosamente");
+
+    setFormData({
+      title: "",
+      description: "",
+      priority: "",
+      acceptance: "",
+    });
   };
 
   return (
-    <div className="min-h-screen bg-white p-6">
-      <div className="max-w-4xl mx-auto">
-        {/* Header */}
-        <div className="mb-8">
-          <div className="flex items-center space-x-4 mb-4">
-            <span className="text-2xl font-bold text-gray-800">TRACEHUB</span>
-            <nav className="flex space-x-4 text-sm text-gray-500">
-              <a href="/tablerokanban" className="hover:text-gray-700">dashboard</a>
-              <a href="#" className="hover:text-gray-700">Tablero</a>
-              <a href="#" className="hover:text-gray-700">list_alt</a>
-              <a href="#" className="hover:text-gray-700">Requisitos</a>
-              <a href="#" className="hover:text-gray-700">person_add</a>
-              <a href="#" className="hover:text-gray-700">Asignación de Tareas</a>
-              <a href="#" className="hover:text-gray-700">history</a>
-              <a href="#" className="hover:text-gray-700">Historial</a>
-              <a href="#" className="hover:text-gray-700">fact_check</a>
-              <a href="#" className="hover:text-gray-700">Validación QA</a>
-              <a href="#" className="hover:text-gray-700">visibility</a>
-              <a href="#" className="hover:text-gray-700">Vista de Stakeholders</a>
-            </nav>
-          </div>
-          
-          <button className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700">
-            <span className="mr-2">+</span> Crear Requisito
-          </button>
-        </div>
+    <div className="min-h-screen bg-[#f4f7fb] p-10">
+      {/* HEADER */}
+      <div className="mb-10">
+        <p className="text-sm text-gray-400 mb-2">
+          Requisitos {" > "} Nueva Entrada
+        </p>
 
-        {/* Main Content */}
-        <div className="bg-gray-50 rounded-lg p-6">
-          <h1 className="text-2xl font-bold text-gray-800 mb-6">Crear Requisito</h1>
-          <p className="text-gray-600 mb-6">
-            Define un nuevo requisito funcional o técnico para el Proyecto Alpha.
-          </p>
+        <h1 className="text-5xl font-bold text-[#2563eb]">
+          Crear Requisito
+        </h1>
 
-          {/* Success/Error Messages */}
-          {success && (
-            <div className="bg-green-50 border-l-4 border-green-500 p-4 mb-6">
-              <div className="flex">
-                <div className="flex-shrink-0">
-                  <span className="text-green-600">✓</span>
-                </div>
-                <div className="ml-3">
-                  <p className="text-sm text-green-700">Requisito creado exitosamente</p>
-                </div>
-              </div>
-            </div>
-          )}
-          {error && (
-            <div className="bg-red-50 border-l-4 border-red-500 p-4 mb-6">
-              <div className="flex">
-                <div className="flex-shrink-0">
-                  <span className="text-red-600">✕</span>
-                </div>
-                <div className="ml-3">
-                  <p className="text-sm text-red-700">{error}</p>
-                </div>
-              </div>
-            </div>
-          )}
-
-          <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Nombre del requisito */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Nombre del requisito *
-              </label>
-              <input
-                type="text"
-                value={nombre}
-                onChange={(e) => setNombre(e.target.value)}
-                required
-                className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                placeholder="Ingrese el nombre del requisito"
-              />
-            </div>
-
-            {/* Descripción detallada */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Descripción detallada *
-              </label>
-              <textarea
-                value={descripcion}
-                onChange={(e) => setDescripcion(e.target.value)}
-                required
-                rows={4}
-                className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                placeholder="Describa detalladamente el requisito"
-              />
-            </div>
-
-            {/* Criterios de aceptación */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Criterios de aceptación
-              </label>
-              <textarea
-                value={criterios}
-                onChange={(e) => setCriterios(e.target.value)}
-                rows={4}
-                className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                placeholder="Defina los criterios de aceptación (opcional)"
-              />
-            </div>
-
-            {/* Archivos */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Archivos adjuntos
-              </label>
-              <div className="flex items-center space-x-4">
-                <div className="flex-1 border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-indigo-300">
-                  <div className="flex flex-col items-center pt-6">
-                    <span className="text-indigo-500">📎</span>
-                    <p className="mt-2 text-sm text-gray-600">
-                      Arrastre archivos de diseño o diagramas aquí
-                    </p>
-                    <button 
-                      type="button"
-                      className="mt-4 px-4 py-2 bg-indigo-50 text-indigo-600 font-medium rounded-md hover:bg-indigo-100"
-                    >
-                      Explorar archivos
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Prioridad */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Prioridad *
-              </label>
-              <select
-                value={prioridad}
-                onChange={(e) => setPrioridad(e.target.value as any)}
-                required
-                className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-              >
-                <option value="">Seleccionar prioridad</option>
-                <option value="baja">Baja</option>
-                <option value="media">Media</option>
-                <option value="alta">Alta</option>
-              </select>
-            </div>
-
-            {/* Sugerencia */}
-            {sugerencia && (
-              <div className="bg-blue-50 border-l-4 border-blue-500 p-4">
-                <div className="flex">
-                  <div className="flex-shrink-0">
-                    <span className="text-blue-600">💡</span>
-                  </div>
-                  <div className="ml-3">
-                    <p className="text-sm text-blue-700">{sugerencia}</p>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* Botones */}
-            <div className="flex justify-end space-x-4">
-              <button
-                type="button"
-                onClick={() => navigate('/dashboard')}
-                className="px-4 py-2 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
-              >
-                Cancelar y salir
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  // Guardar como borrador functionality
-                  alert('Guardado como borrador');
-                }}
-                className="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300"
-              >
-                Guardar como Borrador
-              </button>
-              <button
-                type="submit"
-                disabled={loading}
-                className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700"
-              >
-                {loading ? 'Creando...' : 'Registrar'}
-              </button>
-            </div>
-          </form>
-        </div>
+        <p className="text-gray-500 mt-4">
+          Define un nuevo requisito funcional o técnico para el proyecto.
+        </p>
       </div>
+
+      {/* ALERTAS */}
+      {success && (
+        <div className="bg-green-100 border border-green-300 text-green-700 p-4 rounded-2xl mb-5">
+          {success}
+        </div>
+      )}
+
+      {error && (
+        <div className="bg-red-100 border border-red-300 text-red-700 p-4 rounded-2xl mb-5">
+          {error}
+        </div>
+      )}
+
+      {/* FORM */}
+      <form
+        onSubmit={handleSubmit}
+        className="grid grid-cols-3 gap-8"
+      >
+        {/* LEFT */}
+        <div className="col-span-2 bg-white rounded-3xl p-8 shadow-sm">
+          {/* TITLE */}
+          <div className="mb-6">
+            <label className="block text-sm font-semibold mb-3 text-gray-700">
+              NOMBRE DEL REQUISITO *
+            </label>
+
+            <input
+              type="text"
+              name="title"
+              value={formData.title}
+              onChange={handleChange}
+              placeholder="Ej: Autenticación con SAML"
+              className="w-full border border-gray-200 rounded-2xl p-4 outline-none focus:border-[#2563eb]"
+            />
+          </div>
+
+          {/* DESCRIPTION */}
+          <div className="mb-6">
+            <label className="block text-sm font-semibold mb-3 text-gray-700">
+              DESCRIPCIÓN DETALLADA *
+            </label>
+
+            <textarea
+              name="description"
+              value={formData.description}
+              onChange={handleChange}
+              rows={6}
+              placeholder="Detalle técnico del requisito..."
+              className="w-full border border-gray-200 rounded-2xl p-4 outline-none focus:border-[#2563eb]"
+            />
+          </div>
+
+          {/* ACCEPTANCE */}
+          <div>
+            <label className="block text-sm font-semibold mb-3 text-gray-700">
+              CRITERIOS DE ACEPTACIÓN
+            </label>
+
+            <textarea
+              name="acceptance"
+              value={formData.acceptance}
+              onChange={handleChange}
+              rows={5}
+              placeholder="Defina cuándo este requisito se considera completado..."
+              className="w-full border border-gray-200 rounded-2xl p-4 outline-none focus:border-[#2563eb]"
+            />
+          </div>
+        </div>
+
+        {/* RIGHT */}
+        <div className="space-y-6">
+          {/* PRIORITY */}
+          <div className="bg-white rounded-3xl p-6 shadow-sm">
+            <label className="block text-sm font-semibold mb-3 text-gray-700">
+              PRIORIDAD *
+            </label>
+
+            <select
+              name="priority"
+              value={formData.priority}
+              onChange={handleChange}
+              className="w-full border border-gray-200 rounded-2xl p-4 outline-none focus:border-[#2563eb]"
+            >
+              <option value="">Seleccionar prioridad</option>
+              <option value="high">Alta</option>
+              <option value="medium">Media</option>
+              <option value="low">Baja</option>
+            </select>
+          </div>
+
+          {/* INFO */}
+          <div className="bg-[#1e3a8a] text-white rounded-3xl p-6">
+            <h3 className="font-bold text-xl mb-4">
+              Sugerencia
+            </h3>
+
+            <p className="text-sm text-blue-100 leading-7">
+              Según la capacidad actual del sprint, este requisito
+              puede ser priorizado para desarrollo inmediato.
+            </p>
+          </div>
+
+          {/* BUTTONS */}
+          <div className="space-y-4">
+            <button
+              type="submit"
+              className="w-full bg-[#2563eb] hover:bg-[#1d4ed8] text-white py-4 rounded-2xl font-semibold transition"
+            >
+              Registrar
+            </button>
+
+            <button
+              type="button"
+              className="w-full bg-white border border-gray-200 py-4 rounded-2xl font-semibold"
+            >
+              Guardar como borrador
+            </button>
+          </div>
+        </div>
+      </form>
     </div>
   );
 };
