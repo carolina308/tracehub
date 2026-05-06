@@ -16,7 +16,7 @@ const TableroKanban = () => {
   return (
     <div>
       <h1 className="text-3xl font-bold mb-10 text-blue-600">
-        TRACEHUB Kanban
+        TRACEHUB
       </h1>
 
       <div className="grid md:grid-cols-3 gap-6">

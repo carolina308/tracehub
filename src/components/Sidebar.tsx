@@ -18,12 +18,12 @@ const Sidebar: React.FC = () => {
   const [collapsed, setCollapsed] = useState(false);
 
   const menuItems = [
-    { name: 'Dashboard', path: '/', icon: <BiGridAlt /> },
-    { name: 'Requirements', path: '/registrar-requisito', icon: <BiListUl /> },
-    { name: 'Change Log', path: '/registrar-cambios', icon: <BiHistory /> },
-    { name: 'Quality', path: '/validar-calidad', icon: <BiCheckShield /> },
-    { name: 'Team', path: '/team', icon: <BiGroup /> },
-    { name: 'Settings', path: '/settings', icon: <BiCog /> }
+    { name: 'Tablero', path: '/', icon: <BiGridAlt /> },
+    { name: 'Requerimientos', path: '/registrar-requisito', icon: <BiListUl /> },
+    { name: 'Registrar cambios', path: '/registrar-cambios', icon: <BiHistory /> },
+    { name: 'Calidad', path: '/validar-calidad', icon: <BiCheckShield /> },
+    { name: 'Grupo', path: '/team', icon: <BiGroup /> },
+    { name: 'Ajustes', path: '/settings', icon: <BiCog /> }
   ];
 
   const handleLogout = () => {

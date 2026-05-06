@@ -10,18 +10,18 @@ const Dashboard = () => {
 
       {/* 🔹 BREADCRUMB */}
       <div className="text-sm text-gray-400">
-        Projects / <span className="text-gray-600">TRACEHUB Dashboard</span>
+        Projectos / <span className="text-gray-600">TRACEHUB </span>
       </div>
 
       {/* 🔹 HEADER */}
       <div className="flex justify-between items-center">
 
         <h1 className="text-3xl font-bold text-blue-600">
-          Global Project Dashboard
+          Todos los proyectos
         </h1>
 
         <button className="bg-blue-600 text-white px-4 py-2 rounded-lg">
-          + New Task
+          + Nuevo Proyecto
         </button>
       </div>
 
@@ -33,7 +33,7 @@ const Dashboard = () => {
         </div>
 
         <select className="border px-3 py-2 rounded-lg text-sm">
-          <option>All Team Members</option>
+          <option>Todos los Miembros</option>
         </select>
 
       </div>
