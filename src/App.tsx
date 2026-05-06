@@ -7,6 +7,8 @@ import RegistrarCambios from './pages/RegistrarCambios';
 import AsignarRequisitos from './pages/AsignarRequisitos';
 import ValidarCalidad from './pages/ValidarCalidad';
 import TableroKanban from './pages/TableroKanban';
+import Team from './pages/Team';
+import Settings from './pages/Settings';
 import './App.css';
 
 function ProtectedRoute() {
@@ -32,6 +34,8 @@ function App() {
         <Route path="/registrar-cambios" element={<RegistrarCambios />} />
         <Route path="/asignar-requisitos" element={<AsignarRequisitos />} />
         <Route path="/validar-calidad" element={<ValidarCalidad />} />
+        <Route path="/team" element={<Team />} />
+        <Route path="/settings" element={<Settings />} />
         <Route 
           element={<ProtectedRoute />}
         >
@@ -41,6 +45,8 @@ function App() {
           <Route path="/registrar-cambios" element={<RegistrarCambios />} />
           <Route path="/asignar-requisitos" element={<AsignarRequisitos />} />
           <Route path="/validar-calidad" element={<ValidarCalidad />} />
+          <Route path="/team" element={<Team />} />
+          <Route path="/settings" element={<Settings />} />
         </Route>
         <Route path="*" element={
           localStorage.getItem('token') && localStorage.getItem('user')
