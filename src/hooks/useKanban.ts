@@ -2,9 +2,9 @@ import { useState, useEffect } from 'react';
 import type { Column, Card } from '../types/kanban';
 
 const defaultColumns: Column[] = [
-  { id: 'todo', title: 'To Do', cards: [] },
-  { id: 'in-progress', title: 'In Progress', cards: [] },
-  { id: 'done', title: 'Done', cards: [] }
+  { id: 'todo', title: 'Por hacer', cards: [] },
+  { id: 'En progreso', title: 'En progreso', cards: [] },
+  { id: 'Finalizado', title: 'Finalizado', cards: [] }
 ];
 
 export const useKanban = () => {
