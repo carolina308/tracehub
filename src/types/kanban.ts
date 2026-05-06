@@ -1,12 +1,10 @@
-export type Priority = 'low' | 'medium' | 'high';
-
-
 export interface Card {
   id: string;
+  code?: string;
   title: string;
   description?: string;
+  priority?: 'low' | 'medium' | 'high';
   assignee?: string;
-  priority?: Priority;
   tags?: string[];
 }
 
