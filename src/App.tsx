@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 import Layout from "./layout/Layout";
 
@@ -12,6 +12,13 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
+        {/* REDIRECT INICIAL */}
+        <Route
+          path="/"
+          element={<Navigate to="/dashboard" replace />}
+        />
+
+        {/* LAYOUT */}
         <Route element={<Layout />}>
           <Route
             path="/dashboard"
