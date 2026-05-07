@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Layout from "./layout/Layout";
 
 import Dashboard from "./pages/Dashboard";
-import Register from "./pages/Register";
+import RegistrarRequisito from "./pages/RegistrarRequisito";
 import Team from "./pages/Team";
 import Settings from "./pages/Settings";
 import Historial from "./pages/Historial";
@@ -27,7 +27,7 @@ function App() {
 
           <Route
             path="/register-requirement"
-            element={<Register />}
+            element={<RegistrarRequisito />}
           />
 
           <Route
