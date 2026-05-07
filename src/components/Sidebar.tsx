@@ -47,43 +47,46 @@ const Sidebar = () => {
   ];
 
   return (
-    <aside className="w-[230px] min-h-screen bg-[#081028] flex flex-col justify-between border-r border-[#1e293b]">
+    <aside className="w-64 min-h-screen bg-gradient-to-b from-[#071028] to-[#020817] border-r border-blue-950 flex flex-col justify-between">
+
       {/* TOP */}
       <div>
+
         {/* LOGO */}
-        <div className="p-8">
-          <h1 className="text-5xl font-bold text-[#2563eb]">
+        <div className="px-8 pt-10 pb-8">
+          <h1 className="text-4xl font-extrabold text-blue-500 tracking-wide">
             TRACEHUB
           </h1>
 
-          <p className="text-gray-500 text-sm mt-4">
+          <p className="text-gray-400 text-sm mt-2">
             Agile Command
           </p>
         </div>
 
         {/* MENU */}
-        <nav className="px-4 space-y-3">
+        <nav className="flex flex-col gap-3 px-4">
+
           {menu.map((item) => {
             const Icon = item.icon;
 
-            const active =
-              location.pathname === item.path;
+            const active = location.pathname === item.path;
 
             return (
               <Link
                 key={item.name}
                 to={item.path}
-                className={`flex items-center gap-3 px-5 py-4 rounded-2xl transition-all ${
-                  active
-                    ? "bg-[#172554] text-white"
-                    : "text-gray-400 hover:bg-[#111827]"
-                }`}
+                className={`flex items-center gap-3 px-4 py-4 rounded-2xl transition-all duration-200 text-sm font-medium
+                  
+                  ${
+                    active
+                      ? "bg-blue-600 text-white shadow-lg"
+                      : "text-gray-300 hover:bg-[#101b35] hover:text-white"
+                  }
+                `}
               >
                 <Icon size={20} />
 
-                <span className="font-medium">
-                  {item.name}
-                </span>
+                <span>{item.name}</span>
               </Link>
             );
           })}
@@ -92,8 +95,26 @@ const Sidebar = () => {
 
       {/* BOTTOM */}
       <div className="p-4">
-        <button className="w-full bg-red-500 hover:bg-red-600 transition-all text-white rounded-2xl py-4 flex items-center justify-center gap-3 font-semibold">
+
+        <button
+          className="
+            w-full
+            flex
+            items-center
+            justify-center
+            gap-2
+            bg-red-500
+            hover:bg-red-600
+            text-white
+            py-4
+            rounded-2xl
+            transition-all
+            duration-200
+            font-semibold
+          "
+        >
           <LogOut size={18} />
+
           Salir
         </button>
       </div>
