@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { useKanban } from "../hooks/useKanban";
+import { useAuth } from "../context/AuthContext";
 
 interface RequirementForm {
   title: string;
@@ -14,7 +16,7 @@ const RegistrarRequisito = () => {
     priority: "",
     acceptance: "",
   });
-
+  const { addCard } = useKanban();
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
@@ -29,52 +31,56 @@ const RegistrarRequisito = () => {
     });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+   const handleSubmit = (e: React.FormEvent) => {
+     e.preventDefault();
 
-    setError("");
-    setSuccess("");
+     setError("");
+     setSuccess("");
 
-    if (
-      !formData.title ||
-      !formData.description ||
-      !formData.priority
-    ) {
-      setError("Error en los campos ingresados");
-      return;
-    }
+     if (
+       !formData.title ||
+       !formData.description ||
+       !formData.priority
+     ) {
+       setError("Error en los campos ingresados");
+       return;
+     }
 
-    const newRequirement = {
-      id: crypto.randomUUID(),
-      code: `TH-${Math.floor(Math.random() * 900 + 100)}`,
-      title: formData.title,
-      description: formData.description,
-      priority: formData.priority,
-      acceptance: formData.acceptance,
-      assignee: "Unassigned",
-      tags: ["new"],
-      points: 0,
-      status: "backlog",
-      createdAt: new Date(),
-    };
+     const newRequirement = {
+       id: crypto.randomUUID(),
+       code: `TH-${Math.floor(Math.random() * 900 + 100)}`,
+       title: formData.title,
+       description: formData.description,
+       priority: formData.priority as 'low' | 'medium' | 'high',
+       acceptance: formData.acceptance,
+       assignee: "Unassigned",
+       tags: ["new"],
+       points: 0,
+       status: "backlog",
+       createdAt: new Date(),
+     };
 
-    const existing =
-      JSON.parse(localStorage.getItem("tracehub_tasks") || "[]");
+     // Add to Kanban board (Backlog column)
+     addCard('todo', newRequirement.title, newRequirement);
 
-    localStorage.setItem(
-      "tracehub_tasks",
-      JSON.stringify([...existing, newRequirement])
-    );
+     // Also save to localStorage for backward compatibility
+     const existing =
+       JSON.parse(localStorage.getItem("tracehub_tasks") || "[]");
 
-    setSuccess("Requisito creado exitosamente");
+     localStorage.setItem(
+       "tracehub_tasks",
+       JSON.stringify([...existing, newRequirement])
+     );
 
-    setFormData({
-      title: "",
-      description: "",
-      priority: "",
-      acceptance: "",
-    });
-  };
+     setSuccess("Requisito creado exitosamente");
+
+     setFormData({
+       title: "",
+       description: "",
+       priority: "",
+       acceptance: "",
+     });
+   };
 
   return (
     <div className="min-h-screen bg-[#f4f7fb] p-10">

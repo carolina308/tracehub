@@ -6,48 +6,67 @@
   Users,
   Settings,
   LogOut,
+  UserPlus,
 } from "lucide-react";
 
-import { Link, useLocation } from "react-router-dom";
+import {
+  Link,
+  useLocation,
+  useNavigate,
+} from "react-router-dom";
 
 const Sidebar = () => {
   const location = useLocation();
 
-  const menu = [
-    {
-      name: "Tablero",
-      icon: LayoutDashboard,
-      path: "/dashboard",
-    },
-    {
-      name: "Requerimientos",
-      icon: ClipboardList,
-      path: "/register-requirement",
-    },
-    {
-      name: "Registrar cambios",
-      icon: History,
-      path: "/historial",
-    },
-    {
-      name: "Calidad",
-      icon: ShieldCheck,
-      path: "/qa",
-    },
-    {
-      name: "Grupo",
-      icon: Users,
-      path: "/team",
-    },
-    {
-      name: "Ajustes",
-      icon: Settings,
-      path: "/settings",
-    },
-  ];
+  const navigate = useNavigate();
+
+   const menu = [
+     {
+       name: "Tablero",
+       icon: LayoutDashboard,
+       path: "/dashboard",
+     },
+     {
+       name: "Requerimientos",
+       icon: ClipboardList,
+       path: "/register-requirement",
+     },
+     {
+       name: "Asignar Requisitos",
+       icon: UserPlus,
+       path: "/asignar-requisitos",
+     },
+     {
+       name: "Registrar cambios",
+       icon: History,
+       path: "/historial",
+     },
+     {
+       name: "Calidad",
+       icon: ShieldCheck,
+       path: "/qa",
+     },
+     {
+       name: "Grupo",
+       icon: Users,
+       path: "/team",
+     },
+     {
+       name: "Ajustes",
+       icon: Settings,
+       path: "/settings",
+     },
+   ];
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+
+    navigate("/login");
+  };
 
   return (
-    <aside className="w-64 min-h-screen bg-gradient-to-b from-[#071028] to-[#020817] border-r border-blue-950 flex flex-col justify-between">
+    <aside className="w-64 min-h-screen bg-white border-r border-blue-200 flex flex-col justify-between">
 
       {/* TOP */}
       <div>
@@ -69,26 +88,27 @@ const Sidebar = () => {
           {menu.map((item) => {
             const Icon = item.icon;
 
-            const active = location.pathname === item.path;
+            const active =
+              location.pathname === item.path;
 
-            return (
-              <Link
-                key={item.name}
-                to={item.path}
-                className={`flex items-center gap-3 px-4 py-4 rounded-2xl transition-all duration-200 text-sm font-medium
-                  
-                  ${
-                    active
-                      ? "bg-blue-600 text-white shadow-lg"
-                      : "text-gray-300 hover:bg-[#101b35] hover:text-white"
-                  }
-                `}
-              >
-                <Icon size={20} />
+             return (
+               <Link
+                 key={item.name}
+                 to={item.path}
+                 className={`flex items-center gap-3 px-4 py-4 rounded-2xl transition-all duration-200 text-sm font-medium
+                   
+                   ${
+                     active
+                       ? "bg-blue-600 text-white shadow-lg"
+                       : "text-gray-700 hover:bg-[#101b35] hover:text-white"
+                   }
+                 `}
+               >
+                 <Icon size={20} />
 
-                <span>{item.name}</span>
-              </Link>
-            );
+                 <span>{item.name}</span>
+               </Link>
+             );
           })}
         </nav>
       </div>
@@ -97,6 +117,7 @@ const Sidebar = () => {
       <div className="p-4">
 
         <button
+          onClick={handleLogout}
           className="
             w-full
             flex

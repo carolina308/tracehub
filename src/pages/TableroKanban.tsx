@@ -2,9 +2,11 @@ import { useState } from 'react';
 import { useKanban } from '../hooks/useKanban';
 import KanbanCard from '../components/KanbanCard.tsx';
 import type { Card } from '../types/kanban';
+import { useAuth } from '../context/AuthContext';
 
 const TableroKanban = () => {
   const { columns, addCard, moveCard } = useKanban();
+  const { user } = useAuth();
 
   const [inputs, setInputs] = useState<Record<string, string>>({});
   const [dragged, setDragged] = useState<string | null>(null);
@@ -24,7 +26,7 @@ const TableroKanban = () => {
           <div
             key={col.id}
             onDragOver={(e) => e.preventDefault()}
-            onDrop={() => dragged && moveCard(dragged, col.id)}
+            onDrop={() => dragged && moveCard(dragged, col.id, '', '', user?.role || 'system')}
             className="bg-white p-4 rounded-xl shadow"
           >
             <h2 className="font-bold mb-4">{col.title}</h2>

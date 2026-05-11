@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const Login: React.FC = () => {
+  
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -40,7 +41,7 @@ const Login: React.FC = () => {
       localStorage.setItem('token', 'mock-token'); // mock token
       
       // Redirect to dashboard
-      navigate('/tablerokanban');
+     navigate('/dashboard');
     } catch (err) {
       setError('Invalid credentials');
     } finally {

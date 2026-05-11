@@ -6,6 +6,21 @@ export interface Card {
   priority?: 'low' | 'medium' | 'high';
   assignee?: string;
   tags?: string[];
+  status?: string;
+  points?: number;
+  createdAt?: Date;
+  acceptance?: string;
+  history?: HistoryEntry[];
+}
+
+export interface HistoryEntry {
+  id: string;
+  previousStatus: string;
+  newStatus: string;
+  comment: string;
+  evidence?: string;
+  timestamp: Date;
+  user: string;
 }
 
 export interface Column {

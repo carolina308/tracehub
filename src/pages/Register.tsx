@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const Register: React.FC = () => {
-  
+   
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     firstName: '',
     middleName: '',
@@ -145,16 +147,11 @@ const Register: React.FC = () => {
     }
   };
 
-  if (success) {
-    return (
-      <div className="min-h-screen flex flex-col items-center justify-center px-4 py-8 bg-white">
-        <div className="text-center">
-          <h2 className="text-2xl font-bold text-gray-800 mb-4">El registro fue exitoso</h2>
-          <p className="text-gray-600 mb-6">El usuario se ha registrado correctamente.</p>
-        </div>
-      </div>
-    );
-  }
+    if (success) {
+      // Redirect to login page after successful registration
+      navigate('/login');
+      return null;
+    }
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center px-4 py-8 bg-white">
