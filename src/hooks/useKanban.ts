@@ -80,11 +80,14 @@ export const useKanban = () => {
       };
       
       if (!movedCard) return prevColumns;
-      const updatedCard = {
-        ...movedCard,
+
+      // TypeScript necesita esta verificación explícita para el tipo
+      const cardToMove = movedCard as Card;
+      const updatedCard: Card = {
+        ...cardToMove,
         status: targetColumnId,
         history: [
-          ...(movedCard.history || []), 
+          ...(cardToMove.history || []),
           historyEntry
         ],
       };

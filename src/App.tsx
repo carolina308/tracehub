@@ -15,6 +15,8 @@ import RegistrarRequisito from "./pages/RegistrarRequisito";
 import Historial from "./pages/Historial";
 import Team from "./pages/Team";
 import Settings from "./pages/Settings";
+import QA from "./pages/QA";
+import AsignarRequisitos from "./pages/AsignarRequisitos";
 
 function App() {
   return (
@@ -44,6 +46,11 @@ function App() {
           <Route
             path="/register-requirement"
             element={<RegistrarRequisito />}
+          />
+
+          <Route
+            path="/asignar-requisitos"
+            element={<AsignarRequisitos />}
           />
 
           <Route

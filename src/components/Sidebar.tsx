@@ -66,15 +66,15 @@ const Sidebar = () => {
   };
 
   return (
-    <aside className="w-64 min-h-screen bg-white border-r border-blue-200 flex flex-col justify-between">
+    <aside className="w-64 h-screen fixed top-0 left-0 bg-white border-r border-blue-200 flex flex-col justify-between overflow-x-hidden overflow-y-hidden">
 
       {/* TOP */}
-      <div>
+      <div className="overflow-y-auto flex-1">
 
         {/* LOGO */}
-        <div className="px-8 pt-10 pb-8">
-          <h1 className="text-4xl font-extrabold text-blue-500 tracking-wide">
-            TRACEHUB
+        <div className="px-6 pt-8 pb-6">
+          <h1 className="text-base font-bold text-red-600 tracking-wide">
+            Tracehub
           </h1>
 
           <p className="text-gray-400 text-sm mt-2">
