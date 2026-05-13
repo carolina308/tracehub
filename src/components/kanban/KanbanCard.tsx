@@ -47,8 +47,6 @@ const KanbanCard = ({ task, columns, onMoveTask }: Props) => {
     }
   };
 
-  const currentColumnName = columns.find(c => c.name === task.status)?.name || task.status || '';
-
   return (
     <>
       <div

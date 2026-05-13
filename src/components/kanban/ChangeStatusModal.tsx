@@ -27,7 +27,6 @@ const ChangeStatusModal = ({
     otherColumns[0]?.id ?? currentColumnId
   );
   const [comment, setComment] = useState("");
-  const [evidence, setEvidence] = useState<File | null>(null);
 
   const handleSubmit = () => {
     if (selectedColumnId !== currentColumnId) {

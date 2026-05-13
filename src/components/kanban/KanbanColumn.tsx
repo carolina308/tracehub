@@ -1,19 +1,6 @@
 import KanbanCard from "./KanbanCard";
 import type { ID } from "../../types/api";
-
-interface Task {
-  id: ID;
-  code: string;
-  title: string;
-  description: string;
-  priority: "low" | "medium" | "high";
-  acceptance?: string;
-  assignee: string;
-  tags: string[];
-  points: number;
-  status?: string;
-  updatedAt?: Date | string;
-}
+import type { Task } from "./KanbanBoard";
 
 interface ColumnInfo {
   id: ID;
