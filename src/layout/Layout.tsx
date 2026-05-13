@@ -6,11 +6,9 @@ const Layout = () => {
   return (
     <div className="flex min-h-[100dvh] w-full overflow-hidden">
       <Sidebar />
-      
-      <div className="ml-[240px] w-full min-h-[100dvh] bg-[#f4f7fb] flex flex-col overflow-hidden">
+      <div className="ml-[192px] w-full min-h-[100dvh] bg-[#f4f7fb] flex flex-col overflow-hidden">
         <Header />
-        
-        <main className="flex-1 overflow-y-auto p-6">
+        <main className="flex-1 overflow-y-auto p-3">
           <Outlet />
         </main>
       </div>
