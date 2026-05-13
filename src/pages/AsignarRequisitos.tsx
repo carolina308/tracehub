@@ -1,268 +1,295 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { api } from '../services/api';
+import type { Board, Requirement, BoardMember, ID } from '../types/api';
 
-const AsignarRequisitos: React.FC = () => {
-  const navigate = useNavigate();
+const AsignarRequisitos = () => {
+  const [boards, setBoards] = useState<Board[]>([]);
+  const [selectedBoardId, setSelectedBoardId] = useState<ID | null>(null);
+  const [boardRequirements, setBoardRequirements] = useState<Requirement[]>([]);
+  const [members, setMembers] = useState<BoardMember[]>([]);
   const [requisitoSeleccionado, setRequisitoSeleccionado] = useState('');
   const [usuarioSeleccionado, setUsuarioSeleccionado] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [success, setSuccess] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [asignando, setAsignando] = useState(false);
+  const [success, setSuccess] = useState('');
+  const [error, setError] = useState('');
 
-  // Mock data
-  const requisitos = [
-    { id: 'REQ-001', nombre: 'Implementación OAuth2', descripcion: 'Configuración de proveedores de identidad externos y validación JWT.', prioridad: 'Alta', estado: 'Sin Asignar' },
-    { id: 'REQ-002', nombre: 'Migración de Base de Datos', descripcion: 'Traslado de esquemas relacionales de ambiente local a AWS RDS con cero downtime.', prioridad: 'Media', estado: 'Sin Asignar' },
-    { id: 'REQ-003', nombre: 'Optimización de Consultas', descripcion: 'Refactorización de consultas pesadas para reducir latencia en el dashboard principal.', prioridad: 'Media', estado: 'En Proceso' },
-  ];
+  // Load boards on mount
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const boardsData = await api.getBoards();
+        setBoards(boardsData);
+        if (boardsData.length > 0) {
+          setSelectedBoardId(boardsData[0].id);
+        }
+      } catch (err) {
+        setError('Error al cargar tableros');
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
 
-  const usuarios = [
-    { id: 'user1', nombre: 'Carlos Ruiz', rol: 'Backend Lead' },
-    { id: 'user2', nombre: 'Elena Gómez', rol: 'Security Arch' },
-    { id: 'user3', nombre: 'Marcos Silva', rol: 'DevOps' },
-  ];
+  // When board changes, load requirements and members
+  useEffect(() => {
+    if (!selectedBoardId) return;
 
-  const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
+    const fetchBoardData = async () => {
+      setLoading(true);
+      setError('');
+      try {
+        const [boardData, membersData] = await Promise.all([
+          api.getBoard(selectedBoardId),
+          api.listMembers(selectedBoardId),
+        ]);
+
+        // Collect all requirements from all columns
+        const allReqs = boardData.columns.flatMap(col => col.requirements);
+        setBoardRequirements(allReqs);
+        setMembers(membersData);
+      } catch (err) {
+        setError('Error al cargar datos del tablero');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBoardData();
+  }, [selectedBoardId]);
+
+  const handleAssign = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
-    setError(null);
-    setSuccess(false);
-    
-    // Simulate API call
+    if (!requisitoSeleccionado || !usuarioSeleccionado) return;
+
+    setAsignando(true);
+    setError('');
+    setSuccess('');
+
     try {
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      // In a real app, you would call your API here
-      console.log('Asignación realizada:', { requisitoSeleccionado, usuarioSeleccionado });
-      setSuccess(true);
-      // Reset form after success
+      await api.assignRequirement(
+        Number(requisitoSeleccionado),
+        Number(usuarioSeleccionado)
+      );
+
+      setSuccess('Requisito asignado exitosamente');
+
+      // Refresh data
+      const [boardData, membersData] = await Promise.all([
+        api.getBoard(selectedBoardId!),
+        api.listMembers(selectedBoardId!),
+      ]);
+      setBoardRequirements(boardData.columns.flatMap(col => col.requirements));
+      setMembers(membersData);
+
       setRequisitoSeleccionado('');
       setUsuarioSeleccionado('');
     } catch (err) {
-      setError('Error al asignar el requisito');
+      setError(err instanceof Error ? err.message : 'Error al asignar requisito');
     } finally {
-      setLoading(false);
+      setAsignando(false);
     }
   };
 
+  // Flatten all requirements into a list for status display
+  const unassignedReqs = boardRequirements.filter(r => !r.assignee);
+  const assignedReqs = boardRequirements.filter(r => r.assignee);
+
   return (
-    <div className="min-h-screen bg-white p-6">
-      <div className="max-w-4xl mx-auto">
-        {/* Header */}
-        <div className="mb-8">
-          <div className="flex items-center space-x-4 mb-4">
-            <span className="text-2xl font-bold text-gray-800">TRACEHUB</span>
-            <nav className="flex space-x-4 text-sm text-gray-500">
-              <a href="#" className="hover:text-gray-700">dashboard</a>
-              <a href="#" className="hover:text-gray-700">Tablero</a>
-              <a href="#" className="hover:text-gray-700">list_alt</a>
-              <a href="#" className="hover:text-gray-700">Requisitos</a>
-              <a href="#" className="hover:text-gray-700">person_add</a>
-              <a href="#" className="hover:text-gray-700">Asignación de Tareas</a>
-              <a href="#" className="hover:text-gray-700">history</a>
-              <a href="#" className="hover:text-gray-700">Historial</a>
-              <a href="#" className="hover:text-gray-700">fact_check</a>
-              <a href="#" className="hover:text-gray-700">Validación QA</a>
-              <a href="#" className="hover:text-gray-700">visibility</a>
-              <a href="#" className="hover:text-gray-700">Vista de Stakeholders</a>
-            </nav>
-          </div>
-          
-          <button className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700">
-            <span className="mr-2">+</span> Nuevo Proyecto
-          </button>
-        </div>
+    <div className="min-h-screen bg-[#f4f7fb] p-10">
+      {/* Header */}
+      <div className="mb-8">
+        <p className="text-sm text-gray-400 mb-2">
+          Requisitos {' > '} Asignar
+        </p>
+        <h1 className="text-4xl font-bold text-[#2563eb]">Asignar Requisitos</h1>
+        <p className="text-gray-500 mt-2">
+          Vinculá responsables a los requisitos del proyecto
+        </p>
+      </div>
 
-        {/* Main Content */}
-        <div className="bg-gray-50 rounded-lg p-6">
-          <h1 className="text-2xl font-bold text-gray-800 mb-6">Asignar Requisitos</h1>
-          <p className="text-gray-600 mb-6">
-            Gestione la propiedad de los requisitos del proyecto vinculando responsables específicos para asegurar la trazabilidad y ejecución.
-          </p>
+      {error && (
+        <div className="bg-red-100 border border-red-300 text-red-700 p-4 rounded-2xl mb-5">{error}</div>
+      )}
+      {success && (
+        <div className="bg-green-100 border border-green-300 text-green-700 p-4 rounded-2xl mb-5">{success}</div>
+      )}
 
-          {/* Success/Error Messages */}
-          {success && (
-            <div className="bg-green-50 border-l-4 border-green-500 p-4 mb-6">
-              <div className="flex">
-                <div className="flex-shrink-0">
-                  <span className="text-green-600">✓</span>
-                </div>
-                <div className="ml-3">
-                  <p className="text-sm text-green-700">Asignación completada</p>
-                  <p className="text-sm text-gray-500">El nombre del responsable ha sido asignado exitosamente al requisito seleccionado.</p>
-                </div>
-              </div>
-            </div>
-          )}
-          {error && (
-            <div className="bg-red-50 border-l-4 border-red-500 p-4 mb-6">
-              <div className="flex">
-                <div className="flex-shrink-0">
-                  <span className="text-red-600">✕</span>
-                </div>
-                <div className="ml-3">
-                  <p className="text-sm text-red-700">{error}</p>
-                </div>
-              </div>
-            </div>
-          )}
+      {/* Board Selector */}
+      <div className="bg-white rounded-3xl p-6 shadow-sm mb-8">
+        <label className="block text-sm font-semibold mb-3 text-gray-700">TABLERO</label>
+        <select
+          value={selectedBoardId ?? ''}
+          onChange={(e) => setSelectedBoardId(Number(e.target.value) || null)}
+          className="w-full border border-gray-200 rounded-2xl p-4 outline-none focus:border-[#2563eb]"
+        >
+          {boards.map(b => (
+            <option key={b.id} value={b.id}>{b.name}</option>
+          ))}
+        </select>
+      </div>
 
-          {/* Configurar Asignación */}
-          <div className="mb-8">
-            <h2 className="text-xl font-bold text-gray-800 mb-4">Configurar Asignación</h2>
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                {/* Seleccionar requisito */}
+      {loading ? (
+        <div className="text-center py-10 text-gray-500">Cargando...</div>
+      ) : !selectedBoardId ? (
+        <div className="text-center py-10 text-gray-500">Seleccioná un tablero</div>
+      ) : (
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Left: Assign Form */}
+          <div className="lg:col-span-2">
+            <div className="bg-white rounded-3xl p-8 shadow-sm">
+              <h2 className="text-xl font-bold mb-6">Configurar Asignación</h2>
+              <form onSubmit={handleAssign} className="space-y-6">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Seleccionar requisito
-                  </label>
+                  <label className="block text-sm font-semibold mb-2">Requisito</label>
                   <select
                     value={requisitoSeleccionado}
                     onChange={(e) => setRequisitoSeleccionado(e.target.value)}
                     required
-                    className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                    className="w-full border border-gray-200 rounded-2xl p-4 outline-none focus:border-[#2563eb]"
                   >
-                    <option value="">Elegir requisito de la lista...</option>
-                    {requisitos.map(req => (
+                    <option value="">Seleccionar requisito...</option>
+                    {unassignedReqs.map(req => (
                       <option key={req.id} value={req.id}>
-                        {req.id}: {req.nombre}
+                        #{req.id} - {req.title} ({req.column?.name ?? ''})
                       </option>
                     ))}
                   </select>
                 </div>
 
-                {/* Seleccionar usuario responsable */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Seleccionar usuario responsable
-                  </label>
+                  <label className="block text-sm font-semibold mb-2">Responsable</label>
                   <select
                     value={usuarioSeleccionado}
                     onChange={(e) => setUsuarioSeleccionado(e.target.value)}
                     required
-                    className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                    className="w-full border border-gray-200 rounded-2xl p-4 outline-none focus:border-[#2563eb]"
                   >
-                    <option value="">Buscar usuario registrado...</option>
-                    {usuarios.map(usuario => (
-                      <option key={usuario.id} value={usuario.id}>
-                        {usuario.nombre} ({usuario.rol})
+                    <option value="">Seleccionar usuario...</option>
+                    {members.map(m => (
+                      <option key={m.user.id} value={m.user.id}>
+                        {m.user.name} ({m.user.email}) - {m.role}
                       </option>
                     ))}
                   </select>
                 </div>
-              </div>
 
-              {/* Resumen de Carga */}
-              <div className="border-t pt-4">
-                <h3 className="text-lg font-semibold text-gray-700 mb-2">Resumen de Carga</h3>
-                <div className="space-y-2">
-                  {/* In a real app, this would be dynamic based on the selected user */}
-                  <div className="flex justify-between">
-                    <span className="text-sm font-medium">ALTA</span>
-                    <span className="text-sm text-gray-500">Elena Gómez tiene 4 tareas pendientes.</span>
-                  </div>
+                <div className="flex justify-end gap-4">
+                  <button
+                    type="submit"
+                    disabled={asignando || !requisitoSeleccionado || !usuarioSeleccionado}
+                    className="bg-[#2563eb] hover:bg-[#1d4ed8] text-white px-6 py-3 rounded-2xl font-semibold disabled:opacity-50"
+                  >
+                    {asignando ? 'Asignando...' : 'Confirmar Asignación'}
+                  </button>
                 </div>
-              </div>
+              </form>
+            </div>
 
-              {/* Botones */}
-              <div className="mt-6 flex justify-end space-x-4">
-                <button
-                  type="button"
-                  onClick={() => navigate('/dashboard')}
-                  className="px-4 py-2 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
-                >
-                  Cancelar y salir
-                </button>
-                <button
-                  type="submit"
-                  disabled={loading || !requisitoSeleccionado || !usuarioSeleccionado}
-                  className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700"
-                >
-                  {loading ? 'Confirmando...' : 'Confirmar Asignación'}
-                </button>
-              </div>
-            </form>
-          </div>
+            {/* Requirements List */}
+            <div className="bg-white rounded-3xl p-8 shadow-sm mt-8">
+              <h2 className="text-xl font-bold mb-6">
+                Requisitos ({boardRequirements.length})
+              </h2>
 
-          {/* Estado de Requisitos */}
-          <div className="mb-8">
-            <h2 className="text-xl font-bold text-gray-800 mb-4">Estado de Requisitos</h2>
-            <div className="flex space-x-4 border-b-2 border-gray-200 pb-2">
-              <button
-                className="px-3 py-2 text-sm font-medium 
-                text-indigo-600 border-b-2 border-indigo-400"
-              >
-                Todos
-              </button>
-              <button
-                className="px-3 py-2 text-sm font-medium text-gray-500 hover:text-gray-700"
-              >
-                Sin Asignar
-              </button>
-              <button
-                className="px-3 py-2 text-sm font-medium text-gray-500 hover:text-gray-700"
-              >
-                En Proceso
-              </button>
-              <button
-                className="px-3 py-2 text-sm font-medium text-gray-500 hover:text-gray-700"
-              >
-                Completado
-              </button>
+              {boardRequirements.length === 0 ? (
+                <p className="text-gray-500">No hay requisitos en este tablero.</p>
+              ) : (
+                <div className="space-y-4">
+                  {boardRequirements.map(req => {
+                    const member = members.find(m => m.user.id === req.assignee?.id);
+                    return (
+                      <div key={req.id} className="border border-gray-100 rounded-2xl p-5">
+                        <div className="flex justify-between items-start">
+                          <div>
+                            <p className="text-xs font-bold text-[#2563eb] mb-1">
+                              #{req.id} · {req.column?.name ?? ''}
+                            </p>
+                            <h3 className="font-semibold text-gray-800">{req.title}</h3>
+                            {req.description && (
+                              <p className="text-sm text-gray-500 mt-1 line-clamp-2">{req.description}</p>
+                            )}
+                          </div>
+                          <div className="text-right">
+                            <span className={`text-xs px-3 py-1 rounded-xl font-medium ${
+                              req.priority === 'HIGH' || req.priority === 'URGENT'
+                                ? 'bg-red-100 text-red-600'
+                                : req.priority === 'MEDIUM'
+                                ? 'bg-yellow-100 text-yellow-700'
+                                : 'bg-green-100 text-green-600'
+                            }`}>
+                              {req.priority}
+                            </span>
+                            {req.assignee && (
+                              <p className="text-xs text-gray-500 mt-2">
+                                {member ? member.user.name : `ID ${req.assignee.id}`}
+                              </p>
+                            )}
+                            {!req.assignee && (
+                              <p className="text-xs text-gray-400 mt-2">Sin asignar</p>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
             </div>
           </div>
 
-          {/* Lista de Requisitos */}
-          <div className="space-y-4">
-            {requisitos.map(req => (
-              <div key={req.id} className="border border-gray-200 rounded-lg p-4 bg-white">
-                <div className="flex justify-between items-start">
-                  <div className="flex-1">
-                    <h3 className="font-semibold text-gray-800">{req.id}: {req.nombre}</h3>
-                    <p className="text-sm text-gray-600 mt-1">{req.descripcion}</p>
-                    <div className="flex mt-2 space-x-3 text-xs">
-                      <span className={`px-2 py-0.5 rounded 
-                        ${req.prioridad === 'Alta' ? 'bg-red-100 text-red-800' 
-                            : req.prioridad === 'Media' ? 'bg-yellow-100 text-yellow-800' 
-                            : 'bg-green-100 text-green-800'}`}>
-                        {req.prioridad}
-                      </span>
-                      <span className={`px-2 py-0.5 rounded 
-                        ${req.estado === 'Sin Asignar' ? 'bg-gray-100 text-gray-800' 
-                            : req.estado === 'En Proceso' ? 'bg-blue-100 text-blue-800' 
-                            : 'bg-green-100 text-green-800'}`}>
-                        {req.estado}
-                      </span>
+          {/* Right: Members */}
+          <div className="space-y-6">
+            <div className="bg-white rounded-3xl p-6 shadow-sm">
+              <h2 className="text-lg font-bold mb-4">Miembros del tablero</h2>
+              {members.length === 0 ? (
+                <p className="text-gray-500 text-sm">Sin miembros</p>
+              ) : (
+                <div className="space-y-3">
+                  {members.map(m => (
+                    <div key={m.id} className="flex items-center gap-3 p-3 bg-gray-50 rounded-xl">
+                      <div className="w-10 h-10 rounded-full bg-[#1e3a8a] text-white flex items-center justify-center text-sm font-bold">
+                        {m.user.name.charAt(0)}
+                      </div>
+                      <div>
+                        <p className="text-sm font-semibold">{m.user.name}</p>
+                        <p className="text-xs text-gray-500">{m.user.email}</p>
+                        <span className="text-xs px-2 py-0.5 rounded-full bg-blue-100 text-blue-700">
+                          {m.role}
+                        </span>
+                      </div>
                     </div>
-                  </div>
-                  {req.estado === 'Sin Asignar' && (
-                    <button
-                      onClick={() => {
-                        setRequisitoSeleccionado(req.id);
-                        // Scroll to the form or open a modal? For simplicity, we'll just set the state and let the user select user.
-                        alert('Por favor, seleccione un usuario y confirme la asignación en la sección superior.');
-                      }}
-                      className="px-3 py-1 bg-indigo-600 text-white rounded-md text-sm hover:bg-indigo-700"
-                    >
-                      ASIGNAR AHORA
-                    </button>
-                  )}
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Summary */}
+            <div className="bg-white rounded-3xl p-6 shadow-sm">
+              <h2 className="text-lg font-bold mb-4">Resumen</h2>
+              <div className="space-y-2 text-sm">
+                <div className="flex justify-between">
+                  <span className="text-gray-500">Total requisitos</span>
+                  <span className="font-semibold">{boardRequirements.length}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-500">Asignados</span>
+                  <span className="font-semibold text-green-600">{assignedReqs.length}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-500">Sin asignar</span>
+                  <span className="font-semibold text-orange-600">{unassignedReqs.length}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-500">Miembros</span>
+                  <span className="font-semibold">{members.length}</span>
                 </div>
               </div>
-            ))}
-          </div>
-
-          {/* Footer info */}
-          <div className="mt-8 text-center text-sm text-gray-500">
-            <p>
-              Total Requisitos: 124 | Sin Asignar: 12 | En Proceso: 86
-            </p>
-            <p className="mt-2">
-              © 2023 TRACEHUB Systems. All rights reserved.
-            </p>
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };

@@ -2,30 +2,28 @@ import { useState } from "react";
 
 interface Props {
   onClose: () => void;
-  onCreate: (task: any) => void;
+  onCreate: (task: {
+    title: string;
+    description: string;
+    priority: "low" | "medium" | "high";
+  }) => void;
 }
 
 const CreateTaskModal = ({ onClose, onCreate }: Props) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [priority, setPriority] = useState("medium");
-  const [assignee, setAssignee] = useState("");
+  const [priority, setPriority] = useState<"low" | "medium" | "high">("medium");
 
   const handleSubmit = () => {
-    if (!title || !description || !assignee) {
-      alert("Complete todos los campos");
+    if (!title.trim()) {
+      alert("El título es obligatorio");
       return;
     }
 
     onCreate({
-      id: Date.now().toString(),
-      code: `TH-${Math.floor(Math.random() * 999)}`,
-      title,
-      description,
+      title: title.trim(),
+      description: description.trim(),
       priority,
-      assignee,
-      tags: ["frontend"],
-      points: 5,
     });
 
     onClose();
@@ -35,48 +33,56 @@ const CreateTaskModal = ({ onClose, onCreate }: Props) => {
     <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
       <div className="bg-white rounded-2xl p-6 w-[500px] shadow-xl">
         <h2 className="text-2xl font-bold mb-6 text-[#2563eb]">
-          Nueva tarea
+          Nuevo Requisito
         </h2>
 
         <div className="space-y-4">
-          <input
-            type="text"
-            placeholder="Título"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            className="w-full border rounded-lg p-3"
-          />
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Título *
+            </label>
+            <input
+              type="text"
+              placeholder="Título del requisito"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              className="w-full border rounded-lg p-3"
+              autoFocus
+            />
+          </div>
 
-          <textarea
-            placeholder="Descripción"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            className="w-full border rounded-lg p-3 h-28"
-          />
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Descripción
+            </label>
+            <textarea
+              placeholder="Descripción del requisito..."
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              className="w-full border rounded-lg p-3 h-28"
+            />
+          </div>
 
-          <select
-            value={priority}
-            onChange={(e) => setPriority(e.target.value)}
-            className="w-full border rounded-lg p-3"
-          >
-            <option value="low">Baja</option>
-            <option value="medium">Media</option>
-            <option value="high">Alta</option>
-          </select>
-
-          <input
-            type="text"
-            placeholder="Responsable"
-            value={assignee}
-            onChange={(e) => setAssignee(e.target.value)}
-            className="w-full border rounded-lg p-3"
-          />
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Prioridad
+            </label>
+            <select
+              value={priority}
+              onChange={(e) => setPriority(e.target.value as "low" | "medium" | "high")}
+              className="w-full border rounded-lg p-3"
+            >
+              <option value="low">Baja</option>
+              <option value="medium">Media</option>
+              <option value="high">Alta</option>
+            </select>
+          </div>
         </div>
 
         <div className="flex justify-end gap-3 mt-6">
           <button
             onClick={onClose}
-            className="px-4 py-2 rounded-lg border"
+            className="px-4 py-2 rounded-lg border hover:bg-gray-50"
           >
             Cancelar
           </button>

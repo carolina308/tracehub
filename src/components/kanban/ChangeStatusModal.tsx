@@ -1,41 +1,38 @@
 import { useState } from "react";
-import type { Task } from "./KanbanBoard";
+import type { ID } from "../../types/api";
 
-interface Props {
-  task: Task;
-  onClose: () => void;
-  onConfirm: (
-    taskId: string,
-    status: string,
-    comment: string,
-    evidence: File | null
-  ) => void;
+interface ColumnOption {
+  id: ID;
+  name: string;
 }
 
-const statuses = [
-  "backlog",
-  "todo",
-  "progress",
-  "qa",
-  "done",
-];
+interface Props {
+  taskId: ID;
+  currentColumnId: ID;
+  columns: ColumnOption[];
+  onClose: () => void;
+  onConfirm: (taskId: ID, targetColumnId: ID) => void;
+}
 
 const ChangeStatusModal = ({
-  task,
+  taskId,
+  currentColumnId,
+  columns,
   onClose,
   onConfirm,
 }: Props) => {
-  const [status, setStatus] = useState(task.status || "backlog");
-
-  const [comment, setComment] = useState("");
-
-  const [evidence, setEvidence] = useState<File | null>(
-    null
+  // Default to first different column
+  const otherColumns = columns.filter(c => c.id !== currentColumnId);
+  const [selectedColumnId, setSelectedColumnId] = useState<ID>(
+    otherColumns[0]?.id ?? currentColumnId
   );
+  const [comment, setComment] = useState("");
+  const [evidence, setEvidence] = useState<File | null>(null);
 
   const handleSubmit = () => {
-    onConfirm(task.id, status, comment, evidence);
-
+    if (selectedColumnId !== currentColumnId) {
+      onConfirm(taskId, selectedColumnId);
+    }
     onClose();
   };
 
@@ -47,9 +44,8 @@ const ChangeStatusModal = ({
           <h2 className="text-3xl font-bold text-[#2563eb]">
             Cambiar Estado
           </h2>
-
           <p className="text-gray-500 mt-2">
-            {task.title}
+            Mover requisito a otra columna
           </p>
         </div>
 
@@ -60,13 +56,13 @@ const ChangeStatusModal = ({
           </label>
 
           <select
-            value={status}
-            onChange={(e) => setStatus(e.target.value)}
+            value={selectedColumnId}
+            onChange={(e) => setSelectedColumnId(Number(e.target.value))}
             className="w-full border border-gray-200 rounded-2xl p-4 outline-none focus:border-[#2563eb]"
           >
-            {statuses.map((s) => (
-              <option key={s} value={s}>
-                {s.toUpperCase()}
+            {columns.map((col) => (
+              <option key={col.id} value={col.id}>
+                {col.name} {col.id === currentColumnId ? "(actual)" : ""}
               </option>
             ))}
           </select>
@@ -80,9 +76,7 @@ const ChangeStatusModal = ({
 
           <textarea
             value={comment}
-            onChange={(e) =>
-              setComment(e.target.value)
-            }
+            onChange={(e) => setComment(e.target.value)}
             rows={5}
             placeholder="Describe los cambios realizados..."
             className="w-full border border-gray-200 rounded-2xl p-4 outline-none focus:border-[#2563eb]"
@@ -97,11 +91,7 @@ const ChangeStatusModal = ({
 
           <input
             type="file"
-            onChange={(e) =>
-              setEvidence(
-                e.target.files?.[0] || null
-              )
-            }
+            onChange={(e) => setEvidence(e.target.files?.[0] || null)}
             className="w-full border border-gray-200 rounded-2xl p-4"
           />
         </div>
@@ -117,9 +107,10 @@ const ChangeStatusModal = ({
 
           <button
             onClick={handleSubmit}
-            className="bg-[#2563eb] hover:bg-[#1d4ed8] text-white px-6 py-3 rounded-2xl font-semibold transition"
+            disabled={selectedColumnId === currentColumnId}
+            className="bg-[#2563eb] hover:bg-[#1d4ed8] text-white px-6 py-3 rounded-2xl font-semibold transition disabled:opacity-50"
           >
-            Confirmar
+            Mover
           </button>
         </div>
       </div>

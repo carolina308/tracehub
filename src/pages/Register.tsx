@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { api } from '../services/api';
 
 const Register: React.FC = () => {
    
@@ -20,6 +21,14 @@ const Register: React.FC = () => {
   const [statusMessage, setStatusMessage] = useState<{ type: 'error' | 'warning' | 'success' | ''; text: string }>({ type: '', text: '' });
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+
+  // Redirect after successful registration
+  useEffect(() => {
+    if (success) {
+      const timer = setTimeout(() => navigate('/login'), 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [success, navigate]);
 
   const roleOptions = [
     { value: 'PO', label: 'PO' },
@@ -131,27 +140,42 @@ const Register: React.FC = () => {
     }
 
     try {
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      saveUser({
+      // Map frontend role to backend role
+      const roleMap: Record<string, string> = {
+        'PO': 'PO',
+        'SM': 'SM',
+        'Dev': 'DEV',
+        'QA': 'QA',
+        'Stakeholder': 'STAKEHOLDER',
+      };
+
+      const backendRole = roleMap[formData.role] || 'DEV';
+
+      // Send all fields to backend
+      await api.register({
+        name: `${formData.firstName.trim()} ${formData.lastName.trim()}`.trim(),
         email: formData.email.trim(),
-        firstName: formData.firstName.trim(),
-        lastName: formData.lastName.trim(),
-        role: formData.role,
+        password: formData.password,
+        dni: formData.dni.trim() || undefined,
+        phone: undefined, // Could be added to form if needed
+        address: undefined,
+        role: backendRole,
+        firstName: formData.firstName.trim() || undefined,
+        middleName: formData.middleName.trim() || undefined,
+        lastName: formData.lastName.trim() || undefined,
+        secondLastName: formData.secondLastName.trim() || undefined,
       });
+      
       setSuccess(true);
       setStatusMessage({ type: 'success', text: 'El registro fue exitoso' });
+      
+      // La redirección la maneja el useEffect arriba
     } catch (err) {
-      setStatusMessage({ type: 'error', text: 'Error en los campos ingresados' });
+      setStatusMessage({ type: 'error', text: err instanceof Error ? err.message : 'Error en los campos ingresados' });
     } finally {
       setLoading(false);
     }
   };
-
-    if (success) {
-      // Redirect to login page after successful registration
-      navigate('/login');
-      return null;
-    }
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center px-4 py-8 bg-white">

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { api } from '../services/api';
 
 const Login: React.FC = () => {
   
@@ -14,36 +15,17 @@ const Login: React.FC = () => {
     setLoading(true);
     setError(null);
     
-    // Simulate API call
     try {
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      // In a real app, you would call your authentication API here
-      console.log('Login successful:', { email, password });
+      const result = await api.login(email, password);
       
-      // Mock role assignment based on email for demonstration
-      let role = 'developer'; // default role
-      if (email.includes('@po.example.com')) {
-        role = 'product_owner';
-      } else if (email.includes('@qa.example.com')) {
-        role = 'qa';
-      } else if (email.includes('@sm.example.com')) {
-        role = 'scrum_master';
-      } else if (email.includes('@stakeholder.example.com')) {
-        role = 'stakeholder';
-      }
-      
-      // Store user info including role
-      const userInfo = {
-        email: email,
-        role: role
-      };
-      localStorage.setItem('user', JSON.stringify(userInfo));
-      localStorage.setItem('token', 'mock-token'); // mock token
+      // Store user info and token
+      localStorage.setItem('user', JSON.stringify(result.user));
+      localStorage.setItem('token', result.token);
       
       // Redirect to dashboard
-     navigate('/dashboard');
+      navigate('/dashboard');
     } catch (err) {
-      setError('Invalid credentials');
+      setError(err instanceof Error ? err.message : 'Invalid credentials');
     } finally {
       setLoading(false);
     }
@@ -114,24 +96,28 @@ const Login: React.FC = () => {
             <p className="text-sm text-red-600">{error}</p>
           )}
           
-          <div className="flex items-center justify-between">
-            <div className="flex items-center">
-              <input
-                id="remember-me"
-                type="checkbox"
-                className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
-              />
-              <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900">
-                Recuerdame
-              </label>
-            </div>
-            
-            <div className="text-sm">
-              <a href="#" className="font-medium text-indigo-600 hover:text-indigo-500">
-                Olvidaste tu contraseña?
-              </a>
-            </div>
-          </div>
+           <div className="flex items-center justify-between">
+             <div className="flex items-center">
+               <input
+                 id="remember-me"
+                 type="checkbox"
+                 className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+               />
+               <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900">
+                 Recuerdame
+               </label>
+             </div>
+             
+             <div className="text-sm">
+               <button
+                 type="button"
+                 onClick={() => navigate('/recuperar-password')}
+                 className="text-indigo-600 hover:text-indigo-800 text-sm"
+               >
+                 ¿Olvidaste tu contraseña?
+               </button>
+             </div>
+           </div>
           
           <button
             type="submit"

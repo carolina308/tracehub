@@ -1,30 +1,50 @@
 import KanbanCard from "./KanbanCard";
-import type { Task } from "./KanbanBoard";
+import type { ID } from "../../types/api";
 
-interface Props {
-  column: {
-    id: string;
-    title: string;
-    tasks: Task[];
-  };
-
-  moveTask: (taskId: string, targetColumnId: string) => void;
+interface Task {
+  id: ID;
+  code: string;
+  title: string;
+  description: string;
+  priority: "low" | "medium" | "high";
+  acceptance?: string;
+  assignee: string;
+  tags: string[];
+  points: number;
+  status?: string;
+  updatedAt?: Date | string;
 }
 
-const KanbanColumn = ({ column, moveTask }: Props) => {
+interface ColumnInfo {
+  id: ID;
+  name: string;
+}
+
+interface Column {
+  id: ID;
+  title: string;
+  tasks: Task[];
+}
+
+interface Props {
+  column: Column;
+  allColumns: ColumnInfo[];
+  moveTask: (taskId: ID, targetColumnId: ID) => void;
+  onAddTask?: () => void;
+}
+
+const KanbanColumn = ({ column, allColumns, moveTask, onAddTask }: Props) => {
   const onDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
-
     const taskId = e.dataTransfer.getData("taskId");
-
-    moveTask(taskId, column.id);
+    moveTask(Number(taskId), column.id);
   };
 
   return (
     <div
       onDragOver={(e) => e.preventDefault()}
       onDrop={onDrop}
-      className="bg-[#eef2f7] rounded-3xl p-4 min-h-[550px]"
+      className="bg-[#eef2f7] rounded-3xl p-4 min-h-[550px] flex flex-col"
     >
       <div className="flex items-center justify-between mb-5">
         <h2 className="font-bold text-[#2563eb] text-xl">
@@ -36,11 +56,25 @@ const KanbanColumn = ({ column, moveTask }: Props) => {
         </span>
       </div>
 
-      <div className="space-y-4">
+      <div className="flex-1 space-y-4 overflow-y-auto">
         {column.tasks.map((task) => (
-          <KanbanCard key={task.id} task={task} />
+          <KanbanCard
+            key={task.id}
+            task={task}
+            columns={allColumns}
+            onMoveTask={moveTask}
+          />
         ))}
       </div>
+
+      {onAddTask && (
+        <button
+          onClick={onAddTask}
+          className="mt-4 w-full py-2 text-sm text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition"
+        >
+          + Añadir requisito
+        </button>
+      )}
     </div>
   );
 };

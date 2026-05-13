@@ -15,14 +15,14 @@ const KanbanCard = ({ card, onDragStart }: Props) => {
   const statusColor = {
     backlog: 'bg-gray-100 text-gray-600',
     todo: 'bg-blue-100 text-blue-600',
-    inProgress: 'bg-yellow-100 text-yellow-600',
+    INProgress: 'bg-yellow-100 text-yellow-600',
     finalizado: 'bg-green-100 text-green-600',
   };
 
   const statusLabel = {
     backlog: 'Backlog',
     todo: 'Por hacer',
-    inProgress: 'En progreso',
+    INProgress: 'En progreso',
     finalizado: 'Finalizado',
   };
 
@@ -94,33 +94,33 @@ const KanbanCard = ({ card, onDragStart }: Props) => {
         </div>
       </div>
 
-      {/* HISTORY (if exists) */}
-      {card.history && card.history.length > 0 && (
-        <div className="mt-3 pt-3 border-t border-gray-200">
-          <p className="text-xs font-semibold mb-1">Historial:</p>
-          {card.history.map((entry: HistoryEntry, index: number) => (
-            <div key={entry.id} className="mb-2">
-              <div className="flex justify-between text-[9px]">
-                <span>{new Date(entry.timestamp).toLocaleString()}</span>
-                <span className="font-semibold">{entry.user}</span>
-              </div>
-              <p className="text-[9px] text-gray-600 italic">
-                {entry.previousStatus} → {entry.newStatus}
-              </p>
-              {entry.comment && (
-                <p className="text-[9px] text-gray-700 mb-1">
-                  Comentario: {entry.comment}
-                </p>
-              )}
-              {entry.evidence && (
-                <p className="text-[9px] text-gray-700">
-                  Evidencia: {entry.evidence}
-                </p>
-              )}
-            </div>
-          ))}
-        </div>
-      )}
+       {/* HISTORY (if exists) */}
+       {card.history && card.history.length > 0 && (
+         <div className="mt-3 pt-3 border-t border-gray-200">
+           <p className="text-xs font-semibold mb-1">Historial:</p>
+           {card.history.map((entry: HistoryEntry) => (
+             <div key={entry.id} className="mb-2">
+               <div className="flex justify-between text-[9px]">
+                 <span>{new Date(entry.timestamp).toLocaleString()}</span>
+                 <span className="font-semibold">{entry.user}</span>
+               </div>
+               <p className="text-[9px] text-gray-600 italic">
+                 {entry.previousStatus} → {entry.newStatus}
+               </p>
+               {entry.comment && (
+                 <p className="text-[9px] text-gray-700 mb-1">
+                   Comentario: {entry.comment}
+                 </p>
+               )}
+               {entry.evidence && (
+                 <p className="text-[9px] text-gray-700">
+                   Evidencia: {entry.evidence}
+                 </p>
+               )}
+             </div>
+           ))}
+         </div>
+       )}
     </div>
   );
 };

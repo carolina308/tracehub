@@ -24,11 +24,15 @@ export const AuthProvider = ({ children }: any) => {
 
   const login = (userData: User) => {
     localStorage.setItem('auth', JSON.stringify(userData));
+    if (userData.token) {
+      localStorage.setItem('token', userData.token);
+    }
     setUser(userData);
   };
 
   const logout = () => {
     localStorage.removeItem('auth');
+    localStorage.removeItem('token');
     setUser(null);
   };
 

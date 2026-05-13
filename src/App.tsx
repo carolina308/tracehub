@@ -9,6 +9,7 @@ import Layout from "./layout/Layout";
 
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import RecuperarPassword from "./pages/RecuperarPassword";
 
 import Dashboard from "./pages/Dashboard";
 import RegistrarRequisito from "./pages/RegistrarRequisito";
@@ -33,6 +34,12 @@ function App() {
         <Route
           path="/register"
           element={<Register />}
+        />
+
+        <Route
+          path="/recuperar-password"
+          element={<RecuperarPassword />}
+
         />
 
         {/* PRIVATE ROUTES */}
