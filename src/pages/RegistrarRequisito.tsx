@@ -3,7 +3,7 @@ import { api } from "../services/api";
 import { Priority } from "../types/api";
 import type { Board, ID } from "../types/api";
 
-const inputClass = "w-full border border-gray-200 rounded-md p-2 text-[11px] outline-none focus:border-[#2563eb] focus:ring-1 focus:ring-[#2563eb]/20 transition-all";
+const inputClass = "w-full border border-gray-300 rounded-md p-2 text-[11px] outline-none focus:border-[#2563eb] focus:ring-1 focus:ring-[#2563eb]/20 transition-all";
 
 const RegistrarRequisito = () => {
   const [boards, setBoards] = useState<Board[]>([]);
@@ -104,7 +104,7 @@ const RegistrarRequisito = () => {
           </div>
           <div className="space-y-1">
             <button type="submit" className="w-full bg-[#2563eb] hover:bg-[#1d4ed8] text-white py-2 rounded-md font-semibold active:scale-[0.98] text-[11px]">Registrar</button>
-            <button type="button" className="w-full bg-white border border-gray-200 py-2 rounded-md font-semibold hover:bg-gray-50 active:scale-[0.98] text-[11px]">Cancelar</button>
+            <button type="button" className="w-full bg-white border border-gray-300 py-2 rounded-md font-semibold hover:bg-gray-50 active:scale-[0.98] text-[11px]">Cancelar</button>
           </div>
         </div>
       </form>

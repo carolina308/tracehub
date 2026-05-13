@@ -4,7 +4,7 @@ import type { Board, BoardMember, ID, User } from '../types/api';
 import { UserPlus, Trash2, Shield } from 'lucide-react';
 
 const getUserName = (u: User) => [u.firstName, u.middleName, u.lastName, u.secondLastName].filter(Boolean).join(' ');
-const selectClass = "w-full border border-gray-200 rounded-md p-2 text-[11px] outline-none focus:border-[#2563eb] focus:ring-1 focus:ring-[#2563eb]/20 transition-all";
+const selectClass = "w-full border border-gray-300 rounded-md p-2 text-[11px] outline-none focus:border-[#2563eb] focus:ring-1 focus:ring-[#2563eb]/20 transition-all";
 
 const Team = () => {
   const [boards, setBoards] = useState<Board[]>([]);
@@ -107,7 +107,7 @@ const Team = () => {
                         </div>
                       </div>
                       <div className="flex items-center gap-1 shrink-0">
-                        <select value={m.role} onChange={(e) => handleUpdateRole(m.user.id, e.target.value)} className="border border-gray-200 rounded-md px-1.5 py-0.5 text-[10px] outline-none" disabled={m.role === 'OWNER'}>
+                        <select value={m.role} onChange={(e) => handleUpdateRole(m.user.id, e.target.value)} className="border border-gray-300 rounded-md px-1.5 py-0.5 text-[10px] outline-none" disabled={m.role === 'OWNER'}>
                           <option value="MEMBER">Member</option>
                           <option value="VIEWER">Viewer</option>
                           <option value="OWNER">Owner</option>
@@ -151,18 +151,18 @@ const Team = () => {
             <form onSubmit={handleAddMember} className="space-y-2">
               <div>
                 <label className="block text-[11px] font-semibold mb-0.5 text-gray-800">Correo electrónico</label>
-                <input type="email" value={newEmail} onChange={(e) => setNewEmail(e.target.value)} placeholder="usuario@ejemplo.com" required className="w-full border border-gray-200 rounded-md px-2.5 py-1.5 text-[11px] outline-none focus:border-[#2563eb] focus:ring-1 focus:ring-[#2563eb]/20" autoFocus />
+                <input type="email" value={newEmail} onChange={(e) => setNewEmail(e.target.value)} placeholder="usuario@ejemplo.com" required className="w-full border border-gray-300 rounded-md px-2.5 py-1.5 text-[11px] outline-none focus:border-[#2563eb] focus:ring-1 focus:ring-[#2563eb]/20" autoFocus />
                 <p className="text-[10px] text-gray-600 mt-0.5">Debe estar registrado en TraceHub</p>
               </div>
               <div>
                 <label className="block text-[11px] font-semibold mb-0.5 text-gray-800">Rol</label>
-                <select value={newRole} onChange={(e) => setNewRole(e.target.value)} className="w-full border border-gray-200 rounded-md px-2.5 py-1.5 text-[11px] outline-none focus:border-[#2563eb]">
+                <select value={newRole} onChange={(e) => setNewRole(e.target.value)} className="w-full border border-gray-300 rounded-md px-2.5 py-1.5 text-[11px] outline-none focus:border-[#2563eb]">
                   <option value="MEMBER">Miembro</option>
                   <option value="VIEWER">Espectador</option>
                 </select>
               </div>
               <div className="flex justify-end gap-2 pt-2">
-                <button type="button" onClick={() => { setShowAddForm(false); setNewEmail(''); setError(''); }} className="px-3 py-1.5 rounded-md border border-gray-200 hover:bg-gray-50 text-[11px] font-medium active:scale-[0.98]">Cancelar</button>
+                <button type="button" onClick={() => { setShowAddForm(false); setNewEmail(''); setError(''); }} className="px-3 py-1.5 rounded-md border border-gray-300 hover:bg-gray-50 text-[11px] font-medium active:scale-[0.98]">Cancelar</button>
                 <button type="submit" disabled={adding || !newEmail.trim()} className="bg-[#2563eb] hover:bg-[#1d4ed8] text-white px-3.5 py-1.5 rounded-md font-semibold text-[11px] active:scale-[0.98] disabled:opacity-50">{adding ? 'Enviando...' : 'Enviar'}</button>
               </div>
             </form>

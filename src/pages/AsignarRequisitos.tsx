@@ -3,7 +3,7 @@ import { api } from '../services/api';
 import type { Board, Requirement, BoardMember, ID, User } from '../types/api';
 
 const getUserName = (u: User) => [u.firstName, u.middleName, u.lastName, u.secondLastName].filter(Boolean).join(' ');
-const selectClass = "w-full border border-gray-200 rounded-md p-2 text-[11px] outline-none focus:border-[#2563eb] focus:ring-1 focus:ring-[#2563eb]/20 transition-all";
+const selectClass = "w-full border border-gray-300 rounded-md p-2 text-[11px] outline-none focus:border-[#2563eb] focus:ring-1 focus:ring-[#2563eb]/20 transition-all";
 
 const AsignarRequisitos = () => {
   const [boards, setBoards] = useState<Board[]>([]);

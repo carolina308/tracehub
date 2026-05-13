@@ -67,7 +67,7 @@ const Dashboard = () => {
           <div className="flex items-center gap-2">
             <label className="text-[10px] font-medium text-gray-700">Tablero:</label>
             <select value={selectedBoardId ?? ""} onChange={(e) => setSelectedBoardId(Number(e.target.value) || null)}
-              className="border border-gray-200 rounded-md px-2 py-1.5 bg-white min-w-[150px] text-[11px] outline-none focus:border-[#2563eb] focus:ring-1 focus:ring-[#2563eb]/20">
+              className="border border-gray-300 rounded-md px-2 py-1.5 bg-white min-w-[150px] text-[11px] outline-none focus:border-[#2563eb] focus:ring-1 focus:ring-[#2563eb]/20">
               {boards.length === 0 && <option value="">Sin tableros</option>}
               {boards.map(b => <option key={b.id} value={b.id}>{b.name}</option>)}
             </select>
@@ -100,15 +100,15 @@ const Dashboard = () => {
             <div className="space-y-2">
               <div>
                 <label className="block text-[11px] font-semibold text-gray-800 mb-0.5">Nombre *</label>
-                <input type="text" value={newBoardName} onChange={(e) => setNewBoardName(e.target.value)} placeholder="Ej: Proyecto Principal" className="w-full border border-gray-200 rounded-md px-2.5 py-1.5 text-[11px] outline-none focus:border-[#2563eb] focus:ring-1 focus:ring-[#2563eb]/20" autoFocus />
+                <input type="text" value={newBoardName} onChange={(e) => setNewBoardName(e.target.value)} placeholder="Ej: Proyecto Principal" className="w-full border border-gray-300 rounded-md px-2.5 py-1.5 text-[11px] outline-none focus:border-[#2563eb] focus:ring-1 focus:ring-[#2563eb]/20" autoFocus />
               </div>
               <div>
                 <label className="block text-[11px] font-semibold text-gray-800 mb-0.5">Descripción</label>
-                <textarea value={newBoardDesc} onChange={(e) => setNewBoardDesc(e.target.value)} placeholder="Descripción..." className="w-full border border-gray-200 rounded-md px-2.5 py-1.5 text-[11px] outline-none focus:border-[#2563eb] focus:ring-1 focus:ring-[#2563eb]/20 h-14 resize-none" />
+                <textarea value={newBoardDesc} onChange={(e) => setNewBoardDesc(e.target.value)} placeholder="Descripción..." className="w-full border border-gray-300 rounded-md px-2.5 py-1.5 text-[11px] outline-none focus:border-[#2563eb] focus:ring-1 focus:ring-[#2563eb]/20 h-14 resize-none" />
               </div>
             </div>
             <div className="flex justify-end gap-2 mt-4">
-              <button onClick={() => { setShowCreateModal(false); setNewBoardName(""); setNewBoardDesc(""); }} className="px-3 py-1.5 rounded-md border border-gray-200 hover:bg-gray-50 text-[11px] font-medium active:scale-[0.98]">Cancelar</button>
+              <button onClick={() => { setShowCreateModal(false); setNewBoardName(""); setNewBoardDesc(""); }} className="px-3 py-1.5 rounded-md border border-gray-300 hover:bg-gray-50 text-[11px] font-medium active:scale-[0.98]">Cancelar</button>
               <button onClick={handleCreateBoard} disabled={!newBoardName.trim() || creating} className={btnClass}>{creating ? "Creando..." : "Crear"}</button>
             </div>
           </div>

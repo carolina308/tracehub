@@ -102,9 +102,9 @@ const KanbanBoard = ({ boardId }: KanbanBoardProps) => {
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
           <div className="bg-white rounded-xl p-4 w-[320px] shadow-xl">
             <h2 className="text-sm font-bold mb-3 text-[#2563eb]">Nueva Columna</h2>
-            <input type="text" value={newColumnName} onChange={(e) => setNewColumnName(e.target.value)} placeholder="Nombre de la columna" className="w-full border border-gray-200 rounded-md px-2.5 py-1.5 text-[11px] mb-3 outline-none focus:border-[#2563eb]" autoFocus onKeyDown={(e) => e.key === "Enter" && handleCreateColumn()} />
+            <input type="text" value={newColumnName} onChange={(e) => setNewColumnName(e.target.value)} placeholder="Nombre de la columna" className="w-full border border-gray-300 rounded-md px-2.5 py-1.5 text-[11px] mb-3 outline-none focus:border-[#2563eb]" autoFocus onKeyDown={(e) => e.key === "Enter" && handleCreateColumn()} />
             <div className="flex justify-end gap-2">
-              <button onClick={() => { setShowCreateColumn(false); setNewColumnName(""); }} className="px-3 py-1.5 rounded-md border border-gray-200 hover:bg-gray-50 text-[11px]">Cancelar</button>
+              <button onClick={() => { setShowCreateColumn(false); setNewColumnName(""); }} className="px-3 py-1.5 rounded-md border border-gray-300 hover:bg-gray-50 text-[11px]">Cancelar</button>
               <button onClick={handleCreateColumn} disabled={!newColumnName.trim() || creatingColumn} className="bg-[#2563eb] text-white px-3 py-1.5 rounded-md text-[11px] disabled:opacity-50">{creatingColumn ? "Creando..." : "Crear"}</button>
             </div>
           </div>

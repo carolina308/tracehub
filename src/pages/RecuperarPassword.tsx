@@ -50,7 +50,7 @@ const RecuperarPassword = () => {
               <label htmlFor="email" className="block text-sm font-semibold text-gray-800 mb-1">Correo electrónico</label>
               <div className="relative">
                 <Mail size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
-                <input id="email" type="email" value={correo} onChange={(e) => setCorreo(e.target.value)} required placeholder="tu@correo.com" className="block w-full rounded-xl border border-gray-200 pl-9 pr-3.5 py-2.5 text-sm text-gray-900 placeholder:text-gray-500 outline-none focus:border-[#2563eb] focus:ring-2 focus:ring-[#2563eb]/20 transition-all duration-300" />
+                <input id="email" type="email" value={correo} onChange={(e) => setCorreo(e.target.value)} required placeholder="tu@correo.com" className="block w-full rounded-xl border border-gray-300 pl-9 pr-3.5 py-2.5 text-sm text-gray-900 placeholder:text-gray-500 outline-none focus:border-[#2563eb] focus:ring-2 focus:ring-[#2563eb]/20 transition-all duration-300" />
               </div>
             </div>
             <button type="submit" className="w-full flex items-center justify-center gap-2 bg-[#2563eb] hover:bg-[#1d4ed8] text-white py-2.5 rounded-xl font-semibold transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]">

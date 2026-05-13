@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { api } from '../services/api';
 import { User, Bell, Lock, Info, LogOut } from 'lucide-react';
 
-const inputClass = "w-full border border-gray-200 rounded-md px-2.5 py-1.5 text-[11px] outline-none focus:border-[#2563eb] focus:ring-1 focus:ring-[#2563eb]/20 transition-all";
+const inputClass = "w-full border border-gray-300 rounded-md px-2.5 py-1.5 text-[11px] outline-none focus:border-[#2563eb] focus:ring-1 focus:ring-[#2563eb]/20 transition-all";
 
 const Settings = () => {
   const navigate = useNavigate();

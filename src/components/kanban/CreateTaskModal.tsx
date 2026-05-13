@@ -16,7 +16,7 @@ const CreateTaskModal = ({ onClose, onCreate }: Props) => {
     onClose();
   };
 
-  const inputClass = "w-full border border-gray-200 rounded-md px-2.5 py-1.5 text-[11px] outline-none focus:border-[#2563eb] focus:ring-1 focus:ring-[#2563eb]/20 transition-all";
+  const inputClass = "w-full border border-gray-300 rounded-md px-2.5 py-1.5 text-[11px] outline-none focus:border-[#2563eb] focus:ring-1 focus:ring-[#2563eb]/20 transition-all";
 
   return (
     <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
@@ -41,7 +41,7 @@ const CreateTaskModal = ({ onClose, onCreate }: Props) => {
           </div>
         </div>
         <div className="flex justify-end gap-2 mt-4">
-          <button onClick={onClose} className="px-3 py-1.5 rounded-md border border-gray-200 hover:bg-gray-50 text-[11px] font-medium active:scale-[0.98]">Cancelar</button>
+          <button onClick={onClose} className="px-3 py-1.5 rounded-md border border-gray-300 hover:bg-gray-50 text-[11px] font-medium active:scale-[0.98]">Cancelar</button>
           <button onClick={handleSubmit} className="bg-[#2563eb] text-white px-3.5 py-1.5 rounded-md text-[11px] font-semibold active:scale-[0.98]">Crear</button>
         </div>
       </div>
