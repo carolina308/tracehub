@@ -11,6 +11,7 @@ import type {
   AssignRequirementInput,
   ID,
   BoardMember,
+  User,
 } from '../types/api';
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3000';
@@ -238,18 +239,17 @@ export const api = {
 
   /** Register a new user with all fields */
   async register(data: {
-    name: string;
     email: string;
     password: string;
     dni?: string;
     phone?: string;
     address?: string;
     role?: string;
-    firstName?: string;
+    firstName: string;
     middleName?: string;
-    lastName?: string;
+    lastName: string;
     secondLastName?: string;
-  }): Promise<{ user: { id: ID; name: string; email: string }; token: string }> {
+  }): Promise<{ user: User; token: string }> {
     const res = await fetch(`${API_BASE}/api/auth/register`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -259,7 +259,7 @@ export const api = {
   },
 
   /** Login with email and password */
-  async login(email: string, password: string): Promise<{ user: { id: ID; name: string; email: string }; token: string }> {
+  async login(email: string, password: string): Promise<{ user: User; token: string }> {
     const res = await fetch(`${API_BASE}/api/auth/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },

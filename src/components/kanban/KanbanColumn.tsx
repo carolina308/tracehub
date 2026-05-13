@@ -1,5 +1,5 @@
 import KanbanCard from "./KanbanCard";
-import type { ID } from "../../types/api";
+import type { ID, BoardMember } from "../../types/api";
 import type { Task } from "./KanbanBoard";
 
 interface ColumnInfo {
@@ -18,9 +18,11 @@ interface Props {
   allColumns: ColumnInfo[];
   moveTask: (taskId: ID, targetColumnId: ID) => void;
   onAddTask?: () => void;
+  members?: BoardMember[];
+  onAssignTask?: (taskId: ID, assigneeId: ID | null) => void;
 }
 
-const KanbanColumn = ({ column, allColumns, moveTask, onAddTask }: Props) => {
+const KanbanColumn = ({ column, allColumns, moveTask, onAddTask, members, onAssignTask }: Props) => {
   const onDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     const taskId = e.dataTransfer.getData("taskId");
@@ -50,6 +52,8 @@ const KanbanColumn = ({ column, allColumns, moveTask, onAddTask }: Props) => {
             task={task}
             columns={allColumns}
             onMoveTask={moveTask}
+            members={members}
+            onAssignTask={onAssignTask}
           />
         ))}
       </div>

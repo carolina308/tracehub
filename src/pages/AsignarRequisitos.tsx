@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { api } from '../services/api';
-import type { Board, Requirement, BoardMember, ID } from '../types/api';
+import type { Board, Requirement, BoardMember, ID, User } from '../types/api';
+
+const getUserName = (u: User) => [u.firstName, u.middleName, u.lastName, u.secondLastName].filter(Boolean).join(' ');
 
 const AsignarRequisitos = () => {
   const [boards, setBoards] = useState<Board[]>([]);
@@ -14,16 +16,13 @@ const AsignarRequisitos = () => {
   const [success, setSuccess] = useState('');
   const [error, setError] = useState('');
 
-  // Load boards on mount
   useEffect(() => {
     const fetchData = async () => {
       try {
         const boardsData = await api.getBoards();
         setBoards(boardsData);
-        if (boardsData.length > 0) {
-          setSelectedBoardId(boardsData[0].id);
-        }
-      } catch (err) {
+        if (boardsData.length > 0) setSelectedBoardId(boardsData[0].id);
+      } catch {
         setError('Error al cargar tableros');
       } finally {
         setLoading(false);
@@ -32,10 +31,8 @@ const AsignarRequisitos = () => {
     fetchData();
   }, []);
 
-  // When board changes, load requirements and members
   useEffect(() => {
     if (!selectedBoardId) return;
-
     const fetchBoardData = async () => {
       setLoading(true);
       setError('');
@@ -44,45 +41,33 @@ const AsignarRequisitos = () => {
           api.getBoard(selectedBoardId),
           api.listMembers(selectedBoardId),
         ]);
-
-        // Collect all requirements from all columns
-        const allReqs = boardData.columns.flatMap(col => col.requirements);
-        setBoardRequirements(allReqs);
+        setBoardRequirements(boardData.columns.flatMap(col => col.requirements));
         setMembers(membersData);
-      } catch (err) {
+      } catch {
         setError('Error al cargar datos del tablero');
       } finally {
         setLoading(false);
       }
     };
-
     fetchBoardData();
   }, [selectedBoardId]);
 
   const handleAssign = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!requisitoSeleccionado || !usuarioSeleccionado) return;
-
     setAsignando(true);
     setError('');
     setSuccess('');
 
     try {
-      await api.assignRequirement(
-        Number(requisitoSeleccionado),
-        Number(usuarioSeleccionado)
-      );
-
+      await api.assignRequirement(Number(requisitoSeleccionado), Number(usuarioSeleccionado));
       setSuccess('Requisito asignado exitosamente');
-
-      // Refresh data
       const [boardData, membersData] = await Promise.all([
         api.getBoard(selectedBoardId!),
         api.listMembers(selectedBoardId!),
       ]);
       setBoardRequirements(boardData.columns.flatMap(col => col.requirements));
       setMembers(membersData);
-
       setRequisitoSeleccionado('');
       setUsuarioSeleccionado('');
     } catch (err) {
@@ -92,37 +77,46 @@ const AsignarRequisitos = () => {
     }
   };
 
-  // Flatten all requirements into a list for status display
   const unassignedReqs = boardRequirements.filter(r => !r.assignee);
   const assignedReqs = boardRequirements.filter(r => r.assignee);
 
+  const selectClass = "w-full border border-gray-200 rounded-2xl p-4 outline-none focus:border-[#2563eb] focus:ring-2 focus:ring-[#2563eb]/20 transition-all duration-300";
+
+  if (loading && boardRequirements.length === 0) {
+    return (
+      <div className="min-h-screen bg-[#f4f7fb] flex items-center justify-center">
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-8 h-8 border-2 border-[#2563eb] border-t-transparent rounded-full animate-spin" />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-[#f4f7fb] p-10">
-      {/* Header */}
       <div className="mb-8">
         <p className="text-sm text-gray-400 mb-2">
           Requisitos {' > '} Asignar
         </p>
-        <h1 className="text-4xl font-bold text-[#2563eb]">Asignar Requisitos</h1>
+        <h1 className="text-4xl font-bold text-[#2563eb] tracking-tight">Asignar Requisitos</h1>
         <p className="text-gray-500 mt-2">
           Vinculá responsables a los requisitos del proyecto
         </p>
       </div>
 
       {error && (
-        <div className="bg-red-100 border border-red-300 text-red-700 p-4 rounded-2xl mb-5">{error}</div>
+        <div className="bg-red-50 border border-red-200 text-red-700 p-4 rounded-2xl mb-5">{error}</div>
       )}
       {success && (
-        <div className="bg-green-100 border border-green-300 text-green-700 p-4 rounded-2xl mb-5">{success}</div>
+        <div className="bg-green-50 border border-green-200 text-green-700 p-4 rounded-2xl mb-5">{success}</div>
       )}
 
-      {/* Board Selector */}
       <div className="bg-white rounded-3xl p-6 shadow-sm mb-8">
         <label className="block text-sm font-semibold mb-3 text-gray-700">TABLERO</label>
         <select
           value={selectedBoardId ?? ''}
           onChange={(e) => setSelectedBoardId(Number(e.target.value) || null)}
-          className="w-full border border-gray-200 rounded-2xl p-4 outline-none focus:border-[#2563eb]"
+          className={selectClass}
         >
           {boards.map(b => (
             <option key={b.id} value={b.id}>{b.name}</option>
@@ -130,13 +124,10 @@ const AsignarRequisitos = () => {
         </select>
       </div>
 
-      {loading ? (
-        <div className="text-center py-10 text-gray-500">Cargando...</div>
-      ) : !selectedBoardId ? (
+      {!selectedBoardId ? (
         <div className="text-center py-10 text-gray-500">Seleccioná un tablero</div>
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Left: Assign Form */}
           <div className="lg:col-span-2">
             <div className="bg-white rounded-3xl p-8 shadow-sm">
               <h2 className="text-xl font-bold mb-6">Configurar Asignación</h2>
@@ -147,39 +138,40 @@ const AsignarRequisitos = () => {
                     value={requisitoSeleccionado}
                     onChange={(e) => setRequisitoSeleccionado(e.target.value)}
                     required
-                    className="w-full border border-gray-200 rounded-2xl p-4 outline-none focus:border-[#2563eb]"
+                    className={selectClass}
                   >
                     <option value="">Seleccionar requisito...</option>
-                    {unassignedReqs.map(req => (
-                      <option key={req.id} value={req.id}>
-                        #{req.id} - {req.title} ({req.column?.name ?? ''})
-                      </option>
-                    ))}
+                    {boardRequirements.map(req => {
+                      const member = members.find(m => m.user.id === req.assignee?.id);
+                      return (
+                        <option key={req.id} value={req.id}>
+                          #{req.id} - {req.title} ({req.column?.name ?? ''}) {req.assignee ? `- ${member ? getUserName(member.user) : `ID ${req.assignee.id}`}` : '- Sin asignar'}
+                        </option>
+                      );
+                    })}
                   </select>
                 </div>
-
                 <div>
                   <label className="block text-sm font-semibold mb-2">Responsable</label>
                   <select
                     value={usuarioSeleccionado}
                     onChange={(e) => setUsuarioSeleccionado(e.target.value)}
                     required
-                    className="w-full border border-gray-200 rounded-2xl p-4 outline-none focus:border-[#2563eb]"
+                    className={selectClass}
                   >
                     <option value="">Seleccionar usuario...</option>
                     {members.map(m => (
                       <option key={m.user.id} value={m.user.id}>
-                        {m.user.name} ({m.user.email}) - {m.role}
+                        {getUserName(m.user)} ({m.user.email}) - {m.role}
                       </option>
                     ))}
                   </select>
                 </div>
-
                 <div className="flex justify-end gap-4">
                   <button
                     type="submit"
                     disabled={asignando || !requisitoSeleccionado || !usuarioSeleccionado}
-                    className="bg-[#2563eb] hover:bg-[#1d4ed8] text-white px-6 py-3 rounded-2xl font-semibold disabled:opacity-50"
+                    className="bg-[#2563eb] hover:bg-[#1d4ed8] text-white px-6 py-3 rounded-2xl font-semibold transition-all duration-300 hover:scale-[1.01] active:scale-[0.98] disabled:opacity-50 disabled:active:scale-100"
                   >
                     {asignando ? 'Asignando...' : 'Confirmar Asignación'}
                   </button>
@@ -187,12 +179,10 @@ const AsignarRequisitos = () => {
               </form>
             </div>
 
-            {/* Requirements List */}
             <div className="bg-white rounded-3xl p-8 shadow-sm mt-8">
               <h2 className="text-xl font-bold mb-6">
                 Requisitos ({boardRequirements.length})
               </h2>
-
               {boardRequirements.length === 0 ? (
                 <p className="text-gray-500">No hay requisitos en este tablero.</p>
               ) : (
@@ -200,7 +190,7 @@ const AsignarRequisitos = () => {
                   {boardRequirements.map(req => {
                     const member = members.find(m => m.user.id === req.assignee?.id);
                     return (
-                      <div key={req.id} className="border border-gray-100 rounded-2xl p-5">
+                      <div key={req.id} className="border border-gray-100 rounded-2xl p-5 transition-all duration-200 hover:shadow-sm hover:border-gray-200">
                         <div className="flex justify-between items-start">
                           <div>
                             <p className="text-xs font-bold text-[#2563eb] mb-1">
@@ -223,7 +213,7 @@ const AsignarRequisitos = () => {
                             </span>
                             {req.assignee && (
                               <p className="text-xs text-gray-500 mt-2">
-                                {member ? member.user.name : `ID ${req.assignee.id}`}
+                                {member ? getUserName(member.user) : `ID ${req.assignee.id}`}
                               </p>
                             )}
                             {!req.assignee && (
@@ -239,7 +229,6 @@ const AsignarRequisitos = () => {
             </div>
           </div>
 
-          {/* Right: Members */}
           <div className="space-y-6">
             <div className="bg-white rounded-3xl p-6 shadow-sm">
               <h2 className="text-lg font-bold mb-4">Miembros del tablero</h2>
@@ -250,14 +239,12 @@ const AsignarRequisitos = () => {
                   {members.map(m => (
                     <div key={m.id} className="flex items-center gap-3 p-3 bg-gray-50 rounded-xl">
                       <div className="w-10 h-10 rounded-full bg-[#1e3a8a] text-white flex items-center justify-center text-sm font-bold">
-                        {m.user.name.charAt(0)}
+                        {getUserName(m.user).charAt(0)}
                       </div>
                       <div>
-                        <p className="text-sm font-semibold">{m.user.name}</p>
+                        <p className="text-sm font-semibold">{getUserName(m.user)}</p>
                         <p className="text-xs text-gray-500">{m.user.email}</p>
-                        <span className="text-xs px-2 py-0.5 rounded-full bg-blue-100 text-blue-700">
-                          {m.role}
-                        </span>
+                        <span className="text-xs px-2 py-0.5 rounded-full bg-blue-100 text-blue-700">{m.role}</span>
                       </div>
                     </div>
                   ))}
@@ -265,7 +252,6 @@ const AsignarRequisitos = () => {
               )}
             </div>
 
-            {/* Summary */}
             <div className="bg-white rounded-3xl p-6 shadow-sm">
               <h2 className="text-lg font-bold mb-4">Resumen</h2>
               <div className="space-y-2 text-sm">

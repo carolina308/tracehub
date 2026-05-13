@@ -1,7 +1,9 @@
 ﻿import { useState, useEffect } from 'react';
 import { api } from '../services/api';
-import type { Board, BoardMember, ID } from '../types/api';
+import type { Board, BoardMember, ID, User } from '../types/api';
 import { UserPlus, Trash2, Shield } from 'lucide-react';
+
+const getUserName = (u: User) => [u.firstName, u.middleName, u.lastName, u.secondLastName].filter(Boolean).join(' ');
 
 const Team = () => {
   const [boards, setBoards] = useState<Board[]>([]);
@@ -9,7 +11,6 @@ const Team = () => {
   const [members, setMembers] = useState<BoardMember[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // Add member form
   const [showAddForm, setShowAddForm] = useState(false);
   const [newEmail, setNewEmail] = useState('');
   const [newRole, setNewRole] = useState('MEMBER');
@@ -17,14 +18,13 @@ const Team = () => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
-  // Load boards on mount
   useEffect(() => {
     const fetchBoards = async () => {
       try {
         const data = await api.getBoards();
         setBoards(data);
         if (data.length > 0) setSelectedBoardId(data[0].id);
-      } catch (err) {
+      } catch {
         setError('Error al cargar tableros');
       } finally {
         setLoading(false);
@@ -33,7 +33,6 @@ const Team = () => {
     fetchBoards();
   }, []);
 
-  // Load members when board changes
   useEffect(() => {
     if (!selectedBoardId) return;
     const fetchMembers = async () => {
@@ -50,7 +49,6 @@ const Team = () => {
   const handleAddMember = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newEmail.trim() || !selectedBoardId) return;
-
     setAdding(true);
     setError('');
     setSuccess('');
@@ -61,8 +59,6 @@ const Team = () => {
       setNewEmail('');
       setNewRole('MEMBER');
       setShowAddForm(false);
-
-      // Refresh members
       const updated = await api.listMembers(selectedBoardId);
       setMembers(updated);
     } catch (err) {
@@ -75,7 +71,6 @@ const Team = () => {
   const handleRemoveMember = async (userId: ID) => {
     if (!selectedBoardId) return;
     if (!confirm('¿Estás seguro de eliminar este miembro?')) return;
-
     try {
       await api.removeMember(selectedBoardId, userId);
       const updated = await api.listMembers(selectedBoardId);
@@ -100,10 +95,14 @@ const Team = () => {
 
   const selectedBoard = boards.find(b => b.id === selectedBoardId);
 
+  const selectClass = "w-full border border-gray-200 rounded-2xl p-4 outline-none focus:border-[#2563eb] focus:ring-2 focus:ring-[#2563eb]/20 transition-all duration-300";
+
   if (loading) {
     return (
       <div className="min-h-screen bg-[#f4f7fb] flex items-center justify-center">
-        <div className="text-gray-500">Cargando...</div>
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-8 h-8 border-2 border-[#2563eb] border-t-transparent rounded-full animate-spin" />
+        </div>
       </div>
     );
   }
@@ -112,18 +111,17 @@ const Team = () => {
     <div className="min-h-screen bg-[#f4f7fb] p-10">
       <div className="mb-8">
         <p className="text-sm text-gray-400 mb-2">Equipo</p>
-        <h1 className="text-4xl font-bold text-[#2563eb]">Gestión del Equipo</h1>
+        <h1 className="text-4xl font-bold text-[#2563eb] tracking-tight">Gestión del Equipo</h1>
         <p className="text-gray-500 mt-2">Administrá los miembros de cada tablero</p>
       </div>
 
       {error && (
-        <div className="bg-red-100 border border-red-300 text-red-700 p-4 rounded-2xl mb-5">{error}</div>
+        <div className="bg-red-50 border border-red-200 text-red-700 p-4 rounded-2xl mb-5">{error}</div>
       )}
       {success && (
-        <div className="bg-green-100 border border-green-300 text-green-700 p-4 rounded-2xl mb-5">{success}</div>
+        <div className="bg-green-50 border border-green-200 text-green-700 p-4 rounded-2xl mb-5">{success}</div>
       )}
 
-      {/* Board Selector */}
       <div className="bg-white rounded-3xl p-6 shadow-sm mb-8">
         <div className="flex items-center justify-between">
           <div className="flex-1">
@@ -131,17 +129,16 @@ const Team = () => {
             <select
               value={selectedBoardId ?? ''}
               onChange={(e) => setSelectedBoardId(Number(e.target.value) || null)}
-              className="w-full max-w-md border border-gray-200 rounded-2xl p-4 outline-none focus:border-[#2563eb]"
+              className={`${selectClass} max-w-md`}
             >
               {boards.map(b => (
                 <option key={b.id} value={b.id}>{b.name}</option>
               ))}
             </select>
           </div>
-
           <button
             onClick={() => setShowAddForm(true)}
-            className="flex items-center gap-2 bg-[#2563eb] text-white px-5 py-3 rounded-2xl hover:bg-[#1d4ed8] font-semibold"
+            className="flex items-center gap-2 bg-[#2563eb] text-white px-5 py-3 rounded-2xl hover:bg-[#1d4ed8] font-semibold transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
           >
             <UserPlus size={20} />
             Invitar Miembro
@@ -153,46 +150,41 @@ const Team = () => {
         <div className="text-center py-10 text-gray-500">Seleccioná un tablero</div>
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Members List */}
           <div className="lg:col-span-2">
             <div className="bg-white rounded-3xl p-8 shadow-sm">
               <h2 className="text-xl font-bold mb-6">
                 Miembros ({members.length})
               </h2>
-
               {members.length === 0 ? (
                 <p className="text-gray-500">No hay miembros en este tablero.</p>
               ) : (
                 <div className="space-y-4">
                   {members.map(m => (
-                    <div key={m.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-2xl">
+                    <div key={m.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-2xl transition-all duration-200 hover:shadow-sm">
                       <div className="flex items-center gap-4">
                         <div className="w-12 h-12 rounded-full bg-[#1e3a8a] text-white flex items-center justify-center text-lg font-bold">
-                          {m.user.name.charAt(0)}
+                          {getUserName(m.user).charAt(0)}
                         </div>
                         <div>
-                          <p className="font-semibold">{m.user.name}</p>
+                          <p className="font-semibold">{getUserName(m.user)}</p>
                           <p className="text-sm text-gray-500">{m.user.email}</p>
                         </div>
                       </div>
-
                       <div className="flex items-center gap-3">
-                        {/* Role selector */}
                         <select
                           value={m.role}
                           onChange={(e) => handleUpdateRole(m.user.id, e.target.value)}
-                          className="border border-gray-200 rounded-xl px-3 py-2 text-sm outline-none"
+                          className="border border-gray-200 rounded-xl px-3 py-2 text-sm outline-none focus:border-[#2563eb] transition"
                           disabled={m.role === 'OWNER'}
                         >
                           <option value="MEMBER">Member</option>
                           <option value="VIEWER">Viewer</option>
                           <option value="OWNER">Owner</option>
                         </select>
-
                         {m.role !== 'OWNER' && (
                           <button
                             onClick={() => handleRemoveMember(m.user.id)}
-                            className="p-2 text-red-500 hover:bg-red-50 rounded-xl transition"
+                            className="p-2 text-red-500 hover:bg-red-50 rounded-xl transition-all duration-200 active:scale-[0.9]"
                             title="Eliminar miembro"
                           >
                             <Trash2 size={18} />
@@ -206,7 +198,6 @@ const Team = () => {
             </div>
           </div>
 
-          {/* Sidebar */}
           <div className="space-y-6">
             <div className="bg-white rounded-3xl p-6 shadow-sm">
               <h2 className="text-lg font-bold mb-4 flex items-center gap-2">
@@ -246,12 +237,10 @@ const Team = () => {
         </div>
       )}
 
-      {/* Add Member Modal */}
       {showAddForm && (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
           <div className="bg-white rounded-3xl p-8 w-[480px] shadow-xl">
             <h2 className="text-2xl font-bold text-[#2563eb] mb-6">Invitar Miembro</h2>
-
             <form onSubmit={handleAddMember} className="space-y-5">
               <div>
                 <label className="block text-sm font-semibold mb-2 text-gray-700">
@@ -263,42 +252,36 @@ const Team = () => {
                   onChange={(e) => setNewEmail(e.target.value)}
                   placeholder="usuario@ejemplo.com"
                   required
-                  className="w-full border border-gray-200 rounded-2xl p-4 outline-none focus:border-[#2563eb]"
+                  className="w-full border border-gray-200 rounded-2xl p-4 outline-none focus:border-[#2563eb] focus:ring-2 focus:ring-[#2563eb]/20 transition-all duration-300"
                   autoFocus
                 />
                 <p className="text-xs text-gray-400 mt-2">
                   El usuario debe estar registrado en TraceHub
                 </p>
               </div>
-
               <div>
                 <label className="block text-sm font-semibold mb-2 text-gray-700">Rol</label>
                 <select
                   value={newRole}
                   onChange={(e) => setNewRole(e.target.value)}
-                  className="w-full border border-gray-200 rounded-2xl p-4 outline-none focus:border-[#2563eb]"
+                  className="w-full border border-gray-200 rounded-2xl p-4 outline-none focus:border-[#2563eb] focus:ring-2 focus:ring-[#2563eb]/20 transition-all duration-300"
                 >
                   <option value="MEMBER">Miembro</option>
                   <option value="VIEWER">Espectador</option>
                 </select>
               </div>
-
               <div className="flex justify-end gap-4 pt-4">
                 <button
                   type="button"
-                  onClick={() => {
-                    setShowAddForm(false);
-                    setNewEmail('');
-                    setError('');
-                  }}
-                  className="px-5 py-3 rounded-2xl border border-gray-200 hover:bg-gray-50"
+                  onClick={() => { setShowAddForm(false); setNewEmail(''); setError(''); }}
+                  className="px-5 py-3 rounded-2xl border border-gray-200 hover:bg-gray-50 transition-all duration-200 active:scale-[0.98]"
                 >
                   Cancelar
                 </button>
                 <button
                   type="submit"
                   disabled={adding || !newEmail.trim()}
-                  className="bg-[#2563eb] hover:bg-[#1d4ed8] text-white px-6 py-3 rounded-2xl font-semibold disabled:opacity-50"
+                  className="bg-[#2563eb] hover:bg-[#1d4ed8] text-white px-6 py-3 rounded-2xl font-semibold transition-all duration-300 active:scale-[0.98] disabled:opacity-50 disabled:active:scale-100"
                 >
                   {adding ? 'Enviando...' : 'Enviar Invitación'}
                 </button>

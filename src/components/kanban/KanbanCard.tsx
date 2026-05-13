@@ -1,6 +1,6 @@
 import { useState } from "react";
 import type { Task } from "./KanbanBoard";
-import type { ID, Evidence } from "../../types/api";
+import type { ID, Evidence, BoardMember } from "../../types/api";
 import { api } from "../../services/api";
 import ChangeStatusModal from "./ChangeStatusModal";
 import { Upload, Download, FileText, Trash2 } from "lucide-react";
@@ -14,9 +14,11 @@ interface Props {
   task: Task;
   columns: ColumnOption[];
   onMoveTask: (taskId: ID, targetColumnId: ID) => void;
+  members?: BoardMember[];
+  onAssignTask?: (taskId: ID, assigneeId: ID | null) => void;
 }
 
-const KanbanCard = ({ task, columns, onMoveTask }: Props) => {
+const KanbanCard = ({ task, columns, onMoveTask, members, onAssignTask }: Props) => {
   const [openModal, setOpenModal] = useState(false);
   const [showEvidence, setShowEvidence] = useState(false);
   const [evidence, setEvidence] = useState<Evidence[]>(task.evidence || []);
@@ -182,6 +184,9 @@ const KanbanCard = ({ task, columns, onMoveTask }: Props) => {
           columns={columns}
           onClose={() => setOpenModal(false)}
           onConfirm={handleStatusChange}
+          members={members}
+          currentAssigneeId={task.assigneeId}
+          onAssign={onAssignTask}
         />
       )}
     </>

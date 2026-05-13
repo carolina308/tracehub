@@ -1,3 +1,5 @@
+import { History, ArrowRight, FileText } from 'lucide-react';
+
 const Historial = () => {
   const history =
     JSON.parse(
@@ -6,101 +8,78 @@ const Historial = () => {
 
   return (
     <div className="min-h-screen bg-[#f4f7fb] p-10">
-      {/* HEADER */}
       <div className="mb-10">
         <p className="text-sm text-gray-400 mb-2">
-          TRACEHUB {" > "} Historial
+          TraceHub {" > "} Historial
         </p>
 
-        <h1 className="text-5xl font-bold text-[#2563eb]">
+        <h1 className="text-4xl font-bold text-[#2563eb] tracking-tight">
           Historial de Cambios
         </h1>
 
-        <p className="text-gray-500 mt-4">
-          Seguimiento completo de movimientos y cambios
-          realizados en los requisitos.
+        <p className="text-gray-500 mt-2">
+          Seguimiento completo de movimientos y cambios realizados en los requisitos.
         </p>
       </div>
 
-      {/* EMPTY */}
       {history.length === 0 && (
-        <div className="bg-white rounded-3xl p-10 text-center shadow-sm">
-          <h3 className="text-2xl font-semibold text-gray-700 mb-3">
+        <div className="bg-white rounded-3xl p-12 text-center shadow-sm border border-gray-100">
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-gray-100 rounded-2xl mb-4">
+            <History size={28} className="text-gray-400" />
+          </div>
+          <h3 className="text-xl font-semibold text-gray-700 mb-2">
             No hay movimientos registrados
           </h3>
-
-          <p className="text-gray-500">
-            Los cambios realizados en el tablero aparecerán
-            aquí.
+          <p className="text-gray-500 max-w-[40ch] mx-auto">
+            Los cambios realizados en el tablero aparecerán aquí automáticamente.
           </p>
         </div>
       )}
 
-      {/* HISTORY */}
-      <div className="space-y-5">
+      <div className="space-y-4">
         {history
           .slice()
           .reverse()
           .map((item: any, index: number) => (
             <div
               key={index}
-              className="bg-white rounded-3xl p-6 shadow-sm border border-gray-100"
+              className="bg-white rounded-3xl p-6 shadow-sm border border-gray-100 transition-all duration-300 hover:shadow-md"
             >
-              {/* TOP */}
-              <div className="flex items-center justify-between mb-5">
+              <div className="flex items-start justify-between mb-4">
                 <div>
-                  <p className="text-sm text-[#2563eb] font-bold">
+                  <p className="text-xs font-bold text-[#2563eb]">
                     {item.code}
                   </p>
-
-                  <h3 className="text-xl font-semibold mt-1">
+                  <h3 className="text-lg font-semibold text-gray-800 mt-0.5">
                     {item.title}
                   </h3>
                 </div>
-
-                <span className="text-sm text-gray-400">
+                <span className="text-sm text-gray-400 whitespace-nowrap ml-4">
                   {item.date}
                 </span>
               </div>
 
-              {/* MOVEMENT */}
-              <div className="flex items-center gap-3 mb-5">
-                <span className="bg-gray-100 px-3 py-2 rounded-xl text-sm">
-                  {item.from.toUpperCase()}
+              <div className="flex items-center gap-3 mb-4">
+                <span className="bg-gray-100 px-3 py-1.5 rounded-xl text-sm font-medium text-gray-600">
+                  {item.from?.toUpperCase()}
                 </span>
-
-                <span className="text-gray-400">
-                  →
-                </span>
-
-                <span className="bg-[#2563eb] text-white px-3 py-2 rounded-xl text-sm">
-                  {item.to.toUpperCase()}
+                <ArrowRight size={16} className="text-gray-400" />
+                <span className="bg-[#2563eb] text-white px-3 py-1.5 rounded-xl text-sm font-medium">
+                  {item.to?.toUpperCase()}
                 </span>
               </div>
 
-              {/* COMMENT */}
               {item.comment && (
-                <div className="mb-4">
-                  <p className="text-sm text-gray-400 mb-1">
-                    Comentario
-                  </p>
-
-                  <p className="text-gray-700">
-                    {item.comment}
-                  </p>
+                <div className="mb-3">
+                  <p className="text-xs text-gray-400 mb-1 font-medium">Comentario</p>
+                  <p className="text-sm text-gray-700">{item.comment}</p>
                 </div>
               )}
 
-              {/* EVIDENCE */}
               {item.evidence && (
-                <div>
-                  <p className="text-sm text-gray-400 mb-1">
-                    Evidencia
-                  </p>
-
-                  <p className="text-blue-600 text-sm">
-                    📎 {item.evidence}
-                  </p>
+                <div className="flex items-center gap-2 text-sm text-[#2563eb]">
+                  <FileText size={14} />
+                  <span>{item.evidence}</span>
                 </div>
               )}
             </div>

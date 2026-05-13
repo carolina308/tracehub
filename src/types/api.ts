@@ -10,11 +10,18 @@ export enum Priority {
   URGENT = 'URGENT',
 }
 
-// Backend returns nested User object, not just string
+// Backend returns nested User object with split name fields
 export interface User {
   id: ID;
-  name: string;
   email: string;
+  firstName: string;
+  middleName?: string;
+  lastName: string;
+  secondLastName?: string;
+  role?: string;
+  dni?: string;
+  phone?: string;
+  address?: string;
 }
 
 // Backend returns nested BoardMember with role

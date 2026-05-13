@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { api } from '../services/api';
+import { UserPlus, Layout } from 'lucide-react';
 
-const Register: React.FC = () => {
-   
+const Register = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     firstName: '',
@@ -22,7 +22,6 @@ const Register: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
 
-  // Redirect after successful registration
   useEffect(() => {
     if (success) {
       const timer = setTimeout(() => navigate('/login'), 2000);
@@ -43,133 +42,77 @@ const Register: React.FC = () => {
     return stored ? JSON.parse(stored) as Array<{ email: string; firstName: string; lastName: string; role: string }> : [];
   };
 
-  const saveUser = (user: { email: string; firstName: string; lastName: string; role: string }) => {
-    const users = getStoredUsers();
-    users.push(user);
-    localStorage.setItem('registeredUsers', JSON.stringify(users));
-  };
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value, type } = e.target;
     setFormData(prev => ({
       ...prev,
       [name]: type === 'checkbox' ? (e.target as HTMLInputElement).checked : value,
     }));
-
-    if (errors[name]) {
-      setErrors(prev => ({ ...prev, [name]: '' }));
-    }
-
-    if (statusMessage.type) {
-      setStatusMessage({ type: '', text: '' });
-    }
+    if (errors[name]) setErrors(prev => ({ ...prev, [name]: '' }));
+    if (statusMessage.type) setStatusMessage({ type: '', text: '' });
   };
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
     const nameRegex = /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/;
 
-    if (!formData.firstName.trim()) {
-      newErrors.firstName = 'Primer nombre es obligatorio';
-    } else if (!nameRegex.test(formData.firstName.trim())) {
-      newErrors.firstName = 'Solo se permiten letras y espacios';
-    }
+    if (!formData.firstName.trim()) newErrors.firstName = 'Primer nombre es obligatorio';
+    else if (!nameRegex.test(formData.firstName.trim())) newErrors.firstName = 'Solo se permiten letras y espacios';
 
-    if (formData.middleName.trim() && !nameRegex.test(formData.middleName.trim())) {
-      newErrors.middleName = 'Solo se permiten letras y espacios';
-    }
+    if (formData.middleName.trim() && !nameRegex.test(formData.middleName.trim())) newErrors.middleName = 'Solo se permiten letras y espacios';
+    if (!formData.lastName.trim()) newErrors.lastName = 'Primer apellido es obligatorio';
+    else if (!nameRegex.test(formData.lastName.trim())) newErrors.lastName = 'Solo se permiten letras y espacios';
 
-    if (!formData.lastName.trim()) {
-      newErrors.lastName = 'Primer apellido es obligatorio';
-    } else if (!nameRegex.test(formData.lastName.trim())) {
-      newErrors.lastName = 'Solo se permiten letras y espacios';
-    }
-
-    if (formData.secondLastName.trim() && !nameRegex.test(formData.secondLastName.trim())) {
-      newErrors.secondLastName = 'Solo se permiten letras y espacios';
-    }
-
-    if (!formData.email.trim()) {
-      newErrors.email = 'Correo es obligatorio';
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())) {
-      newErrors.email = 'Verificar correo';
-    }
-
-    if (!formData.role) {
-      newErrors.role = 'Cargo es obligatorio';
-    }
+    if (formData.secondLastName.trim() && !nameRegex.test(formData.secondLastName.trim())) newErrors.secondLastName = 'Solo se permiten letras y espacios';
+    if (!formData.email.trim()) newErrors.email = 'Correo es obligatorio';
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())) newErrors.email = 'Verificar correo';
+    if (!formData.role) newErrors.role = 'Cargo es obligatorio';
 
     setErrors(newErrors);
 
     if (Object.keys(newErrors).length > 0) {
-      const requiredErrors = (['firstName', 'lastName', 'email', 'role'] as const).some(key => {
-        const value = formData[key];
-        return !value.trim();
-      });
-      if (requiredErrors) {
-        setStatusMessage({ type: 'error', text: 'Debe diligenciar los campos obligatorios' });
-      } else if (newErrors.email === 'Verificar correo') {
-        setStatusMessage({ type: 'error', text: 'Verificar correo' });
-      } else {
-        setStatusMessage({ type: 'error', text: 'Error en los campos ingresados' });
-      }
+      const requiredFields = ['firstName', 'lastName', 'email', 'role'] as const;
+      const hasEmptyRequired = requiredFields.some(f => !formData[f].trim());
+      if (hasEmptyRequired) setStatusMessage({ type: 'error', text: 'Debe diligenciar los campos obligatorios' });
+      else if (newErrors.email === 'Verificar correo') setStatusMessage({ type: 'error', text: 'Verificar correo' });
+      else setStatusMessage({ type: 'error', text: 'Error en los campos ingresados' });
       return false;
     }
-
     return true;
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setStatusMessage({ type: '', text: '' });
-
-    if (!validateForm()) {
-      return;
-    }
+    if (!validateForm()) return;
 
     setLoading(true);
-
     const existingUsers = getStoredUsers();
     const emailLower = formData.email.trim().toLowerCase();
-    const userAlreadyExists = existingUsers.some(user => user.email.toLowerCase() === emailLower);
-
-    if (userAlreadyExists) {
+    if (existingUsers.some(user => user.email.toLowerCase() === emailLower)) {
       setStatusMessage({ type: 'warning', text: 'El usuario ya está registrado' });
       setLoading(false);
       return;
     }
 
     try {
-      // Map frontend role to backend role
       const roleMap: Record<string, string> = {
-        'PO': 'PO',
-        'SM': 'SM',
-        'Dev': 'DEV',
-        'QA': 'QA',
-        'Stakeholder': 'STAKEHOLDER',
+        PO: 'PO', SM: 'SM', Dev: 'DEV', QA: 'QA', Stakeholder: 'STAKEHOLDER',
       };
-
-      const backendRole = roleMap[formData.role] || 'DEV';
-
-      // Send all fields to backend
       await api.register({
-        name: `${formData.firstName.trim()} ${formData.lastName.trim()}`.trim(),
         email: formData.email.trim(),
         password: formData.password,
         dni: formData.dni.trim() || undefined,
-        phone: undefined, // Could be added to form if needed
+        phone: undefined,
         address: undefined,
-        role: backendRole,
-        firstName: formData.firstName.trim() || undefined,
+        role: roleMap[formData.role] || 'DEV',
+        firstName: formData.firstName.trim(),
         middleName: formData.middleName.trim() || undefined,
-        lastName: formData.lastName.trim() || undefined,
+        lastName: formData.lastName.trim(),
         secondLastName: formData.secondLastName.trim() || undefined,
       });
-      
       setSuccess(true);
       setStatusMessage({ type: 'success', text: 'El registro fue exitoso' });
-      
-      // La redirección la maneja el useEffect arriba
     } catch (err) {
       setStatusMessage({ type: 'error', text: err instanceof Error ? err.message : 'Error en los campos ingresados' });
     } finally {
@@ -177,255 +120,173 @@ const Register: React.FC = () => {
     }
   };
 
+  const inputClass = "block w-full rounded-xl border border-gray-200 px-4 py-3 text-sm text-gray-900 placeholder:text-gray-400 outline-none focus:border-[#2563eb] focus:ring-2 focus:ring-[#2563eb]/20 transition-all duration-300";
+
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center px-4 py-8 bg-white">
-      <div className="w-full max-w-md space-y-8">
-        <div>
-          <h2 className="text-2xl font-bold text-center text-gray-800">
-            TraceHub
-          </h2>
-          <p className="text-center text-gray-600">
-            Gestión ágil del espacio de trabajo
-          </p>
+    <div className="min-h-[100dvh] flex">
+      {/* LEFT — Brand Panel */}
+      <div className="hidden lg:flex lg:w-[45%] bg-gradient-to-br from-[#1e3a8a] to-[#2563eb] items-center justify-center p-12 relative overflow-hidden">
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute -top-20 -right-20 w-80 h-80 rounded-full border-[40px] border-white" />
+          <div className="absolute -bottom-20 -left-20 w-96 h-96 rounded-full border-[40px] border-white" />
         </div>
-        
-        <form onSubmit={handleSubmit} className="space-y-6">
-          {statusMessage.text && (
-            <div className={`rounded-md px-4 py-3 text-sm ${statusMessage.type === 'error' ? 'bg-red-50 text-red-700' : statusMessage.type === 'warning' ? 'bg-yellow-50 text-yellow-700' : 'bg-green-50 text-green-700'}`}>
-              {statusMessage.text}
-            </div>
-          )}
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 mb-1">
-                Nombre  (required)
-              </label>
-              <input
-                id="firstName"
-                name="firstName"
-                type="text"
-                required
-                className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus-indigo-600 sm:text-sm sm:leading-6"
-                value={formData.firstName}
-                onChange={handleChange}
-                placeholder="First Name"
-              />
-              {errors.firstName && <p className="text-sm text-red-600 mt-1">{errors.firstName}</p>}
-            </div>
-            
-            <div>
-              <label htmlFor="middleName" className="block text-sm font-medium text-gray-700 mb-1">
-                Segundo nombre
-              </label>
-              <input
-                id="middleName"
-                name="middleName"
-                type="text"
-                className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus-indigo-600 sm:text-sm sm:leading-6"
-                value={formData.middleName}
-                onChange={handleChange}
-                placeholder="Middle Name"
-              />
-            </div>
+        <div className="relative z-10 text-center">
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-white/20 backdrop-blur-sm rounded-2xl mb-6">
+            <Layout size={32} className="text-white" />
           </div>
-          
-          <div className="grid grid-cols-2 gap-4">
+          <h1 className="text-4xl font-bold text-white tracking-tight">TraceHub</h1>
+          <p className="text-blue-200 text-lg mt-3">Creá tu cuenta para empezar</p>
+        </div>
+      </div>
+
+      {/* RIGHT — Form */}
+      <div className="w-full lg:w-[55%] flex items-start justify-center py-12 px-8 bg-white overflow-y-auto">
+        <div className="w-full max-w-lg">
+          <div className="lg:hidden text-center mb-8">
+            <div className="inline-flex items-center justify-center w-12 h-12 bg-gradient-to-br from-[#1e3a8a] to-[#2563eb] rounded-xl mb-4">
+              <Layout size={24} className="text-white" />
+            </div>
+            <h1 className="text-2xl font-bold text-gray-900">TraceHub</h1>
+          </div>
+
+          <h2 className="text-2xl font-bold text-gray-900 mb-1">Crear cuenta</h2>
+          <p className="text-gray-500 text-sm mb-8">Completá el formulario para registrarte</p>
+
+          <form onSubmit={handleSubmit} className="space-y-5">
+            {statusMessage.text && (
+              <div className={`rounded-xl px-4 py-3 text-sm ${
+                statusMessage.type === 'error' ? 'bg-red-50 border border-red-200 text-red-700'
+                : statusMessage.type === 'warning' ? 'bg-yellow-50 border border-yellow-200 text-yellow-700'
+                : 'bg-green-50 border border-green-200 text-green-700'
+              }`}>
+                {statusMessage.text}
+              </div>
+            )}
+
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label htmlFor="firstName" className="block text-sm font-semibold text-gray-700 mb-1.5">
+                  Nombre <span className="text-red-500">*</span>
+                </label>
+                <input id="firstName" name="firstName" type="text" required value={formData.firstName} onChange={handleChange} placeholder="Nombre" className={inputClass} />
+                {errors.firstName && <p className="text-sm text-red-600 mt-1">{errors.firstName}</p>}
+              </div>
+              <div>
+                <label htmlFor="middleName" className="block text-sm font-semibold text-gray-700 mb-1.5">
+                  Segundo nombre
+                </label>
+                <input id="middleName" name="middleName" type="text" value={formData.middleName} onChange={handleChange} placeholder="Segundo nombre" className={inputClass} />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label htmlFor="lastName" className="block text-sm font-semibold text-gray-700 mb-1.5">
+                  Apellido <span className="text-red-500">*</span>
+                </label>
+                <input id="lastName" name="lastName" type="text" required value={formData.lastName} onChange={handleChange} placeholder="Apellido" className={inputClass} />
+                {errors.lastName && <p className="text-sm text-red-600 mt-1">{errors.lastName}</p>}
+              </div>
+              <div>
+                <label htmlFor="secondLastName" className="block text-sm font-semibold text-gray-700 mb-1.5">
+                  Segundo apellido
+                </label>
+                <input id="secondLastName" name="secondLastName" type="text" value={formData.secondLastName} onChange={handleChange} placeholder="Segundo apellido" className={inputClass} />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label htmlFor="dni" className="block text-sm font-semibold text-gray-700 mb-1.5">
+                  DNI <span className="text-red-500">*</span>
+                </label>
+                <input id="dni" name="dni" type="text" required value={formData.dni} onChange={handleChange} placeholder="12345678" className={inputClass} />
+                {errors.dni && <p className="text-sm text-red-600 mt-1">{errors.dni}</p>}
+              </div>
+              <div>
+                <label htmlFor="email" className="block text-sm font-semibold text-gray-700 mb-1.5">
+                  Email <span className="text-red-500">*</span>
+                </label>
+                <input id="email" name="email" type="email" required value={formData.email} onChange={handleChange} placeholder="email@ejemplo.com" className={inputClass} />
+                {errors.email && <p className="text-sm text-red-600 mt-1">{errors.email}</p>}
+              </div>
+            </div>
+
             <div>
-              <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 mb-1">
-                Apellido (required)
+              <label htmlFor="role" className="block text-sm font-semibold text-gray-700 mb-1.5">
+                Cargo/Rol <span className="text-red-500">*</span>
               </label>
-              <input
-                id="lastName"
-                name="lastName"
-                type="text"
-                required
-                className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus-indigo-600 sm:text-sm sm:leading-6"
-                value={formData.lastName}
-                onChange={handleChange}
-                placeholder="Last Name"
-              />
-              {errors.lastName && <p className="text-sm text-red-600 mt-1">{errors.lastName}</p>}
+              <select id="role" name="role" required value={formData.role} onChange={handleChange} className={inputClass}>
+                <option value="">Seleccione su cargo</option>
+                {roleOptions.map(opt => (
+                  <option key={opt.value} value={opt.value}>{opt.label}</option>
+                ))}
+              </select>
+              {errors.role && <p className="text-sm text-red-600 mt-1">{errors.role}</p>}
             </div>
-            
-            <div>
-              <label htmlFor="secondLastName" className="block text-sm font-medium text-gray-700 mb-1">
-                Segundo apellido
-              </label>
-              <input
-                id="secondLastName"
-                name="secondLastName"
-                type="text"
-                className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus-indigo-600 sm:text-sm sm:leading-6"
-                value={formData.secondLastName}
-                onChange={handleChange}
-                placeholder="Second Last Name"
-              />
+
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label htmlFor="password" className="block text-sm font-semibold text-gray-700 mb-1.5">
+                  Contraseña <span className="text-red-500">*</span>
+                </label>
+                <div className="relative">
+                  <input id="password" name="password" type="password" required value={formData.password} onChange={handleChange} placeholder="••••••••" className={`${inputClass} pr-11`} />
+                </div>
+                {errors.password && <p className="text-sm text-red-600 mt-1">{errors.password}</p>}
+              </div>
+              <div>
+                <label htmlFor="confirmPassword" className="block text-sm font-semibold text-gray-700 mb-1.5">
+                  Confirmar <span className="text-red-500">*</span>
+                </label>
+                <input id="confirmPassword" name="confirmPassword" type="password" required value={formData.confirmPassword} onChange={handleChange} placeholder="••••••••" className={inputClass} />
+                {errors.confirmPassword && <p className="text-sm text-red-600 mt-1">{errors.confirmPassword}</p>}
+              </div>
             </div>
-          </div>
-          
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label htmlFor="dni" className="block text-sm font-medium text-gray-700 mb-1">
-                DNI (required)
-              </label>
+
+            <div className="flex items-start gap-3">
               <input
-                id="dni"
-                name="dni"
-                type="text"
-                required
-                className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus-indigo-600 sm:text-sm sm:leading-6"
-                value={formData.dni}
-                onChange={handleChange}
-                placeholder="DNI"
-              />
-              {errors.dni && <p className="text-sm text-red-600 mt-1">{errors.dni}</p>}
-            </div>
-            
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-                Email (required)
-              </label>
-              <input
-                id="email"
-                name="email"
-                type="email"
-                required
-                className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus-indigo-600 sm:text-sm sm:leading-6"
-                value={formData.email}
-                onChange={handleChange}
-                placeholder="email@example.com"
-              />
-              {errors.email && <p className="text-sm text-red-600 mt-1">{errors.email}</p>}
-            </div>
-          </div>
-          
-          <div>
-            <label htmlFor="role" className="block text-sm font-medium text-gray-700 mb-1">
-              Cargo/Rol (required)
-            </label>
-            <select
-              id="role"
-              name="role"
-              required
-              className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus-indigo-600 sm:text-sm sm:leading-6"
-              value={formData.role}
-              onChange={handleChange}
-            >
-              <option value="">Seleccione su cargo</option>
-              {roleOptions.map(option => (
-                <option key={option.value} value={option.value}>{option.label}</option>
-              ))}
-            </select>
-            {errors.role && <p className="text-sm text-red-600 mt-1">{errors.role}</p>}
-          </div>
-          
-          <div className="relative">
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
-              Contraseña (required)
-            </label>
-            <div className="flex items-end">
-              <input
-                id="password"
-                name="password"
-                type={loading ? 'text' : 'password'}
-                required
-                className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus-indigo-600 sm:text-sm sm:leading-6"
-                value={formData.password}
-                onChange={handleChange}
-                placeholder="••••••••"
-              />
-              <button
-                type="button"
-                className="absolute right-0 top-0 mt-2.5 mr-2.5 flex h-6 w-6 items-center justify-center rounded-md text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus-indigo-600"
-                onClick={() => {
-                  // Toggle password visibility
-                  const passwordInput = document.getElementById('password') as HTMLInputElement;
-                  if (passwordInput) {
-                    passwordInput.type = passwordInput.type === 'password' ? 'text' : 'password';
-                  }
-                }}
-                aria-label="Show password"
-              >
-                {/* Eye icon would go here */}
-                👁️
-              </button>
-            </div>
-            {errors.password && <p className="text-sm text-red-600 mt-1">{errors.password}</p>}
-          </div>
-          
-          <div className="relative">
-            <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-1">
-              Confirmar contraseña (required)
-            </label>
-            <div className="flex items-end">
-              <input
-                id="confirmPassword"
-                name="confirmPassword"
-                type={loading ? 'text' : 'password'}
-                required
-                className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus-indigo-600 sm:text-sm sm:leading-6"
-                value={formData.confirmPassword}
-                onChange={handleChange}
-                placeholder="••••••••"
-              />
-              <button
-                type="button"
-                className="absolute right-0 top-0 mt-2.5 mr-2.5 flex h-6 w-6 items-center justify-center rounded-md text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus-indigo-600"
-                onClick={() => {
-                  // Toggle password visibility
-                  const confirmPasswordInput = document.getElementById('confirmPassword') as HTMLInputElement;
-                  if (confirmPasswordInput) {
-                    confirmPasswordInput.type = confirmPasswordInput.type === 'password' ? 'text' : 'password';
-                  }
-                }}
-                aria-label="Show password"
-              >
-                {/* Eye icon would go here */}
-                👁️
-              </button>
-            </div>
-            {errors.confirmPassword && <p className="text-sm text-red-600 mt-1">{errors.confirmPassword}</p>}
-          </div>
-          
-          <div className="flex items-start">
-            <div className="flex items-center h-4">
-              <input
-                id="terms"
-                name="terms"
-                type="checkbox"
-                required
-                className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                id="terms" name="terms" type="checkbox" required
                 checked={formData.terms}
                 onChange={(e) => setFormData(prev => ({ ...prev, terms: e.target.checked }))}
+                className="mt-0.5 w-4 h-4 rounded border-gray-300 text-[#2563eb] focus:ring-[#2563eb]"
               />
-            </div>
-            <div className="ml-3 text-sm">
-              <label htmlFor="terms" className="text-gray-700">
-                Acepto los Términos de Servicio y las Protocolos de Seguridad.
+              <label htmlFor="terms" className="text-sm text-gray-600">
+                Acepto los Términos de Servicio y las Políticas de Seguridad.
               </label>
             </div>
-          </div>
-          {!formData.terms && (
-            <p className="ml-5 text-sm text-red-600">
-              Debes aceptar los términos para continuar
-            </p>
-          )}
-          
-          <button
-            type="submit"
-            disabled={loading || !formData.terms}
-            className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-          >
-            {loading ? 'Registrando...' : 'Registrar'}
-          </button>
-        </form>
-        
-        <div className="text-center mt-4">
-          <p className="text-sm text-gray-500">
-            <span>¿Ya tienes una cuenta? </span>
-            <a href="/login" className="font-medium text-indigo-600 hover:text-indigo-500">
-              Inicia sesión aquí
-            </a>
+            {!formData.terms && (
+              <p className="text-sm text-red-600 ml-7">Debés aceptar los términos para continuar</p>
+            )}
+
+            <button
+              type="submit"
+              disabled={loading || !formData.terms}
+              className="w-full flex items-center justify-center gap-2 bg-[#2563eb] hover:bg-[#1d4ed8] text-white py-3 rounded-xl font-semibold transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:hover:scale-100"
+            >
+              {loading ? (
+                <span className="flex items-center gap-2">
+                  <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" /></svg>
+                  Registrando...
+                </span>
+              ) : (
+                <>
+                  <UserPlus size={18} />
+                  Registrar
+                </>
+              )}
+            </button>
+          </form>
+
+          <p className="text-center text-sm text-gray-500 mt-8">
+            ¿Ya tenés cuenta?{' '}
+            <button
+              type="button"
+              onClick={() => navigate('/login')}
+              className="text-[#2563eb] hover:text-[#1d4ed8] font-medium transition"
+            >
+              Iniciá sesión
+            </button>
           </p>
         </div>
       </div>

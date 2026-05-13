@@ -19,6 +19,7 @@ export interface Task {
   priority: "low" | "medium" | "high";
   acceptance?: string;
   assignee: string;
+  assigneeId: ID | null;
   tags: string[];
   points: number;
   status?: string;
@@ -60,6 +61,7 @@ const KanbanBoard = ({ boardId }: KanbanBoardProps) => {
     error,
     createRequirement,
     moveRequirement,
+    assignRequirement,
     refetch,
   } = useKanban(boardId);
 
@@ -74,7 +76,8 @@ const KanbanBoard = ({ boardId }: KanbanBoardProps) => {
       description: req.description || "",
       priority: priorityMap[req.priority] || "medium",
       acceptance: undefined,
-      assignee: req.assignee?.name || "Sin asignar",
+      assignee: req.assignee ? [req.assignee.firstName, req.assignee.middleName, req.assignee.lastName, req.assignee.secondLastName].filter(Boolean).join(' ') : "Sin asignar",
+      assigneeId: req.assignee?.id ?? null,
       tags: [],
       points: 0,
       status: req.column?.name || '',
@@ -82,6 +85,8 @@ const KanbanBoard = ({ boardId }: KanbanBoardProps) => {
       updatedAt: req.updatedAt,
     })),
   }));
+
+  const members = board?.members ?? [];
 
   /* MOVE TASK */
   const handleMoveTask = (taskId: ID, targetColumnId: ID) => {
@@ -139,7 +144,7 @@ const KanbanBoard = ({ boardId }: KanbanBoardProps) => {
           <p className="text-red-500 mb-4">{error}</p>
           <button
             onClick={() => refetch()}
-            className="bg-[#2563eb] text-white px-4 py-2 rounded-xl"
+            className="bg-[#2563eb] text-white px-4 py-2 rounded-xl transition-all duration-200 hover:bg-[#1d4ed8] active:scale-[0.97]"
           >
             Reintentar
           </button>
@@ -166,13 +171,13 @@ const KanbanBoard = ({ boardId }: KanbanBoardProps) => {
 
         <div className="flex gap-3">
           {columns.length > 0 && (
-            <button
-              onClick={() => setOpenModal(true)}
-              className="bg-[#2563eb] hover:bg-[#1d4ed8] text-white px-6 py-3 rounded-2xl font-semibold transition flex items-center gap-2"
-            >
-              <Plus size={20} />
-              Nuevo Requisito
-            </button>
+          <button
+            onClick={() => setOpenModal(true)}
+            className="bg-[#2563eb] hover:bg-[#1d4ed8] text-white px-6 py-3 rounded-2xl font-semibold transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] flex items-center gap-2"
+          >
+            <Plus size={20} />
+            Nuevo Requisito
+          </button>
           )}
         </div>
       </div>
@@ -187,18 +192,20 @@ const KanbanBoard = ({ boardId }: KanbanBoardProps) => {
               allColumns={apiColumns.map(c => ({ id: c.id, name: c.name }))}
               moveTask={handleMoveTask}
               onAddTask={() => setOpenModal(true)}
+              members={members}
+              onAssignTask={(taskId, assigneeId) => assignRequirement(taskId, assigneeId)}
             />
           ))}
 
           {/* Add Column Button */}
           <div className="flex items-start pt-4">
             <button
-              onClick={() => setShowCreateColumn(true)}
-              className="flex items-center gap-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 px-4 py-3 rounded-xl transition w-full"
-            >
-              <Plus size={20} />
-              <span>Nueva Columna</span>
-            </button>
+                onClick={() => setShowCreateColumn(true)}
+                className="flex items-center gap-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 px-4 py-3 rounded-xl transition-all duration-200 active:scale-[0.97] w-full"
+              >
+                <Plus size={20} />
+                <span>Nueva Columna</span>
+              </button>
           </div>
         </div>
       ) : (
@@ -212,9 +219,9 @@ const KanbanBoard = ({ boardId }: KanbanBoardProps) => {
           </p>
           <button
             onClick={() => setShowCreateColumn(true)}
-            className="bg-[#2563eb] text-white px-6 py-3 rounded-xl font-semibold"
-          >
-            Crear Primera Columna
+              className="bg-[#2563eb] text-white px-6 py-3 rounded-xl font-semibold transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
+            >
+              Crear Primera Columna
           </button>
         </div>
       )}

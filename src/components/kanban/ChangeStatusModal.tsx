@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { ID } from "../../types/api";
+import type { ID, BoardMember } from "../../types/api";
 
 interface ColumnOption {
   id: ID;
@@ -12,6 +12,9 @@ interface Props {
   columns: ColumnOption[];
   onClose: () => void;
   onConfirm: (taskId: ID, targetColumnId: ID) => void;
+  members?: BoardMember[];
+  currentAssigneeId?: ID | null;
+  onAssign?: (taskId: ID, assigneeId: ID | null) => void;
 }
 
 const ChangeStatusModal = ({
@@ -20,11 +23,16 @@ const ChangeStatusModal = ({
   columns,
   onClose,
   onConfirm,
+  members,
+  currentAssigneeId,
+  onAssign,
 }: Props) => {
-  // Default to first different column
-  const otherColumns = columns.filter(c => c.id !== currentColumnId);
+  const otherColumns = columns.filter((c) => c.id !== currentColumnId);
   const [selectedColumnId, setSelectedColumnId] = useState<ID>(
-    otherColumns[0]?.id ?? currentColumnId
+    otherColumns[0]?.id ?? currentColumnId,
+  );
+  const [selectedAssigneeId, setSelectedAssigneeId] = useState<ID | "">(
+    currentAssigneeId ?? "",
   );
   const [comment, setComment] = useState("");
 
@@ -32,6 +40,14 @@ const ChangeStatusModal = ({
     if (selectedColumnId !== currentColumnId) {
       onConfirm(taskId, selectedColumnId);
     }
+
+    if (onAssign && selectedAssigneeId !== (currentAssigneeId ?? "")) {
+      onAssign(
+        taskId,
+        selectedAssigneeId === "" ? null : (selectedAssigneeId as ID),
+      );
+    }
+
     onClose();
   };
 
@@ -40,12 +56,8 @@ const ChangeStatusModal = ({
       <div className="bg-white rounded-3xl p-8 w-[550px] shadow-2xl">
         {/* HEADER */}
         <div className="mb-8">
-          <h2 className="text-3xl font-bold text-[#2563eb]">
-            Cambiar Estado
-          </h2>
-          <p className="text-gray-500 mt-2">
-            Mover requisito a otra columna
-          </p>
+          <h2 className="text-3xl font-bold text-[#2563eb]">Cambiar Estado</h2>
+          <p className="text-gray-500 mt-2">Mover requisito a otra columna</p>
         </div>
 
         {/* STATUS */}
@@ -67,11 +79,43 @@ const ChangeStatusModal = ({
           </select>
         </div>
 
+        {/* ASSIGNEE */}
+        {members && members.length > 0 && (
+          <div className="mb-5">
+            <label className="block text-sm font-semibold mb-2">
+              Responsable
+            </label>
+
+            <select
+              value={selectedAssigneeId}
+              onChange={(e) =>
+                setSelectedAssigneeId(
+                  e.target.value === "" ? "" : Number(e.target.value),
+                )
+              }
+              className="w-full border border-gray-200 rounded-2xl p-4 outline-none focus:border-[#2563eb]"
+            >
+              <option value="">Sin asignar</option>
+              {members.map((m) => (
+                <option key={m.user.id} value={m.user.id}>
+                  {[
+                    m.user.firstName,
+                    m.user.middleName,
+                    m.user.lastName,
+                    m.user.secondLastName,
+                  ]
+                    .filter(Boolean)
+                    .join(" ")}{" "}
+                  ({m.user.email}) - {m.role}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
+
         {/* COMMENT */}
         <div className="mb-5">
-          <label className="block text-sm font-semibold mb-2">
-            Comentario
-          </label>
+          <label className="block text-sm font-semibold mb-2">Comentario</label>
 
           <textarea
             value={comment}
@@ -93,10 +137,13 @@ const ChangeStatusModal = ({
 
           <button
             onClick={handleSubmit}
-            disabled={selectedColumnId === currentColumnId}
+            disabled={
+              selectedColumnId === currentColumnId &&
+              selectedAssigneeId === (currentAssigneeId ?? "")
+            }
             className="bg-[#2563eb] hover:bg-[#1d4ed8] text-white px-6 py-3 rounded-2xl font-semibold transition disabled:opacity-50"
           >
-            Mover
+            Guardar
           </button>
         </div>
       </div>

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { api } from "../services/api";
 import { Priority } from "../types/api";
-import type { Board, Requirement, ID } from "../types/api";
+import type { Board, ID } from "../types/api";
 
 const RegistrarRequisito = () => {
   const [boards, setBoards] = useState<Board[]>([]);
@@ -15,15 +15,12 @@ const RegistrarRequisito = () => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
-  // Load boards on mount
   useEffect(() => {
     const fetchBoards = async () => {
       try {
         const data = await api.getBoards();
         setBoards(data);
-        if (data.length > 0) {
-          setSelectedBoardId(data[0].id);
-        }
+        if (data.length > 0) setSelectedBoardId(data[0].id);
       } catch (err) {
         setError("Error al cargar tableros: " + (err instanceof Error ? err.message : ""));
       } finally {
@@ -33,7 +30,6 @@ const RegistrarRequisito = () => {
     fetchBoards();
   }, []);
 
-  // Reset column when board changes
   useEffect(() => {
     const board = boards.find(b => b.id === selectedBoardId);
     if (board && board.columns && board.columns.length > 0) {
@@ -54,7 +50,6 @@ const RegistrarRequisito = () => {
       setError("El título del requisito es obligatorio");
       return;
     }
-
     if (!selectedColumnId) {
       setError("El tablero no tiene columnas. Creá una columna primero en el Dashboard.");
       return;
@@ -66,7 +61,6 @@ const RegistrarRequisito = () => {
         description: description.trim() || undefined,
         priority,
       });
-
       setSuccess("Requisito creado exitosamente");
       setTitle("");
       setDescription("");
@@ -76,42 +70,40 @@ const RegistrarRequisito = () => {
     }
   };
 
+  const inputClass = "w-full border border-gray-200 rounded-2xl p-4 outline-none focus:border-[#2563eb] focus:ring-2 focus:ring-[#2563eb]/20 transition-all duration-300";
+  const selectClass = inputClass;
+
   if (loading) {
     return (
       <div className="min-h-screen bg-[#f4f7fb] flex items-center justify-center">
-        <div className="text-gray-500">Cargando...</div>
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-8 h-8 border-2 border-[#2563eb] border-t-transparent rounded-full animate-spin" />
+        </div>
       </div>
     );
   }
 
   return (
     <div className="min-h-screen bg-[#f4f7fb] p-10">
-      {/* HEADER */}
       <div className="mb-10">
         <p className="text-sm text-gray-400 mb-2">
           Requisitos {" > "} Nueva Entrada
         </p>
-        <h1 className="text-5xl font-bold text-[#2563eb]">
+        <h1 className="text-4xl font-bold text-[#2563eb] tracking-tight">
           Crear Requisito
         </h1>
-        <p className="text-gray-500 mt-4">
+        <p className="text-gray-500 mt-2">
           Define un nuevo requisito funcional o técnico para el proyecto.
         </p>
       </div>
 
-      {/* ALERTS */}
       {success && (
-        <div className="bg-green-100 border border-green-300 text-green-700 p-4 rounded-2xl mb-5">
-          {success}
-        </div>
+        <div className="bg-green-50 border border-green-200 text-green-700 p-4 rounded-2xl mb-5">{success}</div>
       )}
       {error && (
-        <div className="bg-red-100 border border-red-300 text-red-700 p-4 rounded-2xl mb-5">
-          {error}
-        </div>
+        <div className="bg-red-50 border border-red-200 text-red-700 p-4 rounded-2xl mb-5">{error}</div>
       )}
 
-      {/* BOARD & COLUMN SELECTORS */}
       <div className="grid grid-cols-2 gap-4 mb-8">
         <div className="bg-white rounded-3xl p-6 shadow-sm">
           <label className="block text-sm font-semibold mb-3 text-gray-700">
@@ -120,17 +112,14 @@ const RegistrarRequisito = () => {
           <select
             value={selectedBoardId ?? ""}
             onChange={(e) => setSelectedBoardId(Number(e.target.value) || null)}
-            className="w-full border border-gray-200 rounded-2xl p-4 outline-none focus:border-[#2563eb]"
+            className={selectClass}
           >
             {boards.length === 0 && <option value="">Sin tableros</option>}
             {boards.map((board) => (
-              <option key={board.id} value={board.id}>
-                {board.name}
-              </option>
+              <option key={board.id} value={board.id}>{board.name}</option>
             ))}
           </select>
         </div>
-
         <div className="bg-white rounded-3xl p-6 shadow-sm">
           <label className="block text-sm font-semibold mb-3 text-gray-700">
             COLUMNA *
@@ -138,7 +127,7 @@ const RegistrarRequisito = () => {
           <select
             value={selectedColumnId ?? ""}
             onChange={(e) => setSelectedColumnId(Number(e.target.value) || null)}
-            className="w-full border border-gray-200 rounded-2xl p-4 outline-none focus:border-[#2563eb]"
+            className={selectClass}
             disabled={!selectedBoard || !selectedBoard.columns || selectedBoard.columns.length === 0}
           >
             {!selectedBoard ? (
@@ -147,18 +136,14 @@ const RegistrarRequisito = () => {
               <option value="">El tablero no tiene columnas</option>
             ) : (
               selectedBoard.columns.map((col) => (
-                <option key={col.id} value={col.id}>
-                  {col.name}
-                </option>
+                <option key={col.id} value={col.id}>{col.name}</option>
               ))
             )}
           </select>
         </div>
       </div>
 
-      {/* FORM */}
       <form onSubmit={handleSubmit} className="grid grid-cols-3 gap-8">
-        {/* LEFT */}
         <div className="col-span-2 bg-white rounded-3xl p-8 shadow-sm">
           <div className="mb-6">
             <label className="block text-sm font-semibold mb-3 text-gray-700">
@@ -169,11 +154,10 @@ const RegistrarRequisito = () => {
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="Ej: Autenticación con SAML"
-              className="w-full border border-gray-200 rounded-2xl p-4 outline-none focus:border-[#2563eb]"
+              className={inputClass}
             />
           </div>
-
-          <div className="mb-6">
+          <div>
             <label className="block text-sm font-semibold mb-3 text-gray-700">
               DESCRIPCIÓN DETALLADA
             </label>
@@ -182,12 +166,11 @@ const RegistrarRequisito = () => {
               onChange={(e) => setDescription(e.target.value)}
               rows={6}
               placeholder="Detalle técnico del requisito..."
-              className="w-full border border-gray-200 rounded-2xl p-4 outline-none focus:border-[#2563eb]"
+              className={inputClass}
             />
           </div>
         </div>
 
-        {/* RIGHT */}
         <div className="space-y-6">
           <div className="bg-white rounded-3xl p-6 shadow-sm">
             <label className="block text-sm font-semibold mb-3 text-gray-700">
@@ -196,7 +179,7 @@ const RegistrarRequisito = () => {
             <select
               value={priority}
               onChange={(e) => setPriority(e.target.value as Priority)}
-              className="w-full border border-gray-200 rounded-2xl p-4 outline-none focus:border-[#2563eb]"
+              className={selectClass}
             >
               <option value={Priority.LOW}>Baja</option>
               <option value={Priority.MEDIUM}>Media</option>
@@ -205,24 +188,23 @@ const RegistrarRequisito = () => {
             </select>
           </div>
 
-          <div className="bg-[#1e3a8a] text-white rounded-3xl p-6">
-            <h3 className="font-bold text-xl mb-4">Sugerencia</h3>
-            <p className="text-sm text-blue-100 leading-7">
-              Según la capacidad actual del sprint, este requisito
-              puede ser priorizado para desarrollo inmediato.
+          <div className="bg-gradient-to-br from-[#1e3a8a] to-[#2563eb] text-white rounded-3xl p-6">
+            <h3 className="font-bold text-xl mb-3">Sugerencia</h3>
+            <p className="text-sm text-blue-100 leading-relaxed">
+              Según la capacidad actual del sprint, este requisito puede ser priorizado para desarrollo inmediato.
             </p>
           </div>
 
-          <div className="space-y-4">
+          <div className="space-y-3">
             <button
               type="submit"
-              className="w-full bg-[#2563eb] hover:bg-[#1d4ed8] text-white py-4 rounded-2xl font-semibold transition"
+              className="w-full bg-[#2563eb] hover:bg-[#1d4ed8] text-white py-4 rounded-2xl font-semibold transition-all duration-300 hover:scale-[1.01] active:scale-[0.98]"
             >
               Registrar
             </button>
             <button
               type="button"
-              className="w-full bg-white border border-gray-200 py-4 rounded-2xl font-semibold"
+              className="w-full bg-white border border-gray-200 py-4 rounded-2xl font-semibold transition-all duration-200 hover:bg-gray-50 active:scale-[0.98]"
             >
               Cancelar
             </button>

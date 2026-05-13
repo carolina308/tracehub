@@ -4,7 +4,6 @@
   History,
   ShieldCheck,
   Users,
-  Settings,
   LogOut,
   UserPlus,
 } from "lucide-react";
@@ -51,12 +50,7 @@ const Sidebar = () => {
        icon: Users,
        path: "/team",
      },
-     {
-       name: "Ajustes",
-       icon: Settings,
-       path: "/settings",
-     },
-   ];
+    ];
 
   const handleLogout = () => {
     localStorage.removeItem("token");
