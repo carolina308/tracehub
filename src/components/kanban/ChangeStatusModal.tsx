@@ -82,19 +82,6 @@ const ChangeStatusModal = ({
           />
         </div>
 
-        {/* EVIDENCE */}
-        <div className="mb-8">
-          <label className="block text-sm font-semibold mb-2">
-            Evidencia
-          </label>
-
-          <input
-            type="file"
-            onChange={(e) => setEvidence(e.target.files?.[0] || null)}
-            className="w-full border border-gray-200 rounded-2xl p-4"
-          />
-        </div>
-
         {/* BUTTONS */}
         <div className="flex justify-end gap-4">
           <button
