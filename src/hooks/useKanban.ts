@@ -91,7 +91,7 @@ export const useKanban = (boardId?: ID): UseKanbanReturn => {
       });
     };
 
-    const handleMoved = (requirementId: ID, fromColumnId: ID, toColumnId: ID, position: number) => {
+    const handleMoved = (requirementId: ID, _fromColumnId: ID, toColumnId: ID, _position: number) => {
       setBoard(prev => {
         if (!prev) return prev;
         

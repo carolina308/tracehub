@@ -96,7 +96,11 @@ const KanbanBoard = ({ boardId }: KanbanBoardProps) => {
   };
 
   /* CREATE TASK */
-  const handleCreateTask = async (task: Task) => {
+  const handleCreateTask = async (task: {
+    title: string;
+    description: string;
+    priority: "low" | "medium" | "high";
+  }) => {
     const firstColumnId = columns[0]?.id;
     if (!firstColumnId) {
       alert("No hay columnas disponibles. Crea una columna primero.");

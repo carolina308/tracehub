@@ -7,8 +7,6 @@ import type {
   ApiResponse,
   CreateRequirementInput,
   UpdateRequirementInput,
-  MoveRequirementInput,
-  AssignRequirementInput,
   ID,
   BoardMember,
   User,
