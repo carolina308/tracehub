@@ -41,20 +41,20 @@ const RegistrarCambios: React.FC = () => {
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center space-x-4 mb-4">
-            <span className="text-2xl font-bold text-gray-800">TRACEHUB</span>
-            <nav className="flex space-x-4 text-sm text-gray-500">
-              <a href="#" className="hover:text-gray-700">dashboard</a>
-              <a href="#" className="hover:text-gray-700">Tablero</a>
-              <a href="#" className="hover:text-gray-700">list_alt</a>
-              <a href="#" className="hover:text-gray-700">Requisitos</a>
-              <a href="#" className="hover:text-gray-700">person_add</a>
-              <a href="#" className="hover:text-gray-700">Asignación de Tareas</a>
-              <a href="#" className="hover:text-gray-700">history</a>
-              <a href="#" className="hover:text-gray-700">Historial</a>
-              <a href="#" className="hover:text-gray-700">fact_check</a>
-              <a href="#" className="hover:text-gray-700">Validación QA</a>
-              <a href="#" className="hover:text-gray-700">visibility</a>
-              <a href="#" className="hover:text-gray-700">Vista de Stakeholders</a>
+            <span className="text-2xl font-bold text-gray-900">TRACEHUB</span>
+            <nav className="flex space-x-4 text-sm text-gray-600">
+              <a href="#" className="hover:text-gray-800">dashboard</a>
+              <a href="#" className="hover:text-gray-800">Tablero</a>
+              <a href="#" className="hover:text-gray-800">list_alt</a>
+              <a href="#" className="hover:text-gray-800">Requisitos</a>
+              <a href="#" className="hover:text-gray-800">person_add</a>
+              <a href="#" className="hover:text-gray-800">Asignación de Tareas</a>
+              <a href="#" className="hover:text-gray-800">history</a>
+              <a href="#" className="hover:text-gray-800">Historial</a>
+              <a href="#" className="hover:text-gray-800">fact_check</a>
+              <a href="#" className="hover:text-gray-800">Validación QA</a>
+              <a href="#" className="hover:text-gray-800">visibility</a>
+              <a href="#" className="hover:text-gray-800">Vista de Stakeholders</a>
             </nav>
           </div>
           
@@ -65,8 +65,8 @@ const RegistrarCambios: React.FC = () => {
 
         {/* Main Content */}
         <div className="bg-gray-50 rounded-lg p-6">
-          <h1 className="text-2xl font-bold text-gray-800 mb-6">Registrar Cambios</h1>
-          <p className="text-gray-600 mb-6">
+          <h1 className="text-2xl font-bold text-gray-900 mb-6">Registrar Cambios</h1>
+          <p className="text-gray-700 mb-6">
             Audit and update the lifecycle of requirement specifications.
           </p>
 
@@ -99,12 +99,12 @@ const RegistrarCambios: React.FC = () => {
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Detalles del Cambio */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-gray-800 mb-2">
                 Detalles del Cambio
               </label>
               <div className="flex items-center space-x-4">
                 <div className="flex-1 space-y-2">
-                  <label className="block text-sm font-medium text-gray-700">
+                  <label className="block text-sm font-medium text-gray-800">
                     Descripción del cambio *
                   </label>
                   <textarea
@@ -117,7 +117,7 @@ const RegistrarCambios: React.FC = () => {
                   />
                 </div>
                 <div className="space-y-2">
-                  <label className="block text-sm font-medium text-gray-700">
+                  <label className="block text-sm font-medium text-gray-800">
                     Fecha
                   </label>
                   <input
@@ -129,7 +129,7 @@ const RegistrarCambios: React.FC = () => {
                   />
                 </div>
                 <div className="space-y-2">
-                  <label className="block text-sm font-medium text-gray-700">
+                  <label className="block text-sm font-medium text-gray-800">
                     Persona
                   </label>
                   <input
@@ -146,7 +146,7 @@ const RegistrarCambios: React.FC = () => {
 
             {/* Estado */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-gray-800 mb-2">
                 Seleccionar Estado
               </label>
               <div className="flex space-x-4">

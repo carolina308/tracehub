@@ -66,9 +66,9 @@ const KanbanBoard = ({ boardId }: KanbanBoardProps) => {
     <div className="p-3">
       <div className="flex items-center justify-between mb-3">
         <div>
-          <p className="text-[10px] text-gray-400 mb-0.5">Tablero</p>
+          <p className="text-[10px] text-gray-500 mb-0.5">Tablero</p>
           <h1 className="text-sm font-bold text-[#2563eb]">{board?.name || "Tablero"}</h1>
-          {board?.description && <p className="text-gray-500 text-[11px]">{board.description}</p>}
+          {board?.description && <p className="text-gray-600 text-[11px]">{board.description}</p>}
         </div>
         {columns.length > 0 && (
           <button onClick={() => setOpenModal(true)} className="bg-[#2563eb] hover:bg-[#1d4ed8] text-white px-3 py-1.5 rounded-md font-semibold text-[11px] flex items-center gap-1 active:scale-[0.98]">
@@ -84,14 +84,14 @@ const KanbanBoard = ({ boardId }: KanbanBoardProps) => {
               moveTask={handleMoveTask} onAddTask={() => setOpenModal(true)} members={members}
               onAssignTask={(taskId, assigneeId) => assignRequirement(taskId, assigneeId)} />
           ))}
-          <button onClick={() => setShowCreateColumn(true)} className="flex items-center gap-1 text-gray-500 hover:text-gray-700 hover:bg-gray-100 px-2.5 py-1.5 rounded-lg text-[11px] transition">
+          <button onClick={() => setShowCreateColumn(true)} className="flex items-center gap-1 text-gray-600 hover:text-gray-800 hover:bg-gray-100 px-2.5 py-1.5 rounded-lg text-[11px] transition">
             <Plus size={12} /> Columna
           </button>
         </div>
       ) : (
         <div className="text-center py-12">
           <Layout size={36} className="mx-auto text-gray-300 mb-2" />
-          <p className="text-gray-500 text-[11px] mb-3">Este tablero no tiene columnas.</p>
+          <p className="text-gray-600 text-[11px] mb-3">Este tablero no tiene columnas.</p>
           <button onClick={() => setShowCreateColumn(true)} className="bg-[#2563eb] text-white px-4 py-1.5 rounded-md font-semibold text-[11px]">Crear Primera Columna</button>
         </div>
       )}

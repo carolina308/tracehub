@@ -62,7 +62,7 @@ const AsignarRequisitos = () => {
   return (
     <div className="min-h-screen bg-[#f4f7fb] p-3">
       <div className="mb-3">
-        <p className="text-[10px] text-gray-400 mb-0.5">Requisitos &gt; Asignar</p>
+        <p className="text-[10px] text-gray-500 mb-0.5">Requisitos &gt; Asignar</p>
         <h1 className="text-sm font-bold text-[#2563eb]">Asignar Requisitos</h1>
       </div>
 
@@ -70,13 +70,13 @@ const AsignarRequisitos = () => {
       {success && <div className="bg-green-50 border border-green-200 text-green-700 text-[11px] p-2 rounded-md mb-2">{success}</div>}
 
       <div className="bg-white rounded-lg p-3 shadow-sm mb-3">
-        <label className="block text-[10px] font-semibold mb-1 text-gray-700">TABLERO</label>
+        <label className="block text-[10px] font-semibold mb-1 text-gray-800">TABLERO</label>
         <select value={selectedBoardId ?? ''} onChange={(e) => setSelectedBoardId(Number(e.target.value) || null)} className={selectClass}>
           {boards.map(b => <option key={b.id} value={b.id}>{b.name}</option>)}
         </select>
       </div>
 
-      {!selectedBoardId ? <div className="text-center py-4 text-gray-500 text-[11px]">Seleccioná un tablero</div>
+      {!selectedBoardId ? <div className="text-center py-4 text-gray-600 text-[11px]">Seleccioná un tablero</div>
       : (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-3">
           <div className="lg:col-span-2">
@@ -113,7 +113,7 @@ const AsignarRequisitos = () => {
 
             <div className="bg-white rounded-lg p-4 shadow-sm mt-3">
               <h2 className="text-xs font-bold mb-3">Requisitos ({boardRequirements.length})</h2>
-              {boardRequirements.length === 0 ? <p className="text-gray-500 text-[11px]">No hay requisitos.</p> : (
+              {boardRequirements.length === 0 ? <p className="text-gray-600 text-[11px]">No hay requisitos.</p> : (
                 <div className="space-y-1.5">
                   {boardRequirements.map(req => {
                     const member = members.find(m => m.user.id === req.assignee?.id);
@@ -122,15 +122,15 @@ const AsignarRequisitos = () => {
                         <div className="flex justify-between items-start gap-2">
                           <div className="min-w-0">
                             <p className="text-[10px] font-bold text-[#2563eb] mb-0.5">#{req.id} · {req.column?.name ?? ''}</p>
-                            <h3 className="font-semibold text-gray-800 text-[11px] truncate">{req.title}</h3>
+                            <h3 className="font-semibold text-gray-900 text-[11px] truncate">{req.title}</h3>
                           </div>
                           <div className="text-right shrink-0">
                             <span className={`text-[10px] px-1.5 py-0.5 rounded-md font-medium ${
                               req.priority === 'HIGH' || req.priority === 'URGENT' ? 'bg-red-100 text-red-600'
                               : req.priority === 'MEDIUM' ? 'bg-yellow-100 text-yellow-700' : 'bg-green-100 text-green-600'
                             }`}>{req.priority}</span>
-                            {req.assignee ? <p className="text-[10px] text-gray-500 mt-0.5">{member ? getUserName(member.user) : ''}</p>
-                            : <p className="text-[10px] text-gray-400 mt-0.5">Sin asignar</p>}
+                            {req.assignee ? <p className="text-[10px] text-gray-600 mt-0.5">{member ? getUserName(member.user) : ''}</p>
+                            : <p className="text-[10px] text-gray-500 mt-0.5">Sin asignar</p>}
                           </div>
                         </div>
                       </div>
@@ -144,7 +144,7 @@ const AsignarRequisitos = () => {
           <div className="space-y-2">
             <div className="bg-white rounded-lg p-3 shadow-sm">
               <h2 className="text-xs font-bold mb-2">Miembros</h2>
-              {members.length === 0 ? <p className="text-gray-500 text-[11px]">Sin miembros</p> : (
+              {members.length === 0 ? <p className="text-gray-600 text-[11px]">Sin miembros</p> : (
                 <div className="space-y-1">
                   {members.map(m => (
                     <div key={m.id} className="flex items-center gap-2 p-1.5 bg-gray-50 rounded-md">
@@ -161,9 +161,9 @@ const AsignarRequisitos = () => {
             <div className="bg-white rounded-lg p-3 shadow-sm">
               <h2 className="text-xs font-bold mb-2">Resumen</h2>
               <div className="space-y-0.5 text-[11px]">
-                <div className="flex justify-between"><span className="text-gray-500">Total</span><span className="font-semibold">{boardRequirements.length}</span></div>
-                <div className="flex justify-between"><span className="text-gray-500">Asignados</span><span className="font-semibold text-green-600">{assignedReqs.length}</span></div>
-                <div className="flex justify-between"><span className="text-gray-500">Sin asignar</span><span className="font-semibold text-orange-600">{unassignedReqs.length}</span></div>
+                <div className="flex justify-between"><span className="text-gray-600">Total</span><span className="font-semibold">{boardRequirements.length}</span></div>
+                <div className="flex justify-between"><span className="text-gray-600">Asignados</span><span className="font-semibold text-green-600">{assignedReqs.length}</span></div>
+                <div className="flex justify-between"><span className="text-gray-600">Sin asignar</span><span className="font-semibold text-orange-600">{unassignedReqs.length}</span></div>
               </div>
             </div>
           </div>

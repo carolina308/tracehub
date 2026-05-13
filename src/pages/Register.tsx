@@ -97,7 +97,7 @@ const Register = () => {
     }
   };
 
-  const inputClass = "block w-full rounded-xl border border-gray-200 px-3.5 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 outline-none focus:border-[#2563eb] focus:ring-2 focus:ring-[#2563eb]/20 transition-all duration-300";
+  const inputClass = "block w-full rounded-xl border border-gray-200 px-3.5 py-2.5 text-sm text-gray-900 placeholder:text-gray-500 outline-none focus:border-[#2563eb] focus:ring-2 focus:ring-[#2563eb]/20 transition-all duration-300";
 
   return (
     <div className="min-h-[100dvh] flex">
@@ -125,7 +125,7 @@ const Register = () => {
           </div>
 
           <h2 className="text-xl font-bold text-gray-900 mb-1">Crear cuenta</h2>
-          <p className="text-gray-500 text-sm mb-6">Completá el formulario para registrarte</p>
+          <p className="text-gray-600 text-sm mb-6">Completá el formulario para registrarte</p>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             {statusMessage.text && (
@@ -140,40 +140,40 @@ const Register = () => {
 
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label htmlFor="firstName" className="block text-sm font-semibold text-gray-700 mb-1">Nombre <span className="text-red-500">*</span></label>
+                <label htmlFor="firstName" className="block text-sm font-semibold text-gray-800 mb-1">Nombre <span className="text-red-500">*</span></label>
                 <input id="firstName" name="firstName" type="text" required value={formData.firstName} onChange={handleChange} placeholder="Nombre" className={inputClass} />
                 {errors.firstName && <p className="text-xs text-red-600 mt-0.5">{errors.firstName}</p>}
               </div>
               <div>
-                <label htmlFor="middleName" className="block text-sm font-semibold text-gray-700 mb-1">Segundo nombre</label>
+                <label htmlFor="middleName" className="block text-sm font-semibold text-gray-800 mb-1">Segundo nombre</label>
                 <input id="middleName" name="middleName" type="text" value={formData.middleName} onChange={handleChange} placeholder="Segundo nombre" className={inputClass} />
               </div>
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label htmlFor="lastName" className="block text-sm font-semibold text-gray-700 mb-1">Apellido <span className="text-red-500">*</span></label>
+                <label htmlFor="lastName" className="block text-sm font-semibold text-gray-800 mb-1">Apellido <span className="text-red-500">*</span></label>
                 <input id="lastName" name="lastName" type="text" required value={formData.lastName} onChange={handleChange} placeholder="Apellido" className={inputClass} />
                 {errors.lastName && <p className="text-xs text-red-600 mt-0.5">{errors.lastName}</p>}
               </div>
               <div>
-                <label htmlFor="secondLastName" className="block text-sm font-semibold text-gray-700 mb-1">Segundo apellido</label>
+                <label htmlFor="secondLastName" className="block text-sm font-semibold text-gray-800 mb-1">Segundo apellido</label>
                 <input id="secondLastName" name="secondLastName" type="text" value={formData.secondLastName} onChange={handleChange} placeholder="Segundo apellido" className={inputClass} />
               </div>
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label htmlFor="dni" className="block text-sm font-semibold text-gray-700 mb-1">DNI <span className="text-red-500">*</span></label>
+                <label htmlFor="dni" className="block text-sm font-semibold text-gray-800 mb-1">DNI <span className="text-red-500">*</span></label>
                 <input id="dni" name="dni" type="text" required value={formData.dni} onChange={handleChange} placeholder="12345678" className={inputClass} />
                 {errors.dni && <p className="text-xs text-red-600 mt-0.5">{errors.dni}</p>}
               </div>
               <div>
-                <label htmlFor="email" className="block text-sm font-semibold text-gray-700 mb-1">Email <span className="text-red-500">*</span></label>
+                <label htmlFor="email" className="block text-sm font-semibold text-gray-800 mb-1">Email <span className="text-red-500">*</span></label>
                 <input id="email" name="email" type="email" required value={formData.email} onChange={handleChange} placeholder="email@ejemplo.com" className={inputClass} />
                 {errors.email && <p className="text-xs text-red-600 mt-0.5">{errors.email}</p>}
               </div>
             </div>
             <div>
-              <label htmlFor="role" className="block text-sm font-semibold text-gray-700 mb-1">Cargo/Rol <span className="text-red-500">*</span></label>
+              <label htmlFor="role" className="block text-sm font-semibold text-gray-800 mb-1">Cargo/Rol <span className="text-red-500">*</span></label>
               <select id="role" name="role" required value={formData.role} onChange={handleChange} className={inputClass}>
                 <option value="">Seleccione su cargo</option>
                 {roleOptions.map(opt => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
@@ -182,19 +182,19 @@ const Register = () => {
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label htmlFor="password" className="block text-sm font-semibold text-gray-700 mb-1">Contraseña <span className="text-red-500">*</span></label>
+                <label htmlFor="password" className="block text-sm font-semibold text-gray-800 mb-1">Contraseña <span className="text-red-500">*</span></label>
                 <input id="password" name="password" type="password" required value={formData.password} onChange={handleChange} placeholder="••••••••" className={`${inputClass} pr-10`} />
                 {errors.password && <p className="text-xs text-red-600 mt-0.5">{errors.password}</p>}
               </div>
               <div>
-                <label htmlFor="confirmPassword" className="block text-sm font-semibold text-gray-700 mb-1">Confirmar <span className="text-red-500">*</span></label>
+                <label htmlFor="confirmPassword" className="block text-sm font-semibold text-gray-800 mb-1">Confirmar <span className="text-red-500">*</span></label>
                 <input id="confirmPassword" name="confirmPassword" type="password" required value={formData.confirmPassword} onChange={handleChange} placeholder="••••••••" className={inputClass} />
                 {errors.confirmPassword && <p className="text-xs text-red-600 mt-0.5">{errors.confirmPassword}</p>}
               </div>
             </div>
             <div className="flex items-start gap-2">
               <input id="terms" name="terms" type="checkbox" required checked={formData.terms} onChange={(e) => setFormData(prev => ({ ...prev, terms: e.target.checked }))} className="mt-0.5 w-3.5 h-3.5 rounded border-gray-300 text-[#2563eb] focus:ring-[#2563eb]" />
-              <label htmlFor="terms" className="text-sm text-gray-600">Acepto los Términos de Servicio y las Políticas de Seguridad.</label>
+              <label htmlFor="terms" className="text-sm text-gray-700">Acepto los Términos de Servicio y las Políticas de Seguridad.</label>
             </div>
             {!formData.terms && <p className="text-xs text-red-600 ml-5">Debés aceptar los términos para continuar</p>}
 
@@ -208,7 +208,7 @@ const Register = () => {
             </button>
           </form>
 
-          <p className="text-center text-sm text-gray-500 mt-6">
+          <p className="text-center text-sm text-gray-600 mt-6">
             ¿Ya tenés cuenta?{' '}
             <button type="button" onClick={() => navigate('/login')} className="text-[#2563eb] hover:text-[#1d4ed8] font-medium transition">Iniciá sesión</button>
           </p>

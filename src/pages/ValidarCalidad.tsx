@@ -55,20 +55,20 @@ const ValidarCalidad: React.FC = () => {
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center space-x-4 mb-4">
-            <span className="text-2xl font-bold text-gray-800">TRACEHUB</span>
-            <nav className="flex space-x-4 text-sm text-gray-500">
-              <a href="#" className="hover:text-gray-700">dashboard</a>
-              <a href="#" className="hover:text-gray-700">Tablero</a>
-              <a href="#" className="hover:text-gray-700">list_alt</a>
-              <a href="#" className="hover:text-gray-700">Requisitos</a>
-              <a href="#" className="hover:text-gray-700">person_add</a>
-              <a href="#" className="hover:text-gray-700">Asignación de Tareas</a>
-              <a href="#" className="hover:text-gray-700">history</a>
-              <a href="#" className="hover:text-gray-700">Historial</a>
-              <a href="#" className="hover:text-gray-700">fact_check</a>
-              <a href="#" className="hover:text-gray-700">Validación QA</a>
-              <a href="#" className="hover:text-gray-700">visibility</a>
-              <a href="#" className="hover:text-gray-700">Vista de Stakeholders</a>
+            <span className="text-2xl font-bold text-gray-900">TRACEHUB</span>
+            <nav className="flex space-x-4 text-sm text-gray-600">
+              <a href="#" className="hover:text-gray-800">dashboard</a>
+              <a href="#" className="hover:text-gray-800">Tablero</a>
+              <a href="#" className="hover:text-gray-800">list_alt</a>
+              <a href="#" className="hover:text-gray-800">Requisitos</a>
+              <a href="#" className="hover:text-gray-800">person_add</a>
+              <a href="#" className="hover:text-gray-800">Asignación de Tareas</a>
+              <a href="#" className="hover:text-gray-800">history</a>
+              <a href="#" className="hover:text-gray-800">Historial</a>
+              <a href="#" className="hover:text-gray-800">fact_check</a>
+              <a href="#" className="hover:text-gray-800">Validación QA</a>
+              <a href="#" className="hover:text-gray-800">visibility</a>
+              <a href="#" className="hover:text-gray-800">Vista de Stakeholders</a>
             </nav>
           </div>
           
@@ -79,8 +79,8 @@ const ValidarCalidad: React.FC = () => {
 
         {/* Main Content */}
         <div className="bg-gray-50 rounded-lg p-6">
-          <h1 className="text-2xl font-bold text-gray-800 mb-6">Validar Calidad</h1>
-          <p className="text-gray-600 mb-6">
+          <h1 className="text-2xl font-bold text-gray-900 mb-6">Validar Calidad</h1>
+          <p className="text-gray-700 mb-6">
             Realiza el control de aseguramiento para los requisitos de software.
           </p>
 
@@ -93,7 +93,7 @@ const ValidarCalidad: React.FC = () => {
                 </div>
                 <div className="ml-3">
                   <p className="text-sm text-green-700">Validación de calidad guardada</p>
-                  <p className="text-sm text-gray-500">El registro se ha actualizado correctamente en el sistema de trazabilidad.</p>
+                  <p className="text-sm text-gray-600">El registro se ha actualizado correctamente en el sistema de trazabilidad.</p>
                 </div>
               </div>
             </div>
@@ -114,7 +114,7 @@ const ValidarCalidad: React.FC = () => {
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Seleccionar requisito */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-gray-800 mb-2">
                 Seleccionar requisito
               </label>
               <select
@@ -134,7 +134,7 @@ const ValidarCalidad: React.FC = () => {
 
             {/* Seleccionar resultado */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-gray-800 mb-2">
                 Seleccionar resultado
               </label>
               <div className="flex space-x-4">
@@ -147,7 +147,7 @@ const ValidarCalidad: React.FC = () => {
                     className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
                   />
                   Aprobado
-                  <span className="text-xs text-gray-500 ml-1">Cumple con los criterios.</span>
+                  <span className="text-xs text-gray-600 ml-1">Cumple con los criterios.</span>
                 </label>
                 <label className="flex items-center space-x-2">
                   <input
@@ -158,16 +158,16 @@ const ValidarCalidad: React.FC = () => {
                     className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
                   />
                   Rechazado
-                  <span className="text-xs text-gray-500 ml-1">Requiere ajustes técnicos.</span>
+                  <span className="text-xs text-gray-600 ml-1">Requiere ajustes técnicos.</span>
                 </label>
               </div>
             </div>
 
             {/* Observaciones de prueba */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-gray-800 mb-2">
                 Observaciones de prueba
-                <span className="text-xs text-gray-500">
+                <span className="text-xs text-gray-600">
                   {resultado === 'rechazado' && '* Obligatorio si es rechazado'}
                 </span>
               </label>
@@ -182,7 +182,7 @@ const ValidarCalidad: React.FC = () => {
 
             {/* Enlace al documento de prueba */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-gray-800 mb-2">
                 Enlace al documento de prueba
               </label>
               <input
@@ -215,20 +215,20 @@ const ValidarCalidad: React.FC = () => {
 
           {/* Analytics: Estado de Sprint */}
           <div className="mt-8 border-t pt-6">
-            <h2 className="text-xl font-bold text-gray-800 mb-4">
+            <h2 className="text-xl font-bold text-gray-900 mb-4">
               Estado de Sprint
             </h2>
             <div className="flex justify-between">
               <div className="space-y-2">
-                <p className="text-sm font-medium text-gray-700">
+                <p className="text-sm font-medium text-gray-800">
                   Requisitos Validados
                 </p>
-                <p className="text-2xl font-bold text-gray-800">
+                <p className="text-2xl font-bold text-gray-900">
                   78%
                 </p>
               </div>
               <div className="space-y-2">
-                <p className="text-sm font-medium text-gray-700">
+                <p className="text-sm font-medium text-gray-800">
                   Aprobados
                 </p>
                 <p className="text-2xl font-bold text-indigo-600">
@@ -236,7 +236,7 @@ const ValidarCalidad: React.FC = () => {
                 </p>
               </div>
               <div className="space-y-2">
-                <p className="text-sm font-medium text-gray-700">
+                <p className="text-sm font-medium text-gray-800">
                   Rechazados
                 </p>
                 <p className="text-2xl font-bold text-indigo-600">
@@ -248,10 +248,10 @@ const ValidarCalidad: React.FC = () => {
 
           {/* Ayuda Técnica */}
           <div className="mt-8 border-t pt-6">
-            <h2 className="text-xl font-bold text-gray-800 mb-4">
+            <h2 className="text-xl font-bold text-gray-900 mb-4">
               Ayuda Técnica
             </h2>
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-gray-700">
               Asegúrate de adjuntar el log de errores si el resultado es rechazado. Esto ayuda al equipo de desarrollo a solucionar el bug más rápido.
             </p>
             <p className="mt-2">
@@ -268,10 +268,10 @@ const ValidarCalidad: React.FC = () => {
                 <span className="text-indigo-500">☁️</span>
               </div>
               <div>
-                <p className="text-sm font-medium text-gray-700">
+                <p className="text-sm font-medium text-gray-800">
                   Subir evidencias
                 </p>
-                <p className="text-xs text-gray-500">
+                <p className="text-xs text-gray-600">
                   Arrastra archivos aquí o haz clic para buscarlos (.pdf, .png, .zip)
                 </p>
               </div>

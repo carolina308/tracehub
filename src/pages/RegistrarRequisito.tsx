@@ -52,7 +52,7 @@ const RegistrarRequisito = () => {
   return (
     <div className="min-h-screen bg-[#f4f7fb] p-3">
       <div className="mb-3">
-        <p className="text-[10px] text-gray-400 mb-0.5">Requisitos &gt; Nueva Entrada</p>
+        <p className="text-[10px] text-gray-500 mb-0.5">Requisitos &gt; Nueva Entrada</p>
         <h1 className="text-sm font-bold text-[#2563eb]">Crear Requisito</h1>
       </div>
 
@@ -61,14 +61,14 @@ const RegistrarRequisito = () => {
 
       <div className="grid grid-cols-2 gap-2 mb-3">
         <div className="bg-white rounded-lg p-3 shadow-sm">
-          <label className="block text-[10px] font-semibold mb-1 text-gray-700">TABLERO *</label>
+          <label className="block text-[10px] font-semibold mb-1 text-gray-800">TABLERO *</label>
           <select value={selectedBoardId ?? ""} onChange={(e) => setSelectedBoardId(Number(e.target.value) || null)} className={inputClass}>
             {boards.length === 0 && <option value="">Sin tableros</option>}
             {boards.map(b => <option key={b.id} value={b.id}>{b.name}</option>)}
           </select>
         </div>
         <div className="bg-white rounded-lg p-3 shadow-sm">
-          <label className="block text-[10px] font-semibold mb-1 text-gray-700">COLUMNA *</label>
+          <label className="block text-[10px] font-semibold mb-1 text-gray-800">COLUMNA *</label>
           <select value={selectedColumnId ?? ""} onChange={(e) => setSelectedColumnId(Number(e.target.value) || null)} className={inputClass} disabled={!selectedBoard?.columns?.length}>
             {!selectedBoard ? <option value="">Seleccioná un tablero</option>
             : !selectedBoard.columns?.length ? <option value="">Sin columnas</option>
@@ -80,17 +80,17 @@ const RegistrarRequisito = () => {
       <form onSubmit={handleSubmit} className="grid grid-cols-3 gap-3">
         <div className="col-span-2 bg-white rounded-lg p-4 shadow-sm">
           <div className="mb-2">
-            <label className="block text-[10px] font-semibold mb-1 text-gray-700">NOMBRE *</label>
+            <label className="block text-[10px] font-semibold mb-1 text-gray-800">NOMBRE *</label>
             <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Ej: Autenticación con SAML" className={inputClass} />
           </div>
           <div>
-            <label className="block text-[10px] font-semibold mb-1 text-gray-700">DESCRIPCIÓN</label>
+            <label className="block text-[10px] font-semibold mb-1 text-gray-800">DESCRIPCIÓN</label>
             <textarea value={description} onChange={(e) => setDescription(e.target.value)} rows={3} placeholder="Detalle técnico..." className={inputClass} />
           </div>
         </div>
         <div className="space-y-2">
           <div className="bg-white rounded-lg p-3 shadow-sm">
-            <label className="block text-[10px] font-semibold mb-1 text-gray-700">PRIORIDAD *</label>
+            <label className="block text-[10px] font-semibold mb-1 text-gray-800">PRIORIDAD *</label>
             <select value={priority} onChange={(e) => setPriority(e.target.value as Priority)} className={inputClass}>
               <option value={Priority.LOW}>Baja</option>
               <option value={Priority.MEDIUM}>Media</option>

@@ -30,7 +30,7 @@ const KanbanColumn = ({ column, allColumns, moveTask, onAddTask, members, onAssi
         ))}
       </div>
       {onAddTask && (
-        <button onClick={onAddTask} className="mt-2 w-full py-1 text-[10px] text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-md transition">
+        <button onClick={onAddTask} className="mt-2 w-full py-1 text-[10px] text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-md transition">
           + Añadir
         </button>
       )}

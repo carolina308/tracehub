@@ -55,11 +55,11 @@ const Login = () => {
           </div>
 
           <h2 className="text-xl font-bold text-gray-900 mb-1">Iniciar sesión</h2>
-          <p className="text-gray-500 text-sm mb-6">Ingresá tus credenciales para continuar</p>
+          <p className="text-gray-600 text-sm mb-6">Ingresá tus credenciales para continuar</p>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label htmlFor="email" className="block text-sm font-semibold text-gray-700 mb-1">
+              <label htmlFor="email" className="block text-sm font-semibold text-gray-800 mb-1">
                 Correo electrónico
               </label>
               <input
@@ -69,12 +69,12 @@ const Login = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="tu@correo.com"
-                className="block w-full rounded-xl border border-gray-200 px-3.5 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 outline-none focus:border-[#2563eb] focus:ring-2 focus:ring-[#2563eb]/20 transition-all duration-300"
+                className="block w-full rounded-xl border border-gray-200 px-3.5 py-2.5 text-sm text-gray-900 placeholder:text-gray-500 outline-none focus:border-[#2563eb] focus:ring-2 focus:ring-[#2563eb]/20 transition-all duration-300"
               />
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-semibold text-gray-700 mb-1">
+              <label htmlFor="password" className="block text-sm font-semibold text-gray-800 mb-1">
                 Contraseña
               </label>
               <div className="relative">
@@ -85,12 +85,12 @@ const Login = () => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="block w-full rounded-xl border border-gray-200 px-3.5 py-2.5 pr-10 text-sm text-gray-900 placeholder:text-gray-400 outline-none focus:border-[#2563eb] focus:ring-2 focus:ring-[#2563eb]/20 transition-all duration-300"
+                  className="block w-full rounded-xl border border-gray-200 px-3.5 py-2.5 pr-10 text-sm text-gray-900 placeholder:text-gray-500 outline-none focus:border-[#2563eb] focus:ring-2 focus:ring-[#2563eb]/20 transition-all duration-300"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition"
+                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 transition"
                 >
                   {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                 </button>
@@ -104,7 +104,7 @@ const Login = () => {
             <div className="flex items-center justify-between">
               <label className="flex items-center gap-1.5 cursor-pointer">
                 <input type="checkbox" className="w-3.5 h-3.5 rounded border-gray-300 text-[#2563eb] focus:ring-[#2563eb]" />
-                <span className="text-sm text-gray-600">Recordarme</span>
+                <span className="text-sm text-gray-700">Recordarme</span>
               </label>
               <button
                 type="button"
@@ -131,7 +131,7 @@ const Login = () => {
             </button>
           </form>
 
-          <p className="text-center text-sm text-gray-500 mt-6">
+          <p className="text-center text-sm text-gray-600 mt-6">
             ¿No tenés cuenta?{' '}
             <button type="button" onClick={() => navigate('/register')} className="text-[#2563eb] hover:text-[#1d4ed8] font-medium transition">
               Solicitar una cuenta

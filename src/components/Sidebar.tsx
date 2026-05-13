@@ -1,4 +1,4 @@
-﻿import { LayoutDashboard, ClipboardList, History, ShieldCheck, Users, LogOut, UserPlus } from "lucide-react";
+import { LayoutDashboard, ClipboardList, History, ShieldCheck, Users, LogOut, UserPlus } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
 const Sidebar = () => {
@@ -20,7 +20,7 @@ const Sidebar = () => {
       <div className="overflow-y-auto flex-1">
         <div className="px-3 pt-4 pb-2">
           <h1 className="text-2xl font-bold text-blue-600 tracking-wide">Tracehub</h1>
-          <p className="text-gray-400 text-[10px] mt-0.5">Agile Command</p>
+          <p className="text-gray-500 text-[10px] mt-0.5">Agile Command</p>
         </div>
         <nav className="flex flex-col gap-0.5 px-2">
           {menu.map((item) => {
@@ -29,7 +29,7 @@ const Sidebar = () => {
             return (
               <Link key={item.name} to={item.path}
                 className={`flex items-center gap-2 px-2.5 py-1.5 rounded-md transition-all duration-200 text-[11px] font-medium ${
-                  active ? "bg-blue-600 text-white shadow-sm" : "text-gray-700 hover:bg-[#101b35] hover:text-white"
+                  active ? "bg-blue-600 text-white shadow-sm" : "text-gray-800 hover:bg-[#101b35] hover:text-white"
                 }`}
               >
                 <Icon size={13} />

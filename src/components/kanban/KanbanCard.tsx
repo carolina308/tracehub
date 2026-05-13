@@ -42,7 +42,7 @@ const KanbanCard = ({ task, columns, onMoveTask, members, onAssignTask }: Props)
         <div className="flex items-center justify-between mb-1">
           <p className="text-[9px] font-bold text-[#2563eb]">{task.code}</p>
           <div className="flex gap-0.5">
-            <button onClick={() => setShowEvidence(!showEvidence)} className="text-[9px] bg-gray-100 hover:bg-gray-200 text-gray-600 px-1.5 py-0.5 rounded-md transition" title="Evidencias">
+            <button onClick={() => setShowEvidence(!showEvidence)} className="text-[9px] bg-gray-100 hover:bg-gray-200 text-gray-700 px-1.5 py-0.5 rounded-md transition" title="Evidencias">
               <FileText size={10} />
             </button>
             <button onClick={() => setOpenModal(true)} className="text-[9px] bg-[#2563eb] hover:bg-[#1d4ed8] text-white px-1.5 py-0.5 rounded-md transition">
@@ -51,17 +51,17 @@ const KanbanCard = ({ task, columns, onMoveTask, members, onAssignTask }: Props)
           </div>
         </div>
 
-        <h3 className="font-semibold text-gray-800 text-[11px] mb-1 leading-tight">{task.title}</h3>
-        <p className="text-[10px] text-gray-500 mb-2 line-clamp-2">{task.description}</p>
+        <h3 className="font-semibold text-gray-900 text-[11px] mb-1 leading-tight">{task.title}</h3>
+        <p className="text-[10px] text-gray-600 mb-2 line-clamp-2">{task.description}</p>
 
         {showEvidence && (
           <div className="mb-2 bg-gray-50 rounded-lg p-2 border border-gray-100">
-            <p className="text-[9px] font-semibold text-gray-600 mb-1">Evidencias</p>
-            {evidence.length === 0 && <p className="text-[9px] text-gray-400 mb-1">Sin evidencias</p>}
+            <p className="text-[9px] font-semibold text-gray-700 mb-1">Evidencias</p>
+            {evidence.length === 0 && <p className="text-[9px] text-gray-500 mb-1">Sin evidencias</p>}
             <div className="space-y-0.5 mb-1">
               {evidence.map(ev => (
                 <div key={ev.id} className="flex items-center justify-between bg-white rounded px-1.5 py-1 text-[9px]">
-                  <span className="text-gray-600 truncate flex-1">{ev.originalName}</span>
+                  <span className="text-gray-700 truncate flex-1">{ev.originalName}</span>
                   <div className="flex gap-0.5">
                     <a href={api.getEvidenceDownloadUrl(ev.id)} target="_blank" rel="noopener noreferrer" className="p-0.5 text-blue-600 hover:bg-blue-50 rounded"><Download size={10} /></a>
                     <button onClick={async () => {
@@ -72,7 +72,7 @@ const KanbanCard = ({ task, columns, onMoveTask, members, onAssignTask }: Props)
                 </div>
               ))}
             </div>
-            <label className={`flex items-center justify-center gap-1 text-[9px] py-1 rounded-md cursor-pointer transition ${uploading ? 'bg-gray-200 text-gray-500' : 'bg-[#2563eb]/10 text-[#2563eb] hover:bg-[#2563eb]/20'}`}>
+            <label className={`flex items-center justify-center gap-1 text-[9px] py-1 rounded-md cursor-pointer transition ${uploading ? 'bg-gray-200 text-gray-600' : 'bg-[#2563eb]/10 text-[#2563eb] hover:bg-[#2563eb]/20'}`}>
               <Upload size={10} /> {uploading ? 'Subiendo...' : 'Subir'}
               <input type="file" className="hidden" onChange={handleUploadEvidence} disabled={uploading} />
             </label>
@@ -87,14 +87,14 @@ const KanbanCard = ({ task, columns, onMoveTask, members, onAssignTask }: Props)
             <div className="w-5 h-5 rounded-full bg-[#1e3a8a] text-white flex items-center justify-center text-[8px] font-bold">
               {task.assignee.charAt(0)}
             </div>
-            <span className="text-[9px] text-gray-500 truncate max-w-[60px]">{task.assignee}</span>
+            <span className="text-[9px] text-gray-600 truncate max-w-[60px]">{task.assignee}</span>
           </div>
         </div>
 
         {task.lastComment && (
           <div className="mt-2 bg-gray-50 rounded-lg p-2 border border-gray-100">
-            <p className="text-[9px] text-gray-400 mb-0.5">Comentario</p>
-            <p className="text-[10px] text-gray-600">{task.lastComment}</p>
+            <p className="text-[9px] text-gray-500 mb-0.5">Comentario</p>
+            <p className="text-[10px] text-gray-700">{task.lastComment}</p>
           </div>
         )}
 

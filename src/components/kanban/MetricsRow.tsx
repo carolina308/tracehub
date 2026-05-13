@@ -34,7 +34,7 @@ const MetricCard = ({
 }: any) => {
   return (
     <div className="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm">
-      <p className="text-sm text-gray-400 mb-2">
+      <p className="text-sm text-gray-500 mb-2">
         {title}
       </p>
 

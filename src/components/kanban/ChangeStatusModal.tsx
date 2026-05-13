@@ -35,7 +35,7 @@ const ChangeStatusModal = ({ taskId, currentColumnId, columns, onClose, onConfir
           </div>
           <div>
             <h2 className="text-xs font-bold">{taskId ? `REQ-${taskId}` : ''}</h2>
-            <p className="text-[10px] text-gray-500">Mover a otra columna</p>
+            <p className="text-[10px] text-gray-600">Mover a otra columna</p>
           </div>
         </div>
 

@@ -1,4 +1,4 @@
-﻿import { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { api } from '../services/api';
 import { User, Bell, Lock, Info, LogOut } from 'lucide-react';
@@ -55,10 +55,10 @@ const Settings = () => {
             </div>
             <div>
               <p className="font-semibold text-xs">{userName || 'Usuario'}</p>
-              <p className="text-[11px] text-gray-500">{user?.email || ''}</p>
+              <p className="text-[11px] text-gray-600">{user?.email || ''}</p>
             </div>
           </div>
-          <p className="text-[11px] text-gray-500">Tus datos se gestionan desde el registro.</p>
+          <p className="text-[11px] text-gray-600">Tus datos se gestionan desde el registro.</p>
         </div>
       ),
     },
@@ -69,7 +69,7 @@ const Settings = () => {
           <div className="flex items-center justify-between">
             <div>
               <p className="font-semibold text-[11px]">Actualizaciones en tiempo real</p>
-              <p className="text-[10px] text-gray-500">Recibir cambios al instante</p>
+              <p className="text-[10px] text-gray-600">Recibir cambios al instante</p>
             </div>
             <label className="relative inline-flex items-center cursor-pointer">
               <input type="checkbox" checked={notifications} onChange={(e) => setNotifications(e.target.checked)} className="sr-only peer" />
@@ -97,10 +97,10 @@ const Settings = () => {
       id: 'about', icon: Info, title: 'Acerca de',
       content: (
         <div className="space-y-1 text-[11px]">
-          <div className="flex justify-between p-2 bg-gray-50 rounded-md"><span className="text-gray-500">App</span><span className="font-semibold">TraceHub</span></div>
-          <div className="flex justify-between p-2 bg-gray-50 rounded-md"><span className="text-gray-500">Versión</span><span className="font-semibold">1.0.0</span></div>
-          <div className="flex justify-between p-2 bg-gray-50 rounded-md"><span className="text-gray-500">Frontend</span><span className="font-semibold">React + Vite</span></div>
-          <div className="flex justify-between p-2 bg-gray-50 rounded-md"><span className="text-gray-500">Backend</span><span className="font-semibold">Express + Prisma</span></div>
+          <div className="flex justify-between p-2 bg-gray-50 rounded-md"><span className="text-gray-600">App</span><span className="font-semibold">TraceHub</span></div>
+          <div className="flex justify-between p-2 bg-gray-50 rounded-md"><span className="text-gray-600">Versión</span><span className="font-semibold">1.0.0</span></div>
+          <div className="flex justify-between p-2 bg-gray-50 rounded-md"><span className="text-gray-600">Frontend</span><span className="font-semibold">React + Vite</span></div>
+          <div className="flex justify-between p-2 bg-gray-50 rounded-md"><span className="text-gray-600">Backend</span><span className="font-semibold">Express + Prisma</span></div>
         </div>
       ),
     },
@@ -111,7 +111,7 @@ const Settings = () => {
   return (
     <div className="min-h-screen bg-[#f4f7fb] p-3">
       <div className="mb-3">
-        <p className="text-[10px] text-gray-400 mb-0.5">Ajustes</p>
+        <p className="text-[10px] text-gray-600 mb-0.5">Ajustes</p>
         <h1 className="text-sm font-bold text-[#2563eb]">Configuración</h1>
       </div>
       {saved && <div className="bg-green-50 border border-green-200 text-green-700 text-[11px] p-2 rounded-md mb-2">{saved}</div>}
@@ -123,7 +123,7 @@ const Settings = () => {
               const Icon = s.icon;
               return (
                 <button key={s.id} onClick={() => setActiveSection(s.id)} className={`w-full flex items-center gap-2 px-2 py-1.5 rounded-md text-[11px] font-medium transition ${
-                  activeSection === s.id ? 'bg-[#2563eb] text-white shadow-sm' : 'text-gray-700 hover:bg-gray-100'
+                  activeSection === s.id ? 'bg-[#2563eb] text-white shadow-sm' : 'text-gray-800 hover:bg-gray-100'
                 }`}>
                   <Icon size={13} /> {s.title}
                 </button>

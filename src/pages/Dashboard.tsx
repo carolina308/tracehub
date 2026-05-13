@@ -65,7 +65,7 @@ const Dashboard = () => {
       <div className="bg-white border-b border-slate-200/50 px-3 py-2">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <label className="text-[10px] font-medium text-gray-600">Tablero:</label>
+            <label className="text-[10px] font-medium text-gray-700">Tablero:</label>
             <select value={selectedBoardId ?? ""} onChange={(e) => setSelectedBoardId(Number(e.target.value) || null)}
               className="border border-gray-200 rounded-md px-2 py-1.5 bg-white min-w-[150px] text-[11px] outline-none focus:border-[#2563eb] focus:ring-1 focus:ring-[#2563eb]/20">
               {boards.length === 0 && <option value="">Sin tableros</option>}
@@ -77,7 +77,7 @@ const Dashboard = () => {
           </button>
         </div>
         {boards.length === 0 && (
-          <div className="mt-2 text-center text-gray-500 py-2">
+          <div className="mt-2 text-center text-gray-600 py-2">
             <Layout size={24} className="mx-auto mb-1 text-gray-300" />
             <p className="text-[11px]">No tenés tableros todavía.</p>
           </div>
@@ -87,8 +87,8 @@ const Dashboard = () => {
       {selectedBoardId ? <KanbanBoard boardId={selectedBoardId} />
       : boards.length === 0 ? (
         <div className="p-6 text-center">
-          <h2 className="text-sm font-bold text-gray-600 mb-2">Bienvenido a TraceHub</h2>
-          <p className="text-gray-500 text-[11px] mb-3">Creá tu primer tablero.</p>
+          <h2 className="text-sm font-bold text-gray-700 mb-2">Bienvenido a TraceHub</h2>
+          <p className="text-gray-600 text-[11px] mb-3">Creá tu primer tablero.</p>
           <button onClick={() => setShowCreateModal(true)} className={btnClass}>Crear Primer Tablero</button>
         </div>
       ) : null}
@@ -99,11 +99,11 @@ const Dashboard = () => {
             <h2 className="text-sm font-bold text-[#2563eb] mb-3">Nuevo Tablero</h2>
             <div className="space-y-2">
               <div>
-                <label className="block text-[11px] font-semibold text-gray-700 mb-0.5">Nombre *</label>
+                <label className="block text-[11px] font-semibold text-gray-800 mb-0.5">Nombre *</label>
                 <input type="text" value={newBoardName} onChange={(e) => setNewBoardName(e.target.value)} placeholder="Ej: Proyecto Principal" className="w-full border border-gray-200 rounded-md px-2.5 py-1.5 text-[11px] outline-none focus:border-[#2563eb] focus:ring-1 focus:ring-[#2563eb]/20" autoFocus />
               </div>
               <div>
-                <label className="block text-[11px] font-semibold text-gray-700 mb-0.5">Descripción</label>
+                <label className="block text-[11px] font-semibold text-gray-800 mb-0.5">Descripción</label>
                 <textarea value={newBoardDesc} onChange={(e) => setNewBoardDesc(e.target.value)} placeholder="Descripción..." className="w-full border border-gray-200 rounded-md px-2.5 py-1.5 text-[11px] outline-none focus:border-[#2563eb] focus:ring-1 focus:ring-[#2563eb]/20 h-14 resize-none" />
               </div>
             </div>

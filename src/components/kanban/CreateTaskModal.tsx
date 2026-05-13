@@ -24,15 +24,15 @@ const CreateTaskModal = ({ onClose, onCreate }: Props) => {
         <h2 className="text-sm font-bold mb-3 text-[#2563eb]">Nuevo Requisito</h2>
         <div className="space-y-2">
           <div>
-            <label className="block text-[11px] font-semibold text-gray-700 mb-0.5">Título *</label>
+            <label className="block text-[11px] font-semibold text-gray-800 mb-0.5">Título *</label>
             <input type="text" placeholder="Título del requisito" value={title} onChange={(e) => setTitle(e.target.value)} className={inputClass} autoFocus />
           </div>
           <div>
-            <label className="block text-[11px] font-semibold text-gray-700 mb-0.5">Descripción</label>
+            <label className="block text-[11px] font-semibold text-gray-800 mb-0.5">Descripción</label>
             <textarea placeholder="Descripción..." value={description} onChange={(e) => setDescription(e.target.value)} className={`${inputClass} h-20 resize-none`} />
           </div>
           <div>
-            <label className="block text-[11px] font-semibold text-gray-700 mb-0.5">Prioridad</label>
+            <label className="block text-[11px] font-semibold text-gray-800 mb-0.5">Prioridad</label>
             <select value={priority} onChange={(e) => setPriority(e.target.value as "low" | "medium" | "high")} className={inputClass}>
               <option value="low">Baja</option>
               <option value="medium">Media</option>

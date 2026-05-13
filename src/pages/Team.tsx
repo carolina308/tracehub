@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { api } from '../services/api';
 import type { Board, BoardMember, ID, User } from '../types/api';
 import { UserPlus, Trash2, Shield } from 'lucide-react';
@@ -68,7 +68,7 @@ const Team = () => {
   return (
     <div className="min-h-screen bg-[#f4f7fb] p-3">
       <div className="mb-3">
-        <p className="text-[10px] text-gray-400 mb-0.5">Equipo</p>
+        <p className="text-[10px] text-gray-600 mb-0.5">Equipo</p>
         <h1 className="text-sm font-bold text-[#2563eb]">Gestión del Equipo</h1>
       </div>
 
@@ -78,7 +78,7 @@ const Team = () => {
       <div className="bg-white rounded-lg p-3 shadow-sm mb-3">
         <div className="flex items-center justify-between gap-3">
           <div className="flex-1">
-            <label className="block text-[10px] font-semibold mb-1 text-gray-700">TABLERO</label>
+            <label className="block text-[10px] font-semibold mb-1 text-gray-800">TABLERO</label>
             <select value={selectedBoardId ?? ''} onChange={(e) => setSelectedBoardId(Number(e.target.value) || null)} className={`${selectClass} max-w-[200px]`}>
               {boards.map(b => <option key={b.id} value={b.id}>{b.name}</option>)}
             </select>
@@ -89,13 +89,13 @@ const Team = () => {
         </div>
       </div>
 
-      {!selectedBoardId ? <div className="text-center py-4 text-gray-500 text-[11px]">Seleccioná un tablero</div>
+      {!selectedBoardId ? <div className="text-center py-4 text-gray-700 text-[11px]">Seleccioná un tablero</div>
       : (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-3">
           <div className="lg:col-span-2">
             <div className="bg-white rounded-lg p-4 shadow-sm">
               <h2 className="text-xs font-bold mb-3">Miembros ({members.length})</h2>
-              {members.length === 0 ? <p className="text-gray-500 text-[11px]">Sin miembros.</p> : (
+              {members.length === 0 ? <p className="text-gray-700 text-[11px]">Sin miembros.</p> : (
                 <div className="space-y-1.5">
                   {members.map(m => (
                     <div key={m.id} className="flex items-center justify-between p-2 bg-gray-50 rounded-md">
@@ -103,7 +103,7 @@ const Team = () => {
                         <div className="w-7 h-7 rounded-full bg-[#1e3a8a] text-white flex items-center justify-center text-[10px] font-bold shrink-0">{getUserName(m.user).charAt(0)}</div>
                         <div className="min-w-0">
                           <p className="text-[11px] font-semibold truncate">{getUserName(m.user)}</p>
-                          <p className="text-[10px] text-gray-500 truncate">{m.user.email}</p>
+                          <p className="text-[10px] text-gray-600 truncate">{m.user.email}</p>
                         </div>
                       </div>
                       <div className="flex items-center gap-1 shrink-0">
@@ -128,16 +128,16 @@ const Team = () => {
             <div className="bg-white rounded-lg p-3 shadow-sm">
               <h2 className="text-xs font-bold mb-2 flex items-center gap-1"><Shield size={12} /> Roles</h2>
               <div className="space-y-1 text-[11px]">
-                <div className="p-1.5 bg-gray-50 rounded-md"><p className="font-semibold text-[11px]">OWNER</p><p className="text-[10px] text-gray-500">Control total</p></div>
-                <div className="p-1.5 bg-gray-50 rounded-md"><p className="font-semibold text-[11px]">MEMBER</p><p className="text-[10px] text-gray-500">Edita requisitos</p></div>
-                <div className="p-1.5 bg-gray-50 rounded-md"><p className="font-semibold text-[11px]">VIEWER</p><p className="text-[10px] text-gray-500">Solo lectura</p></div>
+                <div className="p-1.5 bg-gray-50 rounded-md"><p className="font-semibold text-[11px]">OWNER</p><p className="text-[10px] text-gray-600">Control total</p></div>
+                <div className="p-1.5 bg-gray-50 rounded-md"><p className="font-semibold text-[11px]">MEMBER</p><p className="text-[10px] text-gray-600">Edita requisitos</p></div>
+                <div className="p-1.5 bg-gray-50 rounded-md"><p className="font-semibold text-[11px]">VIEWER</p><p className="text-[10px] text-gray-600">Solo lectura</p></div>
               </div>
             </div>
             <div className="bg-white rounded-lg p-3 shadow-sm">
               <h2 className="text-xs font-bold mb-2">Info</h2>
               <div className="space-y-0.5 text-[11px]">
-                <div className="flex justify-between"><span className="text-gray-500">Tablero</span><span className="font-semibold">{selectedBoard?.name}</span></div>
-                <div className="flex justify-between"><span className="text-gray-500">Miembros</span><span className="font-semibold">{members.length}</span></div>
+                <div className="flex justify-between"><span className="text-gray-600">Tablero</span><span className="font-semibold">{selectedBoard?.name}</span></div>
+                <div className="flex justify-between"><span className="text-gray-600">Miembros</span><span className="font-semibold">{members.length}</span></div>
               </div>
             </div>
           </div>
@@ -150,12 +150,12 @@ const Team = () => {
             <h2 className="text-sm font-bold text-[#2563eb] mb-3">Invitar Miembro</h2>
             <form onSubmit={handleAddMember} className="space-y-2">
               <div>
-                <label className="block text-[11px] font-semibold mb-0.5 text-gray-700">Correo electrónico</label>
+                <label className="block text-[11px] font-semibold mb-0.5 text-gray-800">Correo electrónico</label>
                 <input type="email" value={newEmail} onChange={(e) => setNewEmail(e.target.value)} placeholder="usuario@ejemplo.com" required className="w-full border border-gray-200 rounded-md px-2.5 py-1.5 text-[11px] outline-none focus:border-[#2563eb] focus:ring-1 focus:ring-[#2563eb]/20" autoFocus />
-                <p className="text-[10px] text-gray-400 mt-0.5">Debe estar registrado en TraceHub</p>
+                <p className="text-[10px] text-gray-600 mt-0.5">Debe estar registrado en TraceHub</p>
               </div>
               <div>
-                <label className="block text-[11px] font-semibold mb-0.5 text-gray-700">Rol</label>
+                <label className="block text-[11px] font-semibold mb-0.5 text-gray-800">Rol</label>
                 <select value={newRole} onChange={(e) => setNewRole(e.target.value)} className="w-full border border-gray-200 rounded-md px-2.5 py-1.5 text-[11px] outline-none focus:border-[#2563eb]">
                   <option value="MEMBER">Miembro</option>
                   <option value="VIEWER">Espectador</option>
